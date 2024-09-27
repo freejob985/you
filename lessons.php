@@ -80,8 +80,10 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
     <!-- مكتبة توست -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     
-    <!-- مكتبة DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap5.min.css">
     
     <!-- مكتبة Tagify -->
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -104,64 +106,112 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
             width: 60px;
             height: auto;
         }
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+        .watch-button {
+            min-width: 100px;
+        }
+        .form-check-input {
+            cursor: pointer;
+        }
+        #lessonsTable tbody tr {
+            transition: background-color 0.3s ease;
+        }
+        #lessonsTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
         
-        <table id="lessonsTable" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>الصورة</th>
-                    <th>عنوان الدرس</th>
-                    <th>المدة</th>
-                    <th>الحالة</th>
-                    <th>الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($lessons as $lesson): ?>
-                    <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'completed' : ''; ?>">
-                        <td>
-                            <?php if (!empty($lesson['thumbnail'])): ?>
-                                <img src="<?php echo htmlspecialchars($lesson['thumbnail']); ?>" alt="Thumbnail" class="thumbnail-img">
-                            <?php else: ?>
-                                <span>لا توجد صورة</span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <span class="lesson-title" data-lesson-id="<?php echo $lesson['id']; ?>" style="cursor: pointer;">
-                                <?php echo htmlspecialchars($lesson['title']); ?>
-                            </span>
-                        </td>
-                        <td><?php echo formatDuration($lesson['duration']); ?></td>
-                        <td>
-                            <span class="lesson-status">
-                                <?php echo ($lesson['status'] === 'completed') ? 'مكتمل' : 'غير مكتمل'; ?>
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-sm watch-button" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
-                                <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
-                            </button>
-                            <button class="btn btn-secondary btn-sm assign-section-button" data-lesson-id="<?php echo $lesson['id']; ?>">
-                                <i class="fas fa-layer-group"></i>
-                            </button>
-                            <button class="btn btn-info btn-sm set-status-button" data-lesson-id="<?php echo $lesson['id']; ?>">
-                                <i class="fas fa-flag"></i>
-                            </button>
-                            <input type="checkbox" class="mark-complete-checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
-                        </td>
+        <div class="table-responsive">
+            <table id="lessonsTable" class="table table-striped table-bordered table-hover shadow-sm">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>الصورة</th>
+                        <th>عنوان الدرس</th>
+                        <th>المدة</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($lessons as $lesson): ?>
+                        <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'table-success' : ''; ?>">
+                            <td>
+                                <?php if (!empty($lesson['thumbnail'])): ?>
+                                    <img src="<?php echo htmlspecialchars($lesson['thumbnail']); ?>" alt="Thumbnail" class="img-thumbnail" style="width: 60px; height: auto;">
+                                <?php else: ?>
+                                    <span class="text-muted">لا توجد صورة</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <span class="lesson-title" data-lesson-id="<?php echo $lesson['id']; ?>" style="cursor: pointer;">
+                                    <?php echo htmlspecialchars($lesson['title']); ?>
+                                </span>
+                            </td>
+                            <td><?php echo formatDuration($lesson['duration']); ?></td>
+                            <td>
+                                <span class="lesson-status badge <?php echo ($lesson['status'] === 'completed') ? 'bg-success' : 'bg-warning'; ?>">
+                                    <?php echo ($lesson['status'] === 'completed') ? 'مكتمل' : 'غير مكتمل'; ?>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-primary btn-sm watch-button" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
+                                        <i class="fas fa-eye"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm assign-section-button" data-lesson-id="<?php echo $lesson['id']; ?>">
+                                        <i class="fas fa-layer-group"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-sm set-status-button" data-lesson-id="<?php echo $lesson['id']; ?>">
+                                        <i class="fas fa-flag"></i>
+                                    </button>
+                                    <div class="form-check form-switch d-inline-block ms-2">
+                                        <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         
         <div class="mt-4">
             <h4>نسبة إكمال الكورس</h4>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: <?php echo $completionPercentage; ?>%;" aria-valuenow="<?php echo $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                     role="progressbar" 
+                     style="width: <?php echo $completionPercentage; ?>%;" 
+                     aria-valuenow="<?php echo $completionPercentage; ?>" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
                     <?php echo $completionPercentage; ?>%
                 </div>
             </div>
@@ -240,8 +290,12 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
     <!-- مكتبة jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <!-- مكتبة DataTables -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
+    <!-- DataTables Responsive JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap5.min.js"></script>
     
     <!-- مكتبة Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -258,10 +312,16 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
     <script>
     $(document).ready(function() {
         // تهيئة جدول DataTables
-        $('#lessonsTable').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Arabic.json"
-            }
+        var table = $('#lessonsTable').DataTable({
+            responsive: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.24/i18n/Arabic.json"
+            },
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+            ],
+            order: [[1, 'asc']]
         });
 
         // تهيئة توست
@@ -502,57 +562,46 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
             var lessonId = $(this).data('lesson-id');
             var isChecked = $(this).is(':checked') ? 1 : 0;
 
-            $.ajax({
-                url: 'lessons_actions.php',
-                type: 'POST',
-                data: {
-                    action: 'mark_complete',
-                    lesson_id: lessonId,
-                    completed: isChecked
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        if (isChecked) {
-                            $('#lesson-row-' + lessonId).addClass('completed');
-                            $('#lesson-row-' + lessonId + ' .lesson-status').text('مكتمل');
-                            toastr.success('تم تعليم الدرس كمكتمل.');
-                        } else {
-                            $('#lesson-row-' + lessonId).removeClass('completed');
-                            $('#lesson-row-' + lessonId + ' .lesson-status').text('غير مكتمل');
-                            toastr.success('تم إلغاء تعليم الدرس كمكتمل.');
-                        }
-                        updateCompletionPercentage();
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('حدث خطأ في الاتصال بالخادم.');
-                }
-            });
+            updateLessonStatus(lessonId, isChecked);
         });
 
         // وظيفة تعليم الدرس كمكتمل عند الضغط على اسم الدرس
         $('.lesson-title').on('click', function() {
             var lessonId = $(this).data('lesson-id');
 
+            updateLessonStatus(lessonId, 1);
+        });
+
+        function updateLessonStatus(lessonId, isCompleted) {
             $.ajax({
                 url: 'lessons_actions.php',
                 type: 'POST',
                 data: {
                     action: 'mark_complete',
                     lesson_id: lessonId,
-                    completed: 1
+                    completed: isCompleted ? 1 : 0
                 },
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        $('#lesson-row-' + lessonId).addClass('completed');
-                        $('#lesson-row-' + lessonId + ' .lesson-status').text('مكتمل');
-                        $('#lesson-row-' + lessonId + ' .mark-complete-checkbox').prop('checked', true);
-                        toastr.success('تم تعليم الدرس كمكتمل.');
+                        var row = $('#lesson-row-' + lessonId);
+                        var statusBadge = row.find('.lesson-status');
+                        var checkbox = row.find('.mark-complete-checkbox');
+                        
+                        if (isCompleted) {
+                            row.addClass('table-success');
+                            statusBadge.removeClass('bg-warning').addClass('bg-success').text('مكتمل');
+                            checkbox.prop('checked', true);
+                            toastr.success('تم تعليم الدرس كمكتمل.');
+                        } else {
+                            row.removeClass('table-success');
+                            statusBadge.removeClass('bg-success').addClass('bg-warning').text('غير مكتمل');
+                            checkbox.prop('checked', false);
+                            toastr.success('تم إلغاء تعليم الدرس كمكتمل.');
+                        }
+                        
                         updateCompletionPercentage();
+                        table.row(row).invalidate().draw(false);
                     } else {
                         toastr.error(response.message);
                     }
@@ -561,7 +610,7 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                     toastr.error('حدث خطأ في الاتصال بالخادم.');
                 }
             });
-        });
+        }
     });
     </script>
 </body>
