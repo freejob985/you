@@ -161,200 +161,205 @@ $statuses = getStatuses();
         
         <div class="bg-white shadow-lg rounded-lg p-6">
             <form id="searchForm" class="mb-6">
-                <div class="flex flex-wrap -mx-3 mb-4">
-                    <div class="w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="search">
-                            البحث
-                        </label>
-                        <div class="relative">
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 pr-10 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="search" name="search" type="text" placeholder="ادخل كلمات البحث هنا...">
-                            <img src="https://cdn-icons-png.flaticon.com/128/3850/3850203.png" alt="Search Icon" class="search-icon">
-                        </div>
-                    </div>
-                </div>
+                <input type="text" name="search" placeholder="ابحث عن درس..." class="w-full px-3 py-2 border rounded-md">
                 
-                <button type="button" id="toggleFilters" class="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
-                    <i class="fas fa-filter"></i>
-                </button>
-
-                <div id="filtersSection" class="hidden">
-                    <!-- فلاتر البحث الجديدة بتصميم ماتريل ديزاين -->
+                <div id="filtersSection" class="mt-4">
                     <div class="flex flex-wrap -mx-3 mb-4">
                         <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                             <h3 class="text-lg font-semibold mb-2">اللغات</h3>
-                            <select name="language" id="language" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">اختر اللغة</option>
-                                <?php foreach ($languages as $language): ?>
-                                    <option value="<?php echo $language['id']; ?>"><?php echo $language['name']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php foreach ($languages as $language): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="lang_<?php echo $language['id']; ?>" name="languages[]" value="<?php echo $language['id']; ?>">
+                                    <label for="lang_<?php echo $language['id']; ?>"><?php echo $language['name']; ?></label>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                         <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                             <h3 class="text-lg font-semibold mb-2">الكورسات</h3>
-                            <select name="course" id="course" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">اختر الكورس</option>
-                                <?php foreach ($courses as $course): ?>
-                                    <option value="<?php echo $course['id']; ?>"><?php echo $course['title']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php foreach ($courses as $course): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="course_<?php echo $course['id']; ?>" name="courses[]" value="<?php echo $course['id']; ?>">
+                                    <label for="course_<?php echo $course['id']; ?>"><?php echo $course['title']; ?></label>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                         <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                             <h3 class="text-lg font-semibold mb-2">الأقسام</h3>
-                            <select name="section" id="section" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">اختر القسم</option>
-                                <?php foreach ($sections as $section): ?>
-                                    <option value="<?php echo $section['id']; ?>"><?php echo $section['name']; ?></option>
-                                <?php endforeach; ?>
-                              
-            </select>
-        </div>
-        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-            <h3 class="text-lg font-semibold mb-2">الحالات</h3>
-            <select name="status" id="status" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                <option value="">اختر الحالة</option>
-                <?php foreach ($statuses as $key => $value): ?>
-                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-                <?php endforeach; ?>
-            </select>
+                            <?php foreach ($sections as $section): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="section_<?php echo $section['id']; ?>" name="sections[]" value="<?php echo $section['id']; ?>">
+                                    <label for="section_<?php echo $section['id']; ?>"><?php echo $section['name']; ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+                            <h3 class="text-lg font-semibold mb-2">الحالة</h3>
+                            <?php foreach ($statuses as $status => $label): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="status_<?php echo $status; ?>" name="statuses[]" value="<?php echo $status; ?>">
+                                    <label for="status_<?php echo $status; ?>"><?php echo $label; ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        بحث
+                    </button>
+                </div>
+            </form>
+
+            <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Search results will be displayed here -->
+            </div>
+
+            <div id="pagination" class="mt-8 flex justify-center">
+                <!-- Pagination buttons will be displayed here -->
+            </div>
         </div>
     </div>
-</div>
 
-<div class="flex justify-center mt-6">
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        بحث
-    </button>
-</div>
-</form>
+    <footer class="footer bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 My Wiki. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
 
-<div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-<!-- نتائج البحث ستظهر هنا -->
-</div>
+    <!-- روابط JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
 
-<div id="pagination" class="mt-8 flex justify-center">
-<!-- أزرار التنقل بين الصفحات ستظهر هنا -->
-</div>
-</div>
-</div>
-
-<footer class="footer bg-gray-800 text-white py-4">
-<div class="container mx-auto px-4 text-center">
-    <p>&copy; 2023 My Wiki. جميع الحقوق محفوظة.</p>
-</div>
-</footer>
-
-<!-- روابط JavaScript -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    $('#toggleFilters').click(function() {
-        $('#filtersSection').toggleClass('hidden');
-    });
-
-    function getStatusBadgeClass(status) {
-        switch (status) {
-            case 'completed': return 'bg-success';
-            case 'watch':
-            case 'review': return 'bg-primary';
-            case 'problem':
-            case 'retry':
-            case 'retry_again': return 'bg-warning';
-            case 'discussion':
-            case 'search': return 'bg-info';
-            case 'excluded': return 'bg-danger';
-            case 'project': return 'bg-secondary';
-            default: return 'bg-secondary';
-        }
-    }
-
-    function getStatusLabel(status) {
-        const statusLabels = {
-            'completed': 'مكتمل',
-            'watch': 'مشاهدة',
-            'problem': 'مشكلة',
-            'discussion': 'نقاش',
-            'search': 'بحث',
-            'retry': 'إعادة',
-            'retry_again': 'إعادة ثانية',
-            'review': 'مراجعة',
-            'excluded': 'مستبعد',
-            'project': 'مشروع تطبيقي'
-        };
-        return statusLabels[status] || 'غير محدد';
-    }
-
-    function displayResults(results) {
-        const resultsContainer = $('#searchResults');
-        resultsContainer.empty();
-
-        results.forEach(lesson => {
-            const card = $('<div>').addClass('lesson-card');
-            card.html(`
-                <h3>${lesson.title}</h3>
-                <p>الكورس: ${lesson.course_title}</p>
-                <p>اللغة: ${lesson.language_name}</p>
-                <p>القسم: ${lesson.section_name}</p>
-                <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
-            `);
-            resultsContainer.append(card);
+    <script>
+    $(document).ready(function() {
+        $('#toggleFilters').click(function() {
+            $('#filtersSection').toggleClass('hidden');
         });
-    }
 
-    function displayPagination(currentPage, totalPages) {
-        const paginationContainer = $('#pagination');
-        paginationContainer.empty();
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'completed': return 'bg-success';
+                case 'watch':
+                case 'review': return 'bg-primary';
+                case 'problem':
+                case 'retry':
+                case 'retry_again': return 'bg-warning';
+                case 'discussion':
+                case 'search': return 'bg-info';
+                case 'excluded': return 'bg-danger';
+                case 'project': return 'bg-secondary';
+                default: return 'bg-secondary';
+            }
+        }
 
-        if (totalPages > 1) {
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = $('<button>')
-                    .addClass('mx-1 px-3 py-1 rounded')
-                    .text(i)
-                    .click(function() {
-                        performSearch(i);
-                    });
+        function getStatusLabel(status) {
+            const statusLabels = {
+                'completed': 'مكتمل',
+                'watch': 'مشاهدة',
+                'problem': 'مشكلة',
+                'discussion': 'نقاش',
+                'search': 'بحث',
+                'retry': 'إعادة',
+                'retry_again': 'إعادة ثانية',
+                'review': 'مراجعة',
+                'excluded': 'مستبعد',
+                'project': 'مشروع تطبيقي'
+            };
+            return statusLabels[status] || 'غير محدد';
+        }
 
-                if (i === currentPage) {
-                    pageButton.addClass('bg-blue-500 text-white');
+        function displayResults(response) {
+            const resultsContainer = $('#searchResults');
+            resultsContainer.empty();
+
+            if (response.success && Array.isArray(response.results)) {
+                if (response.results.length === 0) {
+                    resultsContainer.html('<p>لا توجد نتائج للبحث.</p>');
                 } else {
-                    pageButton.addClass('bg-gray-200 text-gray-700 hover:bg-gray-300');
+                    response.results.forEach(lesson => {
+                        const card = $('<div>').addClass('lesson-card');
+                        card.html(`
+                            <h3>${lesson.title}</h3>
+                            <p>الكورس: ${lesson.course_title || 'غير محدد'}</p>
+                            <p>اللغة: ${lesson.language_name || 'غير محددة'}</p>
+                            <p>القسم: ${lesson.section_name || 'غير محدد'}</p>
+                            <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
+                        `);
+                        resultsContainer.append(card);
+                    });
                 }
+            } else {
+                resultsContainer.html('<p>حدث خطأ أثناء جلب النتائج. يرجى المحاولة مرة أخرى.</p>');
+                console.error('Error in response:', response);
+            }
 
-                paginationContainer.append(pageButton);
+            // تحديث التصفح (pagination) إذا كان موجودًا
+            if (response.totalPages) {
+                displayPagination(response.currentPage, response.totalPages);
             }
         }
-    }
 
-    function performSearch(page = 1) {
-        const formData = $('#searchForm').serialize() + '&page=' + page;
+        function displayPagination(currentPage, totalPages) {
+            const paginationContainer = $('#pagination');
+            paginationContainer.empty();
 
-        $.ajax({
-            url: 'search/search_operations.php',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                displayResults(response.results);
-                displayPagination(response.currentPage, response.totalPages);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
+            if (totalPages > 1) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = $('<button>')
+                        .addClass('mx-1 px-3 py-1 rounded')
+                        .text(i)
+                        .click(function() {
+                            performSearch(i);
+                        });
+
+                    if (i === currentPage) {
+                        pageButton.addClass('bg-blue-500 text-white');
+                    } else {
+                        pageButton.addClass('bg-gray-200 text-gray-700 hover:bg-gray-300');
+                    }
+
+                    paginationContainer.append(pageButton);
+                }
             }
-        });
-    }
+        }
 
-    $('#searchForm').submit(function(e) {
-        e.preventDefault();
+        function performSearch(page = 1) {
+            const formData = new FormData($('#searchForm')[0]);
+            formData.append('page', page);
+
+            $.ajax({
+                url: 'search/search_operations.php',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        displayResults(response);
+                    } else {
+                        $('#searchResults').html('<p>حدث خطأ: ' + (response.message || 'خطأ غير معروف') + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    console.log(xhr.responseText);
+                    $('#searchResults').html('<p>حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى.</p>');
+                }
+            });
+        }
+
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+            performSearch();
+        });
+
+        // تنفيذ البحث الأولي عند تحميل الصفحة
         performSearch();
     });
-
-    // Load initial results
-    performSearch();
-});
-</script>
-
+    </script>
 </body>
 </html>
