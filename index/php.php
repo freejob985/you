@@ -63,6 +63,7 @@ $db->exec('CREATE TABLE IF NOT EXISTS lessons (
     thumbnail TEXT,
     views INTEGER DEFAULT 0,
     language_id INTEGER,
+    section_tags TEXT,
     FOREIGN KEY (course_id) REFERENCES courses(id),
     FOREIGN KEY (section_id) REFERENCES sections(id),
     FOREIGN KEY (language_id) REFERENCES tags(id)
@@ -83,6 +84,24 @@ $db->exec('CREATE TABLE IF NOT EXISTS sections (
     name TEXT NOT NULL,
     language_id INTEGER,
     FOREIGN KEY (language_id) REFERENCES tags(id)
+)');
+
+// إنشاء جدول التعليقات
+$db->exec('CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lesson_id INTEGER,
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(id)
+)');
+
+// إنشاء جدول الأكواد
+$db->exec('CREATE TABLE IF NOT EXISTS codes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lesson_id INTEGER,
+    code TEXT NOT NULL,
+    explanation TEXT,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(id)
 )');
 
 // حذف جدول اللغات القديم إذا كان موجودًا
@@ -207,120 +226,96 @@ case 'add_sections':
                 }
                 exit;
         }
-    }
+    } else {
+        // التعامل مع إضافة الكورس الجديد
+        $courseLink = $_POST['courseLink'];
+        $courseLanguage = $_POST['courseLanguage'];
+        $apiKey = "AIzaSyDGPD8_t3EAlU4f_pMOGjECkVQr-p3oRvY"; // استبدل بمفتاح API الخاص بك
 
-    $courseLink = $_POST['courseLink'];
-    $courseTags = isset($_POST['courseTags']) ? json_decode($_POST['courseTags'], true) : [];
-    $courseLanguage = $_POST['courseLanguage'];
-    $apiKey = "AIzaSyDGPD8_t3EAlU4f_pMOGjECkVQr-p3oRvY"; // استبدل بمفتاح API الخاص بك
+        // استخراج معرف قائمة التشغيل من الرابط
+        preg_match('/list=([^&]+)/', $courseLink, $matches);
+        $playlistId = $matches[1] ?? null;
 
-    // استخراج معرف قائمة التشغيل من الرابط
-    preg_match('/list=([^&]+)/', $courseLink, $matches);
-    $playlistId = $matches[1] ?? null;
-
-    if ($playlistId) {
-        try {
-            // جلب تفاصيل قائمة التشغيل
-            $playlistDetails = getPlaylistDetails($playlistId, $apiKey);
-            $playlistInfo = array();
-            
-            if(isset($playlistDetails['items'][0]['snippet'])) {
-                $snippet = $playlistDetails['items'][0]['snippet'];
-                $playlistInfo = array(
-                    'title' => $snippet['title'],
-                    'description' => $snippet['description'],
-                    'thumbnail' => isset($snippet['thumbnails']['high']['url']) ? $snippet['thumbnails']['high']['url'] : '',
-                    'channel_title' => $snippet['channelTitle']
-                );
-            }
-
-            $playlistItemsResponse = getPlaylistItems($playlistId, $apiKey);
-            $totalDuration = 0;
-            $lessonsCount = 0;
-
-            if(isset($playlistItemsResponse['items'])) {
-                foreach ($playlistItemsResponse['items'] as $item) {
-                    $videoId = $item['snippet']['resourceId']['videoId'];
-                    $videoResponse = getVideoDetails($videoId, $apiKey);
-                    
-                    if (isset($videoResponse['items'][0]['contentDetails']['duration'])) {
-                        $duration = $videoResponse['items'][0]['contentDetails']['duration'];
-                        $seconds = ISO8601ToSeconds($duration);
-                        $totalDuration += $seconds;
-                        $lessonsCount++;
-                    }
+        if ($playlistId) {
+            try {
+                // جلب تفاصيل قائمة التشغيل
+                $playlistDetails = getPlaylistDetails($playlistId, $apiKey);
+                $playlistInfo = array();
+                
+                if(isset($playlistDetails['items'][0]['snippet'])) {
+                    $snippet = $playlistDetails['items'][0]['snippet'];
+                    $playlistInfo = array(
+                        'title' => $snippet['title'],
+                        'description' => $snippet['description'],
+                        'thumbnail' => isset($snippet['thumbnails']['high']['url']) ? $snippet['thumbnails']['high']['url'] : '',
+                        'channel_title' => $snippet['channelTitle']
+                    );
                 }
-            }
 
-            // إضافة الكورس إلى قاعدة البيانات
-            $stmt = $db->prepare('INSERT INTO courses (title, lessons_count, duration, thumbnail, language_id) VALUES (:title, :lessons_count, :duration, :thumbnail, :language_id)');
-            $stmt->bindValue(':title', $playlistInfo['title'], PDO::PARAM_STR);
-            $stmt->bindValue(':lessons_count', $lessonsCount, PDO::PARAM_INT);
-            $stmt->bindValue(':duration', $totalDuration, PDO::PARAM_INT);
-            $stmt->bindValue(':thumbnail', $playlistInfo['thumbnail'], PDO::PARAM_STR);
-            $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
-            $result = $stmt->execute();
+                $playlistItemsResponse = getPlaylistItems($playlistId, $apiKey);
+                $totalDuration = 0;
+                $lessonsCount = 0;
 
-            if ($result) {
-                $courseId = $db->lastInsertId();
-
-                // إضافة التاجات
-                if (!empty($courseTags)) {
-                    foreach ($courseTags as $tag) {
-                        $tagName = trim($tag['value']);
-                        if (!empty($tagName)) {
-                            // إضافة التاج إذا لم يكن موجودًا
-                            $stmt = $db->prepare('INSERT OR IGNORE INTO tags (name) VALUES (:name)');
-                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                            $stmt->execute();
-
-                            // الحصول على معرف التاج
-                            $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
-                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                            $stmt->execute();
-                            $tagId = $stmt->fetchColumn();
-
-                            // ربط التاج بالكورس
-                            $stmt = $db->prepare('INSERT INTO course_tags (course_id, tag_id) VALUES (:course_id, :tag_id)');
-                            $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-                            $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
-                            $stmt->execute();
+                if(isset($playlistItemsResponse['items'])) {
+                    foreach ($playlistItemsResponse['items'] as $item) {
+                        $videoId = $item['snippet']['resourceId']['videoId'];
+                        $videoResponse = getVideoDetails($videoId, $apiKey);
+                        
+                        if (isset($videoResponse['items'][0]['contentDetails']['duration'])) {
+                            $duration = $videoResponse['items'][0]['contentDetails']['duration'];
+                            $seconds = ISO8601ToSeconds($duration);
+                            $totalDuration += $seconds;
+                            $lessonsCount++;
                         }
                     }
                 }
 
-                // إضافة الدروس إلى قاعدة البيانات
-                foreach ($playlistItemsResponse['items'] as $item) {
-                    $videoId = $item['snippet']['resourceId']['videoId'];
-                    $title = $item['snippet']['title'];
-                    $url = "https://www.youtube.com/watch?v=" . $videoId;
-                    
-                    $videoResponse = getVideoDetails($videoId, $apiKey);
-                    $duration = isset($videoResponse['items'][0]['contentDetails']['duration']) ? ISO8601ToSeconds($videoResponse['items'][0]['contentDetails']['duration']) : 0;
-                    $thumbnail = isset($videoResponse['items'][0]['snippet']['thumbnails']['high']['url']) ? $videoResponse['items'][0]['snippet']['thumbnails']['high']['url'] : '';
+                // إضافة الكورس إلى قاعدة البيانات
+                $stmt = $db->prepare('INSERT INTO courses (title, lessons_count, duration, thumbnail, language_id) VALUES (:title, :lessons_count, :duration, :thumbnail, :language_id)');
+                $stmt->bindValue(':title', $playlistInfo['title'], PDO::PARAM_STR);
+                $stmt->bindValue(':lessons_count', $lessonsCount, PDO::PARAM_INT);
+                $stmt->bindValue(':duration', $totalDuration, PDO::PARAM_INT);
+                $stmt->bindValue(':thumbnail', $playlistInfo['thumbnail'], PDO::PARAM_STR);
+                $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
+                $result = $stmt->execute();
 
-                    $stmt = $db->prepare('INSERT INTO lessons (title, url, course_id, duration, status, thumbnail, views, language_id) VALUES (:title, :url, :course_id, :duration, :status, :thumbnail, :views, :language_id)');
-                    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
-                    $stmt->bindValue(':url', $url, PDO::PARAM_STR);
-                    $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-                    $stmt->bindValue(':duration', $duration, PDO::PARAM_INT);
-                    $stmt->bindValue(':status', 'active', PDO::PARAM_STR);
-                    $stmt->bindValue(':thumbnail', $thumbnail, PDO::PARAM_STR);
-                    $stmt->bindValue(':views', 0, PDO::PARAM_INT);
-                    $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
+                if ($result) {
+                    $courseId = $db->lastInsertId();
 
-                    $stmt->execute();
+                    // إضافة الدروس إلى قاعدة البيانات
+                    foreach ($playlistItemsResponse['items'] as $item) {
+                        $videoId = $item['snippet']['resourceId']['videoId'];
+                        $title = $item['snippet']['title'];
+                        $url = "https://www.youtube.com/watch?v=" . $videoId;
+                        
+                        $videoResponse = getVideoDetails($videoId, $apiKey);
+                        $duration = isset($videoResponse['items'][0]['contentDetails']['duration']) ? ISO8601ToSeconds($videoResponse['items'][0]['contentDetails']['duration']) : 0;
+                        $thumbnail = isset($videoResponse['items'][0]['snippet']['thumbnails']['high']['url']) ? $videoResponse['items'][0]['snippet']['thumbnails']['high']['url'] : '';
+
+                        $stmt = $db->prepare('INSERT INTO lessons (title, url, course_id, duration, status, thumbnail, views, language_id) VALUES (:title, :url, :course_id, :duration, :status, :thumbnail, :views, :language_id)');
+                        $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+                        $stmt->bindValue(':url', $url, PDO::PARAM_STR);
+                        $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
+                        $stmt->bindValue(':duration', $duration, PDO::PARAM_INT);
+                        $stmt->bindValue(':status', 'active', PDO::PARAM_STR);
+                        $stmt->bindValue(':thumbnail', $thumbnail, PDO::PARAM_STR);
+                        $stmt->bindValue(':views', 0, PDO::PARAM_INT);
+                        $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
+
+                        $stmt->execute();
+                    }
+
+                    echo json_encode(['success' => true, 'message' => 'تمت إضافة الكورس بنجاح!']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة الكورس.']);
                 }
-
-                echo json_encode(['success' => true, 'message' => 'تمت إضافة الكورس بنجاح!']);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة الكورس.']);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'حدث خطأ: ' . $e->getMessage()]);
             }
-        } catch (Exception $e) {
-            echo json_encode(['success' => false, 'message' => 'حدث خطأ: ' . $e->getMessage()]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'رابط قائمة التشغيل غير صالح.']);
         }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'رابط قائمة التشغيل غير صالح.']);
+        exit; // إضافة هذا السطر لضمان عدم تنفيذ أي كود إضافي بعد الاستجابة
     }
 }
 
