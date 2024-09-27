@@ -172,7 +172,11 @@ function setStatus($db) {
     $lesson_id = $_POST['lesson_id'] ?? null;
     $status = $_POST['status'] ?? null;
 
-    $allowed_statuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed'];
+    $allowed_statuses = [
+        'watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed',
+        'excluded', 'project', 'active', 'paused', 'archived', 'pending', 'in_progress',
+        'needs_review', 'approved', 'rejected', 'on_hold', 'cancelled', 'deferred'
+    ];
 
     if (!$lesson_id || !is_numeric($lesson_id) || !$status) {
         echo json_encode(['success' => false, 'message' => 'معرف الدرس أو الحالة غير صالحة.']);

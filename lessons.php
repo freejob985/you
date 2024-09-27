@@ -246,6 +246,27 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         .completed-card .card-header {
             background-color: #000000 !important;
         }
+        .pagination .page-link {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            border: 2px solid #007bff;
+            color: #007bff;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link,
+        .pagination .page-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
     </style>
 </head>
 <body>
@@ -253,27 +274,21 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         <h1 class="text-center mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
         
         <div class="row">
-<div class="col-12 mb-4">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">إحصائيات الكورس</h5>
-            <div class="progress" style="height: 30px;">
-                <?php if ($totalLessons > 0): ?>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo ($completedLessons / $totalLessons) * 100; ?>%;" aria-valuenow="<?php echo $completedLessons; ?>" aria-valuemin="0" aria-valuemax="<?php echo $totalLessons; ?>">
-                        <?php echo $completedLessons; ?> مكتمل
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">إحصائيات الكورس</h5>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $completionPercentage; ?>%;" aria-valuenow="<?php echo $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo $completionPercentage; ?>% مكتمل (<?php echo $completedLessons; ?> دروس)
+                            </div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: <?php echo 100 - $completionPercentage; ?>%;" aria-valuenow="<?php echo 100 - $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo 100 - $completionPercentage; ?>% غير مكتمل (<?php echo $totalLessons - $completedLessons; ?> دروس)
+                            </div>
+                        </div>
                     </div>
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: <?php echo (($totalLessons - $completedLessons) / $totalLessons) * 100; ?>%;" aria-valuenow="<?php echo $totalLessons - $completedLessons; ?>" aria-valuemin="0" aria-valuemax="<?php echo $totalLessons; ?>">
-                        <?php echo $totalLessons - $completedLessons; ?> غير مكتمل
-                    </div>
-                <?php else: ?>
-                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 100%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        لا توجد دروس
-                    </div>
-                <?php endif; ?>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
         </div>
         
         <div class="row">
@@ -322,11 +337,11 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         </div>
         
         <!-- Pagination -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?php echo ($i == $currentPage) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?course_id=<?php echo $courseId; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        <a class="page-link rounded-circle" href="?course_id=<?php echo $courseId; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -454,74 +469,108 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         }
 
         // دالة لتحديث نسبة إكمال الكورس
-     function updateCompletionPercentage() {
-    $.ajax({
-        url: 'lessons_actions.php',
-        method: 'POST',
-        data: {
-            action: 'get_completion_percentage',
-            course_id: <?php echo $courseId; ?>
-        },
-        success: function(response) {
-            if (response.success) {
-                const completedPercentage = response.percentage;
-                const remainingPercentage = 100 - completedPercentage;
-                
-                $('.progress-bar.bg-success').css('width', completedPercentage + '%')
-                    .attr('aria-valuenow', response.completed_lessons)
-                    .text(response.completed_lessons + ' مكتمل');
-                
-                $('.progress-bar.bg-primary').css('width', remainingPercentage + '%')
-                    .attr('aria-valuenow', response.total_lessons - response.completed_lessons)
-                    .text((response.total_lessons - response.completed_lessons) + ' غير مكتمل');
-            }
-        }
-    });
-}
-
-
-
-        // زر المشاهدة
-$('.watch-button').click(function() {
-    const lessonId = $(this).data('lesson-id');
-    const views = $(this).data('views');
-    const newViews = views === 0 ? 1 : 0;
-    const button = $(this);
-
-    $.ajax({
-        url: 'lessons_actions.php',
-        method: 'POST',
-        data: {
-            action: 'toggle_watch',
-            lesson_id: lessonId,
-            views: newViews
-        },
-        success: function(response) {
-            if (response.success) {
-                button.data('views', newViews);
-                button.removeClass('btn-primary btn-success')
-                      .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
-                button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
-                toastr.success('تم تحديث حالة المشاهدة');
-                
-                // تحديث حالة الدرس إلى "مكتمل" إذا تم المشاهدة
-                if (newViews > 0) {
-                    updateLessonStatus(lessonId, 'completed');
-                    button.closest('.card').find('.mark-complete-checkbox').prop('checked', true);
-                } else {
-                    updateLessonStatus(lessonId, 'active');
-                    button.closest('.card').find('.mark-complete-checkbox').prop('checked', false);
+        function updateCompletionPercentage() {
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'get_completion_percentage',
+                    course_id: <?php echo $courseId; ?>
+                },
+                success: function(response) {
+                    if (response.success) {
+                        const completedPercentage = response.percentage;
+                        const remainingPercentage = 100 - completedPercentage;
+                        
+                        $('.progress-bar.bg-success').css('width', completedPercentage + '%')
+                            .attr('aria-valuenow', completedPercentage)
+                            .text(completedPercentage + '% مكتمل');
+                        $('.progress-bar.bg-primary').css('width', remainingPercentage + '%')
+                            .attr('aria-valuenow', remainingPercentage)
+                            .text(remainingPercentage + '% غير مكتمل');
+                        
+                        $('.completed-lessons').text(response.completed_lessons);
+                        $('.remaining-lessons').text(response.total_lessons - response.completed_lessons);
+                    }
                 }
-                
-                // تحديث نسبة الإكمال
-                updateCompletionPercentage();
-            } else {
-                toastr.error(response.message);
-            }
+            });
         }
-    });
-});
-        // زر تعيين القسم
+
+        // تحديث حدث النقر على زر المشاهدة
+        $('.watch-button').click(function() {
+            const lessonId = $(this).data('lesson-id');
+            const views = $(this).data('views');
+            const newViews = views === 0 ? 1 : 0;
+            const button = $(this);
+
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'toggle_watch',
+                    lesson_id: lessonId,
+                    views: newViews
+                },
+                success: function(response) {
+                    if (response.success) {
+                        button.data('views', newViews);
+                        button.removeClass('btn-primary btn-success')
+                              .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
+                        button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
+                        toastr.success('تم تحديث حالة المشاهدة');
+                        
+                        // تحديث حالة الدرس إلى "مكتمل" إذا تم المشاهدة
+                        if (newViews > 0) {
+                            updateLessonStatus(lessonId, 'completed');
+                            button.closest('.card').find('.mark-complete-checkbox').prop('checked', true);
+                        } else {
+                            updateLessonStatus(lessonId, 'active');
+                            button.closest('.card').find('.mark-complete-checkbox').prop('checked', false);
+                        }
+                        
+                        // تحديث نسبة الإكمال
+                        updateCompletionPercentage();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+
+        // تحديث حدث تغيير صندوق الاختيار
+        $('.mark-complete-checkbox').change(function() {
+            const lessonId = $(this).data('lesson-id');
+            const completed = $(this).prop('checked') ? 1 : 0;
+
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'mark_complete',
+                    lesson_id: lessonId,
+                    completed: completed
+                },
+                success: function(response) {
+                    if (response.success) {
+                        updateLessonStatus(lessonId, completed ? 'completed' : 'active');
+                        toastr.success('تم تحديث حالة الإكمال');
+                        
+                        // تحديث زر المشاهدة
+                        const watchButton = $(`.watch-button[data-lesson-id="${lessonId}"]`);
+                        watchButton.data('views', completed ? 1 : 0);
+                        watchButton.removeClass('btn-primary btn-success')
+                                   .addClass(completed ? 'btn-success' : 'btn-primary');
+                        watchButton.html(`<i class="fas ${completed ? 'fa-check' : 'fa-eye'}"></i> ${completed ? 'تم المشاهدة' : 'مشاهدة'}`);
+                        
+                        // تحديث نسبة الإكمال
+                        updateCompletionPercentage();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+
         $('.assign-section-button').click(function() {
             const lessonId = $(this).data('lesson-id');
             $('#assignSectionModal').data('lesson-id', lessonId).modal('show');
@@ -675,6 +724,14 @@ $('.watch-button').click(function() {
                 default: return 'غير محدد';
             }
         }
+
+        // تحديث البروجرس بار عند تحميل الصفحة
+        updateProgressBar();
+
+        // تحديث البروجرس بار عند تغيير حالة الدرس
+        $('.mark-complete-checkbox, .watch-button').on('change click', function() {
+            updateProgressBar();
+        });
     });
     </script>
 </body>
