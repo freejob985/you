@@ -188,85 +188,75 @@ fetch('', {
     Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
 });
 });
-
-function updateLanguageList() {
-fetch('', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-        'action': 'get_languages'
-    })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        const languageSelect = document.getElementById('courseLanguage');
-        const languageSelectModal = document.getElementById('languageSelect');
-        languageSelect.innerHTML = '<option value="">اختر اللغة</option>';
-        languageSelectModal.innerHTML = '';
-        data.languages.forEach(language => {
-            languageSelect.innerHTML += `<option value="${language.id}">${language.name}</option>`;
-            languageSelectModal.innerHTML += `<option value="${language.id}">${language.name}</option>`;
-        });
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-});
-
-
-// ابحث عن الدالة الخاصة بإضافة اللغة (حوالي السطر 150)
 function addLanguage() {
-    const languageTags = $('#languageTags').val();
+    const languageTags = document.getElementById('languageTags').value;
     
     if (languageTags) {
-        $.ajax({
-            url: '',
+        fetch('', {
             method: 'POST',
-            data: {
-                action: 'add_language',
-                languageTags: languageTags
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    Swal.fire('تم!', response.message, 'success');
-                    $('#addLanguageModal').modal('hide');
-                    $('#languageTags').val('');
-                    
-                    // تحديث قائمة اللغات
-                    if (response.languages && response.languages.length > 0) {
-                        const languageSelect = $('#courseLanguage');
-                        response.languages.forEach(function(lang) {
-                            languageSelect.append($('<option>', {
-                                value: lang.id,
-                                text: lang.name
-                            }));
-                        });
-                    }
-                } else {
-                    Swal.fire('خطأ!', response.message, 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
+            body: new URLSearchParams({
+                'action': 'add_language',
+                'languageTags': languageTags
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('تم!', data.message, 'success');
+                $('#addLanguageModal').modal('hide');
+                document.getElementById('languageTags').value = '';
+                
+                // تحديث قائمة اللغات
+                updateLanguageList();
+            } else {
+                Swal.fire('خطأ!', data.message, 'error');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
         });
     } else {
         Swal.fire('خطأ!', 'يرجى إدخال اسم اللغة.', 'error');
     }
 }
+// تحديث دالة تحديث قائمة اللغات
+function updateLanguageList() {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'action': 'get_languages'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const languageSelect = document.getElementById('courseLanguage');
+            const languageSelectModal = document.getElementById('languageSelect');
+            languageSelect.innerHTML = '<option value="">اختر اللغة</option>';
+            languageSelectModal.innerHTML = '';
+            data.languages.forEach(language => {
+                languageSelect.innerHTML += `<option value="${language.id}">${language.name}</option>`;
+                languageSelectModal.innerHTML += `<option value="${language.id}">${language.name}</option>`;
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire('خطأ!', 'حدث خطأ أثناء تحديث قائمة اللغات.', 'error');
+    });
+}
 
-// تأكد من أن هذا الكود موجود لربط الدالة بزر الإرسال
-$('#addLanguageForm').on('submit', function(e) {
+// ربط الدالة بنموذج إضافة اللغة
+document.getElementById('addLanguageForm').addEventListener('submit', function(e) {
     e.preventDefault();
     addLanguage();
 });
-}
-
-
 
 </script>
