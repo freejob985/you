@@ -194,8 +194,60 @@ overflow-y: hidden;
         text-align: center;
         vertical-align: middle;
     }
+thead.bg-primary.text-white {
+    border: #649cfa;
+}
 
-    </style>
+
+    .completed-row {
+        background-color: #e8f5e9 !important; /* لون أخضر فاتح للدروس المكتملة */
+    }
+ .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+
+    .pagination .page-link {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #007bff;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-item.active .page-link,
+    .pagination .page-link:hover {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #6c757d;
+    }
+
+    /* تنسيق أزرار السابق والتالي */
+    .pagination .page-item.previous .page-link,
+    .pagination .page-item.next .page-link {
+        width: auto;
+        padding: 0 15px;
+        border-radius: 20px;
+    }
+</style>
 </head>
 <body>
     <div class="container mt-5">
@@ -214,7 +266,7 @@ overflow-y: hidden;
                 </thead>
                 <tbody>
                     <?php foreach ($lessons as $lesson): ?>
-                        <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'completed' : ''; ?>">
+                        <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'completed-row' : ''; ?>">
                             <td style="padding: 0px;">
                                 <?php if (!empty($lesson['thumbnail'])): ?>
                                     <img src="<?php echo htmlspecialchars($lesson['thumbnail']); ?>" alt="Thumbnail" class="img-thumbnail" style="width:50%;height: 50%;">
@@ -223,7 +275,7 @@ overflow-y: hidden;
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <span class="lesson-title" data-lesson-id="<?php echo $lesson['id']; ?>" style="cursor: pointer;">
+                                <span class="lesson-title <?php echo ($lesson['status'] === 'completed') ? 'completed' : ''; ?>" data-lesson-id="<?php echo $lesson['id']; ?>" style="cursor: pointer;">
                                     <?php echo htmlspecialchars($lesson['title']); ?>
                                 </span>
                             </td>
@@ -343,15 +395,23 @@ overflow-y: hidden;
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.10.24/i18n/Arabic.json"
             },
+  pagingType: 'simple_numbers',
+    language: {
+        paginate: {
+            previous: 'السابق',
+            next: 'التالي'
+        }
+    },
             columnDefs: [
                 { responsivePriority: 1, targets: 0 },
                 { responsivePriority: 2, targets: -1 }
             ],
             order: [[1, 'asc']],
             scrollY: false,
-            scrollCollapse: false,
+            scrollCollapse: true,
             paging: true,
-            searching: false
+            searching: false,
+            info: true
         });
         
         // تهيئة Tagify للأقسام الجديدة
@@ -388,9 +448,11 @@ overflow-y: hidden;
                 button.data('views', newViews);
                 button.html('<i class="fas fa-eye"></i> ' + (newViews === 1 ? 'تم المشاهدة' : 'مشاهدة'));
                 if (newViews === 1) {
-                    lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
+                    lessonTitle.addClass('completed');
+                    row.addClass('completed-row');
                 } else {
-                    lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
+                    lessonTitle.removeClass('completed');
+                    row.removeClass('completed-row');
                 }
                 toastr.success(response.message);
             } else {
@@ -421,12 +483,12 @@ overflow-y: hidden;
                 success: function(response) {
                     if (response.success) {
                         if (isCompleted) {
-                            row.addClass('completed');
-                            lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
+                            lessonTitle.addClass('completed');
+                            row.addClass('completed-row');
                             row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-success').text('مكتمل');
                         } else {
-                            row.removeClass('completed');
-                            lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
+                            lessonTitle.removeClass('completed');
+                            row.removeClass('completed-row');
                             row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-warning').text('غير مكتمل');
                         }
                         updateCompletionPercentage();
@@ -649,17 +711,17 @@ overflow-y: hidden;
         });
     }
     
- function updateLessonStatusUI(lessonId, status) {
+function updateLessonStatusUI(lessonId, status) {
     var row = $('#lesson-row-' + lessonId);
     var statusBadge = row.find('.lesson-status');
     var lessonTitle = row.find('.lesson-title');
     
     // تحديث الصف
-    row.removeClass('completed');
-    lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
+    row.removeClass('completed-row');
+    lessonTitle.removeClass('completed');
     if (status === 'completed') {
-        row.addClass('completed');
-        lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
+        row.addClass('completed-row');
+        lessonTitle.addClass('completed');
     }
     
     // تحديث شارة الحالة
@@ -669,38 +731,39 @@ overflow-y: hidden;
     // تحديث مربع الاختيار
     row.find('.mark-complete-checkbox').prop('checked', status === 'completed');
 }
-    
-    function getStatusBadgeClass(status) {
-        switch (status) {
-            case 'completed': return 'bg-success';
-            case 'watch':
-            case 'review': return 'bg-primary';
-            case 'problem':
-            case 'retry':
-            case 'retry_again': return 'bg-warning';
-            case 'discussion':
-            case 'search': return 'bg-info';
-            case 'excluded': return 'bg-danger';
-            case 'project': return 'bg-secondary';
-            default: return 'bg-secondary';
-        }
+
+function getStatusBadgeClass(status) {
+    switch (status) {
+        case 'completed': return 'bg-success';
+        case 'watch':
+        case 'review': return 'bg-primary';
+        case 'problem':
+        case 'retry':
+        case 'retry_again': return 'bg-warning';
+        case 'discussion':
+        case 'search': return 'bg-info';
+        case 'excluded': return 'bg-danger';
+        case 'project': return 'bg-secondary';
+        default: return 'bg-secondary';
     }
-    
-    function getStatusLabel(status) {
-        switch (status) {
-            case 'completed': return 'مكتمل';
-            case 'watch': return 'مشاهدة';
-            case 'problem': return 'مشكلة';
-            case 'discussion': return 'نقاش';
-            case 'search': return 'بحث';
-            case 'retry': return 'إعادة';
-            case 'retry_again': return 'إعادة ثانية';
-            case 'review': return 'مراجعة';
-            case 'excluded': return 'مستبعد';
-            case 'project': return 'مشروع تطبيقي';
-            default: return 'غير محدد';
-        }
+}
+
+function getStatusLabel(status) {
+    switch (status) {
+        case 'completed': return 'مكتمل';
+        case 'watch': return 'مشاهدة';
+        case 'problem': return 'مشكلة';
+        case 'discussion': return 'نقاش';
+        case 'search': return 'بحث';
+        case 'retry': return 'إعادة';
+        case 'retry_again': return 'إعادة ثانية';
+        case 'review': return 'مراجعة';
+        case 'excluded': return 'مستبعد';
+        case 'project': return 'مشروع تطبيقي';
+        default: return 'غير محدد';
     }
-    </script>
+}
+
+  </script>
 </body>
 </html>

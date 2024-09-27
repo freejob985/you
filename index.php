@@ -16,7 +16,7 @@ try {
         FOREIGN KEY (section_id) REFERENCES sections(id),
         PRIMARY KEY (tag_id, section_id)
     )');
-    echo "تم إنشاء جدول tag_sections بنجاح.";
+//    echo "تم إنشاء جدول tag_sections بنجاح.";
 } catch(PDOException $e) {
     echo "حدث خطأ أثناء إنشاء جدول tag_sections: " . $e->getMessage();
 }
