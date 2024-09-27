@@ -54,6 +54,56 @@ foreach ($lessons as $lesson) {
     }
 }
 $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+
+function getStatusBadgeClass($status) {
+    switch ($status) {
+        case 'completed':
+            return 'bg-success';
+        case 'watch':
+        case 'review':
+            return 'bg-primary';
+        case 'problem':
+        case 'retry':
+        case 'retry_again':
+            return 'bg-warning';
+        case 'discussion':
+        case 'search':
+            return 'bg-info';
+        case 'excluded':
+            return 'bg-danger';
+        case 'project':
+            return 'bg-secondary';
+        default:
+            return 'bg-secondary';
+    }
+}
+
+function getStatusLabel($status) {
+    switch ($status) {
+        case 'completed':
+            return 'مكتمل';
+        case 'watch':
+            return 'مشاهدة';
+        case 'problem':
+            return 'مشكلة';
+        case 'discussion':
+            return 'نقاش';
+        case 'search':
+            return 'بحث';
+        case 'retry':
+            return 'إعادة';
+        case 'retry_again':
+            return 'إعادة ثانية';
+        case 'review':
+            return 'مراجعة';
+        case 'excluded':
+            return 'مستبعد';
+        case 'project':
+            return 'مشروع تطبيقي';
+        default:
+            return 'غير محدد';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +151,7 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
         }
         .completed {
             text-decoration: line-through;
+            font-weight: bold;
         }
         .thumbnail-img {
             width: 60px;
@@ -121,28 +172,12 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
         #lessonsTable tbody tr:hover {
             background-color: #f5f5f5;
         }
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
+        .badge.bg-success { background-color: #28a745 !important; }
+        .badge.bg-warning { background-color: #ffc107 !important; }
+        .badge.bg-danger { background-color: #dc3545 !important; }
+        .badge.bg-info { background-color: #17a2b8 !important; }
+        .badge.bg-primary { background-color: #007bff !important; }
+        .badge.bg-secondary { background-color: #6c757d !important; }
     </style>
 </head>
 <body>
@@ -162,10 +197,10 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                 </thead>
                 <tbody>
                     <?php foreach ($lessons as $lesson): ?>
-                        <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'table-success' : ''; ?>">
-                            <td>
+                        <tr id="lesson-row-<?php echo $lesson['id']; ?>" class="<?php echo ($lesson['status'] === 'completed') ? 'completed' : ''; ?>">
+                            <td style="padding: 0px;">
                                 <?php if (!empty($lesson['thumbnail'])): ?>
-                                    <img src="<?php echo htmlspecialchars($lesson['thumbnail']); ?>" alt="Thumbnail" class="img-thumbnail" style="width: 60px; height: auto;">
+                                    <img src="<?php echo htmlspecialchars($lesson['thumbnail']); ?>" alt="Thumbnail" class="img-thumbnail" style="width:50%;height: 50%;">
                                 <?php else: ?>
                                     <span class="text-muted">لا توجد صورة</span>
                                 <?php endif; ?>
@@ -177,8 +212,8 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                             </td>
                             <td><?php echo formatDuration($lesson['duration']); ?></td>
                             <td>
-                                <span class="lesson-status badge <?php echo ($lesson['status'] === 'completed') ? 'bg-success' : 'bg-warning'; ?>">
-                                    <?php echo ($lesson['status'] === 'completed') ? 'مكتمل' : 'غير مكتمل'; ?>
+                                <span class="lesson-status badge <?php echo getStatusBadgeClass($lesson['status']); ?>">
+                                    <?php echo getStatusLabel($lesson['status']); ?>
                                 </span>
                             </td>
                             <td>
@@ -191,6 +226,9 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                                     </button>
                                     <button class="btn btn-info btn-sm set-status-button" data-lesson-id="<?php echo $lesson['id']; ?>">
                                         <i class="fas fa-flag"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm delete-lesson-button" data-lesson-id="<?php echo $lesson['id']; ?>">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                     <div class="form-check form-switch d-inline-block ms-2">
                                         <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
@@ -259,54 +297,25 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
       </div>
     </div>
 
-    <!-- مودال لتحديد حالة الدرس -->
-    <div class="modal fade" id="setStatusModal" tabindex="-1" aria-labelledby="setStatusModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="setStatusModalLabel">تحديد حالة الدرس</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-          </div>
-          <div class="modal-body">
-            <select class="form-control" id="lessonStatusSelect">
-                <option value="">اختر حالة</option>
-                <option value="watch">مشاهدة</option>
-                <option value="problem">مشكلة</option>
-                <option value="discussion">نقاش</option>
-                <option value="search">بحث</option>
-                <option value="retry">إعادة</option>
-                <option value="retry_again">إعادة ثانية</option>
-                <option value="review">مراجعة</option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-            <button type="button" class="btn btn-primary" id="setStatusConfirmButton">تحديد الحالة</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- مكتبة jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- DataTables JS -->
+        <!-- DataTables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
     <!-- DataTables Responsive JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap5.min.js"></script>
     
-    <!-- مكتبة Bootstrap JS -->
+    <!-- مكتبة Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- مكتبة Tagify -->
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     
-    <!-- مكتبة SweetAlert -->
+    <!-- مكتبة SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- مكتبة توست -->
+    <!-- مكتبة Toastr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     
     <script>
@@ -323,215 +332,26 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
             ],
             order: [[1, 'asc']]
         });
-
-        // تهيئة توست
+        
+        // تهيئة Tagify للأقسام الجديدة
+        var input = document.querySelector('#newSectionTags');
+        new Tagify(input);
+        
+        // تهيئة Toastr
         toastr.options = {
             "closeButton": true,
             "progressBar": true,
             "positionClass": "toast-top-right",
             "timeOut": "3000"
         };
-
-        // تهيئة Tagify للأقسام الجديدة
-        var newSectionInput = document.querySelector('#newSectionTags');
-        var tagifySections = new Tagify(newSectionInput, {
-            delimiters: ",",
-            maxTags: 10,
-            dropdown: {
-                enabled: 0
-            }
-        });
-
-        // أزرار المودال لتحديد القسم
-        $('#newSectionButton').on('click', function() {
-            $('#newSectionInput').show();
-            $('#existingSectionSelect').hide();
-        });
-
-        $('#existingSectionButton').on('click', function() {
-            $('#existingSectionSelect').show();
-            $('#newSectionInput').hide();
-        });
-
-        var currentLessonId = null;
-
-        // فتح مودال تعيين القسم
-        $('.assign-section-button').on('click', function() {
-            currentLessonId = $(this).data('lesson-id');
-            $('#assignSectionModal').modal('show');
-        });
-
-        // تأكيد تعيين القسم
-        $('#assignSectionConfirmButton').on('click', function() {
-            if (currentLessonId === null) {
-                toastr.error('معرف الدرس غير موجود.');
-                return;
-            }
-
-            var selectedSectionId = $('#existingSections').val();
-            var newSections = tagifySections.value.map(tag => tag.value).filter(name => name.trim() !== '');
-
-            if ($('#newSectionInput').is(':visible')) {
-                if (newSections.length === 0) {
-                    toastr.error('يرجى إدخال أسماء الأقسام الجديدة.');
-                    return;
-                }
-
-                // إرسال أقسام جديدة إلى الخادم
-                $.ajax({
-                    url: 'lessons_actions.php',
-                    type: 'POST',
-                    data: {
-                        action: 'add_new_sections',
-                        sections: JSON.stringify(newSections)
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            var newSectionIds = response.section_ids;
-                            // تعيين القسم الأول من الأقسام الجديدة للدرس
-                            if (newSectionIds.length > 0) {
-                                assignSectionToLesson(currentLessonId, newSectionIds[0]);
-                            }
-                            Swal.fire('تم!', 'تم إضافة الأقسام الجديدة وتعيين القسم للدرس بنجاح.', 'success');
-                            $('#assignSectionModal').modal('hide');
-                            tagifySections.removeAllTags();
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function() {
-                        toastr.error('حدث خطأ في الاتصال بالخادم.');
-                    }
-                });
-            } else if ($('#existingSectionSelect').is(':visible')) {
-                if (selectedSectionId === "") {
-                    toastr.error('يرجى اختيار قسم موجود.');
-                    return;
-                }
-
-                assignSectionToLesson(currentLessonId, selectedSectionId);
-                Swal.fire('تم!', 'تم تعيين القسم للدرس بنجاح.', 'success');
-                $('#assignSectionModal').modal('hide');
-            }
-        });
-
-        function assignSectionToLesson(lessonId, sectionId) {
-            $.ajax({
-                url: 'lessons_actions.php',
-                type: 'POST',
-                data: {
-                    action: 'assign_section',
-                    lesson_id: lessonId,
-                    section_id: sectionId
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success('تم تعيين القسم بنجاح.');
-                        // يمكنك تحديث الواجهة إذا لزم الأمر
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('حدث خطأ في الاتصال بالخادم.');
-                }
-            });
-        }
-
-        // فتح مودال تحديد حالة الدرس
-        $('.set-status-button').on('click', function() {
-            currentLessonId = $(this).data('lesson-id');
-            $('#setStatusModal').modal('show');
-        });
-
-        // تأكيد تعيين حالة الدرس
-        $('#setStatusConfirmButton').on('click', function() {
-            var selectedStatus = $('#lessonStatusSelect').val();
-            if (selectedStatus === "") {
-                toastr.error('يرجى اختيار حالة للدرس.');
-                return;
-            }
-
-            if (currentLessonId === null) {
-                toastr.error('معرف الدرس غير موجود.');
-                return;
-            }
-
-            $.ajax({
-                url: 'lessons_actions.php',
-                type: 'POST',
-                data: {
-                    action: 'set_status',
-                    lesson_id: currentLessonId,
-                    status: selectedStatus
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success('تم تحديد حالة الدرس بنجاح.');
-                        // تحديث حالة الدرس في الجدول
-                        $('#lesson-row-' + currentLessonId + ' .lesson-status').text(getStatusLabel(selectedStatus));
-                        $('#setStatusModal').modal('hide');
-                        $('#lessonStatusSelect').val('');
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('حدث خطأ في الاتصال بالخادم.');
-                }
-            });
-        });
-
-        function getStatusLabel(status) {
-            switch(status) {
-                case 'watch':
-                    return 'مشاهدة';
-                case 'problem':
-                    return 'مشكلة';
-                case 'discussion':
-                    return 'نقاش';
-                case 'search':
-                    return 'بحث';
-                case 'retry':
-                    return 'إعادة';
-                case 'retry_again':
-                    return 'إعادة ثانية';
-                case 'review':
-                    return 'مراجعة';
-                default:
-                    return 'غير محدد';
-            }
-        }
-
-        // وظيفة تحديث نسبة الإكمال
-        function updateCompletionPercentage() {
-            $.ajax({
-                url: 'lessons_actions.php',
-                type: 'POST',
-                data: { 
-                    action: 'get_completion_percentage',
-                    course_id: <?php echo $courseId; ?>
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        $('.progress-bar').css('width', response.percentage + '%').attr('aria-valuenow', response.percentage).text(response.percentage + '%');
-                    }
-                }
-            });
-        }
-
-        // وظيفة تحديث حالة الدرس عند الضغط على زر المشاهدة
+        
+        // زر المشاهدة
         $('.watch-button').on('click', function() {
             var lessonId = $(this).data('lesson-id');
-            var currentViews = $(this).data('views');
-
-            var newViews = (currentViews > 0) ? 0 : 1;
-            var newButtonText = (newViews > 0) ? 'تم المشاهدة' : 'مشاهدة';
-
+            var views = parseInt($(this).data('views'));
+            var newViews = views === 0 ? 1 : 0;
+            var button = $(this);
+            
             $.ajax({
                 url: 'lessons_actions.php',
                 type: 'POST',
@@ -543,10 +363,9 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        // تحديث النص والبيانات الخاصة بزر المشاهدة
-                        $('#lesson-row-' + lessonId + ' .watch-button').text(newButtonText).data('views', newViews);
-                        toastr.success('تم تحديث حالة المشاهدة بنجاح.');
-                        updateCompletionPercentage();
+                        button.data('views', newViews);
+                        button.html('<i class="fas fa-eye"></i> ' + (newViews === 1 ? 'تم المشاهدة' : 'مشاهدة'));
+                        toastr.success(response.message);
                     } else {
                         toastr.error(response.message);
                     }
@@ -556,23 +375,12 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                 }
             });
         });
-
-        // وظيفة تعليم الدرس كمكتمل عند الضغط على الشيك بوكس
+        
+        // مربع اختيار إكمال الدرس
         $('.mark-complete-checkbox').on('change', function() {
             var lessonId = $(this).data('lesson-id');
-            var isChecked = $(this).is(':checked') ? 1 : 0;
-
-            updateLessonStatus(lessonId, isChecked);
-        });
-
-        // وظيفة تعليم الدرس كمكتمل عند الضغط على اسم الدرس
-        $('.lesson-title').on('click', function() {
-            var lessonId = $(this).data('lesson-id');
-
-            updateLessonStatus(lessonId, 1);
-        });
-
-        function updateLessonStatus(lessonId, isCompleted) {
+            var isCompleted = $(this).is(':checked');
+            
             $.ajax({
                 url: 'lessons_actions.php',
                 type: 'POST',
@@ -585,23 +393,15 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                 success: function(response) {
                     if (response.success) {
                         var row = $('#lesson-row-' + lessonId);
-                        var statusBadge = row.find('.lesson-status');
-                        var checkbox = row.find('.mark-complete-checkbox');
-                        
                         if (isCompleted) {
-                            row.addClass('table-success');
-                            statusBadge.removeClass('bg-warning').addClass('bg-success').text('مكتمل');
-                            checkbox.prop('checked', true);
-                            toastr.success('تم تعليم الدرس كمكتمل.');
+                            row.addClass('completed');
+                            row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-success').text('مكتمل');
                         } else {
-                            row.removeClass('table-success');
-                            statusBadge.removeClass('bg-success').addClass('bg-warning').text('غير مكتمل');
-                            checkbox.prop('checked', false);
-                            toastr.success('تم إلغاء تعليم الدرس كمكتمل.');
+                            row.removeClass('completed');
+                            row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-warning').text('غير مكتمل');
                         }
-                        
                         updateCompletionPercentage();
-                        table.row(row).invalidate().draw(false);
+                        toastr.success(response.message);
                     } else {
                         toastr.error(response.message);
                     }
@@ -610,8 +410,265 @@ $completionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLes
                     toastr.error('حدث خطأ في الاتصال بالخادم.');
                 }
             });
-        }
+        });
+        
+        // زر تعيين القسم
+        $('.assign-section-button').on('click', function() {
+            var lessonId = $(this).data('lesson-id');
+            $('#assignSectionModal').data('lesson-id', lessonId).modal('show');
+        });
+        
+        // أزرار اختيار نوع القسم
+        $('#newSectionButton').on('click', function() {
+            $('#newSectionInput').show();
+            $('#existingSectionSelect').hide();
+        });
+        
+        $('#existingSectionButton').on('click', function() {
+            $('#newSectionInput').hide();
+            $('#existingSectionSelect').show();
+        });
+        
+        // زر تأكيد تعيين القسم
+        $('#assignSectionConfirmButton').on('click', function() {
+            var lessonId = $('#assignSectionModal').data('lesson-id');
+            var sectionId = $('#existingSections').val();
+            var newSections = $('#newSectionTags').val();
+            
+            if (sectionId) {
+                assignExistingSection(lessonId, sectionId);
+            } else if (newSections) {
+                addNewSections(lessonId, newSections);
+            } else {
+                toastr.error('الرجاء اختيار قسم موجود أو إضافة قسم جديد.');
+            }
+        });
+        
+        // تحديث حالة الدرس
+        $('.set-status-button').on('click', function() {
+            var lessonId = $(this).data('lesson-id');
+            showSetStatusModal(lessonId);
+        });
+        
+        // حذف الدرس
+        $('.delete-lesson-button').on('click', function() {
+            var lessonId = $(this).data('lesson-id');
+            confirmDeleteLesson(lessonId);
+        });
     });
+    
+    function assignExistingSection(lessonId, sectionId) {
+        $.ajax({
+            url: 'lessons_actions.php',
+            type: 'POST',
+            data: {
+                action: 'assign_section',
+                lesson_id: lessonId,
+                section_id: sectionId
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#assignSectionModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('حدث خطأ في الاتصال بالخادم.');
+            }
+        });
+    }
+    
+    function addNewSections(lessonId, newSections) {
+        $.ajax({
+            url: 'lessons_actions.php',
+            type: 'POST',
+            data: {
+                action: 'add_new_sections',
+                lesson_id: lessonId,
+                sections: newSections
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#assignSectionModal').modal('hide');
+                    toastr.success(response.message);
+                    // تحديث قائمة الأقسام الموجودة
+                    var select = $('#existingSections');
+                    response.section_ids.forEach(function(sectionId, index) {
+                        var sectionName = JSON.parse(newSections)[index].value;
+                        select.append($('<option>', {
+                            value: sectionId,
+                            text: sectionName
+                        }));
+                    });
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('حدث خطأ في الاتصال بالخادم.');
+            }
+        });
+    }
+    
+    function updateCompletionPercentage() {
+        $.ajax({
+            url: 'lessons_actions.php',
+            type: 'POST',
+            data: {
+                action: 'get_completion_percentage',
+                course_id: <?php echo $courseId; ?>
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var percentage = response.percentage;
+                    $('.progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage).text(percentage + '%');
+                }
+            },
+            error: function() {
+                console.error('فشل في تحديث نسبة الإكمال');
+            }
+        });
+    }
+    
+    function showSetStatusModal(lessonId) {
+        Swal.fire({
+            title: 'تحديد حالة الدرس',
+            input: 'select',
+            inputOptions: {
+                'watch': 'مشاهدة',
+                'problem': 'مشكلة',
+                'discussion': 'نقاش',
+                'search': 'بحث',
+                'retry': 'إعادة',
+                'retry_again': 'إعادة ثانية',
+                'review': 'مراجعة',
+                'completed': 'مكتمل',
+                'excluded': 'مستبعد',
+                'project': 'مشروع تطبيقي'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'تحديث',
+            cancelButtonText: 'إلغاء',
+            showLoaderOnConfirm: true,
+            preConfirm: (status) => {
+                return $.ajax({
+                    url: 'lessons_actions.php',
+                    type: 'POST',
+                    data: {
+                        action: 'set_status',
+                        lesson_id: lessonId,
+                        status: status
+                    },
+                    dataType: 'json'
+                }).then(response => {
+                    if (!response.success) {
+                        throw new Error(response.message)
+                    }
+                    return response
+                }).catch(error => {
+                    Swal.showValidationMessage(`فشل الطلب: ${error}`)
+                })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                updateLessonStatusUI(lessonId, result.value.status);
+                Swal.fire('تم!', 'تم تحديث حالة الدرس بنجاح.', 'success');
+            }
+        });
+    }
+    
+    function confirmDeleteLesson(lessonId) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من استرجاع هذا الدرس!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'نعم، احذفه!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'lessons_actions.php',
+                    type: 'POST',
+                    data: {
+                        action: 'delete_lesson',
+                        lesson_id: lessonId
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#lesson-row-' + lessonId).remove();
+                            updateCompletionPercentage();
+                            Swal.fire('تم الحذف!', 'تم حذف الدرس بنجاح.', 'success');
+                        } else {
+                            Swal.fire('خطأ!', response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('خطأ!', 'حدث خطأ أثناء الاتصال بالخادم.', 'error');
+                    }
+                });
+            }
+        });
+    }
+    
+    function updateLessonStatusUI(lessonId, status) {
+        var row = $('#lesson-row-' + lessonId);
+        var statusBadge = row.find('.lesson-status');
+        
+        // تحديث الصف
+        row.removeClass('completed');
+        if (status === 'completed') {
+            row.addClass('completed');
+        }
+        
+        // تحديث شارة الحالة
+        statusBadge.removeClass().addClass('lesson-status badge ' + getStatusBadgeClass(status));
+        statusBadge.text(getStatusLabel(status));
+        
+        // تحديث مربع الاختيار
+        row.find('.mark-complete-checkbox').prop('checked', status === 'completed');
+    }
+    
+    function getStatusBadgeClass(status) {
+        switch (status) {
+            case 'completed': return 'bg-success';
+            case 'watch':
+            case 'review': return 'bg-primary';
+            case 'problem':
+            case 'retry':
+            case 'retry_again': return 'bg-warning';
+            case 'discussion':
+            case 'search': return 'bg-info';
+            case 'excluded': return 'bg-danger';
+            case 'project': return 'bg-secondary';
+            default: return 'bg-secondary';
+        }
+    }
+    
+    function getStatusLabel(status) {
+        switch (status) {
+            case 'completed': return 'مكتمل';
+            case 'watch': return 'مشاهدة';
+            case 'problem': return 'مشكلة';
+            case 'discussion': return 'نقاش';
+            case 'search': return 'بحث';
+            case 'retry': return 'إعادة';
+            case 'retry_again': return 'إعادة ثانية';
+            case 'review': return 'مراجعة';
+            case 'excluded': return 'مستبعد';
+            case 'project': return 'مشروع تطبيقي';
+            default: return 'غير محدد';
+        }
+    }
     </script>
 </body>
 </html>
