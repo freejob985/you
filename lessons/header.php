@@ -22,6 +22,12 @@
     
     <!-- مكتبة Tagify -->
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script> -->
+
     
     <style>
         body {
@@ -109,5 +115,8 @@
         .pagination .page-item {
             margin: 0 5px;
         }
+.card.h-100.completed-card {
+    background: #D4D4D4FF;
+}
     </style>
 </head>

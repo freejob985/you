@@ -65,6 +65,9 @@ require_once 'lessons/header.php';
                                 <button class="btn btn-danger btn-sm delete-lesson-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>">
                                     <i class="fas fa-trash"></i> حذف
                                 </button>
+                                <button class="btn btn-info btn-sm edit-tags-button mb-2" data-bs-toggle="modal" data-bs-target="#editTagsModal" data-lesson-id="<?php echo $lesson['id']; ?>">
+    <i class="fas fa-tags"></i> تحرير الأقسام
+</button>
                             </div>
                             <div class="form-check form-switch mt-2">
                                 <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
@@ -158,6 +161,25 @@ require_once 'lessons/header.php';
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
         <button type="button" class="btn btn-primary" id="confirmSetStatus">تأكيد</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- مودال تحرير الأقسام -->
+<div class="modal fade" id="editTagsModal" tabindex="-1" aria-labelledby="editTagsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTagsModalLabel">تحرير أقسام الدرس</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input id="lessonTags" type="text" placeholder="أدخل الأقسام هنا">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+        <button type="button" class="btn btn-primary" id="confirmEditTags">تأكيد</button>
       </div>
     </div>
   </div>

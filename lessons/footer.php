@@ -73,47 +73,41 @@
         }
 
         // تحديث حدث النقر على زر المشاهدة
+        $('.watch-button').click(function() {
+            const lessonId = $(this).data('lesson-id');
+            const views = $(this).data('views');
+            const newViews = views === 0 ? 1 : 0;
+            const button = $(this);
+            const checkbox = button.closest('.card').find('.mark-complete-checkbox');
 
-
-
-
-// تحديث حدث النقر على زر المشاهدة
-// تحديث حدث النقر على زر المشاهدة
-$('.watch-button').click(function() {
-    const lessonId = $(this).data('lesson-id');
-    const views = $(this).data('views');
-    const newViews = views === 0 ? 1 : 0;
-    const button = $(this);
-    const checkbox = button.closest('.card').find('.mark-complete-checkbox');
-
-    $.ajax({
-        url: 'lessons_actions.php',
-        method: 'POST',
-        data: {
-            action: 'toggle_watch',
-            lesson_id: lessonId,
-            views: newViews
-        },
-        success: function(response) {
-            if (response.success) {
-                button.data('views', newViews);
-                button.removeClass('btn-primary btn-success')
-                      .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
-                button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
-                
-                checkbox.prop('checked', newViews > 0);
-                
-                updateLessonStatus(lessonId, newViews > 0 ? 'completed' : 'active');
-                toastr.success('تم تحديث حالة الدرس');
-                
-                // تحديث نسبة الإكمال
-                updateCompletionPercentage();
-            } else {
-                toastr.error(response.message);
-            }
-        }
-    });
-});
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'toggle_watch',
+                    lesson_id: lessonId,
+                    views: newViews
+                },
+                success: function(response) {
+                    if (response.success) {
+                        button.data('views', newViews);
+                        button.removeClass('btn-primary btn-success')
+                              .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
+                        button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
+                        
+                        checkbox.prop('checked', newViews > 0);
+                        
+                        updateLessonStatus(lessonId, newViews > 0 ? 'completed' : 'active');
+                        toastr.success('تم تحديث حالة الدرس');
+                        
+                        // تحديث نسبة الإكمال
+                        updateCompletionPercentage();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
 
         // تحديث حدث تغيير صندوق الاختيار
         $('.mark-complete-checkbox').change(function() {
@@ -318,6 +312,52 @@ $('.watch-button').click(function() {
                 default: return '#7E0C0CFF';
             }
         }
+
+        // تهيئة Tagify
+        var input = document.querySelector('#lessonTags');
+        var tagify = new Tagify(input, {
+            delimiters: ",",
+            dropdown: {
+                enabled: 0
+            }
+        });
+
+        // فتح مودال تحرير الأقسام
+        $('.edit-tags-button').click(function() {
+            var lessonId = $(this).data('lesson-id');
+            var currentTags = $(this).closest('.card').find('.section-tags').text().split(',').map(tag => tag.trim());
+            
+            tagify.removeAllTags();
+            tagify.addTags(currentTags);
+            
+            $('#editTagsModal').data('lesson-id', lessonId);
+        });
+
+        // إرسال الأقسام الجديدة عند الضغط على زر التأكيد
+        $('#confirmEditTags').click(function() {
+            var lessonId = $('#editTagsModal').data('lesson-id');
+            var tags = tagify.value.map(tag => tag.value);
+            
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'update_section_tags',
+                    lesson_id: lessonId,
+                    section_tags: JSON.stringify(tags)
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success('تم تحديث أقسام الدرس بنجاح');
+                        $('#editTagsModal').modal('hide');
+                        // تحديث الأقسام المعروضة في البطاقة
+                        $(`.card:has([data-lesson-id="${lessonId}"])`).find('.section-tags').text(tags.join(', '));
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
 
         // تحديث البروجرس بار عند تحميل الصفحة
         updateProgressBar();

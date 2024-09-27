@@ -35,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'delete_lesson':
             deleteLesson($db);
             break;
+        case 'update_section_tags':
+            update_section_tags($db);
+            break;
         default:
             echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف.']);
             break;
@@ -249,6 +252,33 @@ function deleteLesson($db) {
         echo json_encode(['success' => true, 'message' => 'تم حذف الدرس بنجاح.']);
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء حذف الدرس: ' . $e->getMessage()]);
+    }
+}
+
+function update_section_tags($db) {
+    $lesson_id = $_POST['lesson_id'] ?? null;
+    $section_tags = $_POST['section_tags'] ?? null;
+
+    if (!$lesson_id || !is_numeric($lesson_id) || !$section_tags) {
+        echo json_encode(['success' => false, 'message' => 'معرف الدرس أو الأقسام غير صالحة.']);
+        exit;
+    }
+
+    $tags = json_decode($section_tags, true);
+    if (!is_array($tags)) {
+        echo json_encode(['success' => false, 'message' => 'تنسيق الأقسام غير صالح.']);
+        exit;
+    }
+
+    try {
+        $stmt = $db->prepare('UPDATE lessons SET section_tags = :section_tags WHERE id = :lesson_id');
+        $stmt->bindValue(':section_tags', implode(',', $tags), PDO::PARAM_STR);
+        $stmt->bindValue(':lesson_id', $lesson_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        echo json_encode(['success' => true, 'message' => 'تم تحديث أقسام الدرس بنجاح.']);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء تحديث أقسام الدرس: ' . $e->getMessage()]);
     }
 }
 ?>
