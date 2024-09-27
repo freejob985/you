@@ -175,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 try {
                     $db->beginTransaction();
+                    $addedLanguages = [];
                     
                     foreach ($languageTags as $language) {
                         $languageName = trim($language['value']);
@@ -182,11 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $stmt = $db->prepare('INSERT INTO tags (name) VALUES (:name)');
                             $stmt->bindValue(':name', $languageName, PDO::PARAM_STR);
                             $stmt->execute();
+                            $addedLanguages[] = ['id' => $db->lastInsertId(), 'name' => $languageName];
                         }
                     }
                     
                     $db->commit();
-                    echo json_encode(['success' => true, 'message' => 'تمت إضافة اللغات بنجاح!']);
+                    echo json_encode(['success' => true, 'message' => 'تمت إضافة اللغات بنجاح!', 'languages' => $addedLanguages]);
                 } catch (Exception $e) {
                     $db->rollBack();
                     echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة اللغات: ' . $e->getMessage()]);
@@ -260,31 +262,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result) {
                 $courseId = $db->lastInsertId();
 
-                // إضافة التاجات
-                if (!empty($courseTags)) {
-                    foreach ($courseTags as $tag) {
-                        $tagName = trim($tag['value']);
-                        if (!empty($tagName)) {
-                            // إضافة التاج إذا لم يكن موجودًا
-                            $stmt = $db->prepare('INSERT OR IGNORE INTO tags (name) VALUES (:name)');
-                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                            $stmt->execute();
-
-                            // الحصول على معرف التاج
-                            $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
-                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                            $stmt->execute();
-                            $tagId = $stmt->fetchColumn();
-
-                            // ربط التاج بالكورس
-                            $stmt = $db->prepare('INSERT INTO course_tags (course_id, tag_id) VALUES (:course_id, :tag_id)');
-                            $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-                            $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
-                            $stmt->execute();
-                        }
-                    }
-                }
-
                 // إضافة الدروس إلى قاعدة البيانات
                 foreach ($playlistItemsResponse['items'] as $item) {
                     $videoId = $item['snippet']['resourceId']['videoId'];
@@ -306,28 +283,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
 
                     $stmt->execute();
-
-                    $lessonId = $db->lastInsertId();
-
-                    // إضافة التاجات للدرس
-                    if (!empty($courseTags)) {
-                        foreach ($courseTags as $tag) {
-                            $tagName = trim($tag['value']);
-                            if (!empty($tagName)) {
-                                $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
-                                $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                                $stmt->execute();
-                                $tagId = $stmt->fetchColumn();
-
-                                if ($tagId) {
-                                    $stmt = $db->prepare('INSERT INTO lesson_tags (lesson_id, tag_id) VALUES (:lesson_id, :tag_id)');
-                                    $stmt->bindValue(':lesson_id', $lessonId, PDO::PARAM_INT);
-                                    $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
-                                    $stmt->execute();
-                                }
-                            }
-                        }
-                    }
                 }
 
                 echo json_encode(['success' => true, 'message' => 'تمت إضافة الكورس بنجاح!']);

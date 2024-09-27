@@ -25,7 +25,6 @@ document.getElementById('courseForm').addEventListener('submit', function(e) {
     
     const courseLink = document.getElementById('courseLink').value;
     const courseLanguage = document.getElementById('courseLanguage').value;
-    const courseTags = JSON.stringify(courseTagsInput.value); // أضف هذا السطر
     
     if (courseLink && courseLanguage) {
         Swal.fire({
@@ -48,11 +47,28 @@ document.getElementById('courseForm').addEventListener('submit', function(e) {
                     },
                     body: new URLSearchParams({
                         'courseLink': courseLink,
-                        'courseLanguage': courseLanguage,
-                        'courseTags': courseTags // أضف هذا السطر
+                        'courseLanguage': courseLanguage
                     })
                 })
-                // باقي الكود كما هو
+                .then(response => response.json())
+                .then(data => {
+                    // إخفاء SVG المتحرك
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    
+                    if (data.success) {
+                        Swal.fire('تم!', data.message, 'success');
+                        // إعادة تعيين النموذج
+                        document.getElementById('courseForm').reset();
+                    } else {
+                        Swal.fire('خطأ!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // إخفاء SVG المتحرك
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس.', 'error');
+                });
             }
         });
     } else {
@@ -199,5 +215,58 @@ fetch('', {
 .catch(error => {
     console.error('Error:', error);
 });
+
+
+// ابحث عن الدالة الخاصة بإضافة اللغة (حوالي السطر 150)
+function addLanguage() {
+    const languageTags = $('#languageTags').val();
+    
+    if (languageTags) {
+        $.ajax({
+            url: '',
+            method: 'POST',
+            data: {
+                action: 'add_language',
+                languageTags: languageTags
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire('تم!', response.message, 'success');
+                    $('#addLanguageModal').modal('hide');
+                    $('#languageTags').val('');
+                    
+                    // تحديث قائمة اللغات
+                    if (response.languages && response.languages.length > 0) {
+                        const languageSelect = $('#courseLanguage');
+                        response.languages.forEach(function(lang) {
+                            languageSelect.append($('<option>', {
+                                value: lang.id,
+                                text: lang.name
+                            }));
+                        });
+                    }
+                } else {
+                    Swal.fire('خطأ!', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
+            }
+        });
+    } else {
+        Swal.fire('خطأ!', 'يرجى إدخال اسم اللغة.', 'error');
+    }
 }
+
+// تأكد من أن هذا الكود موجود لربط الدالة بزر الإرسال
+$('#addLanguageForm').on('submit', function(e) {
+    e.preventDefault();
+    addLanguage();
+});
+}
+
+
+
 </script>

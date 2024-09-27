@@ -35,10 +35,7 @@ require_once 'index/header.php';
                                     ?>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="courseTags" class="form-label">تاجات الكورس</label>
-                                <input type="text" class="form-control" id="courseTags" name="courseTags">
-                            </div>
+                            <!-- حذف حقل تاجات الكورس -->
                             <button type="submit" class="btn btn-primary w-100">إضافة الكورس</button>
                         </form>
                         <div id="loadingContainer" class="mt-3 text-center" style="display: none;">

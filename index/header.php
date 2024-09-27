@@ -58,4 +58,16 @@
             margin-left: auto;
         }
     </style>
+<style>
+.tagify {
+    width: 100%;
+    max-width: 100%;
+}
+.tagify__tag {
+    max-width: calc(100% - 10px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
 </head>
