@@ -120,36 +120,37 @@ document.getElementById('addSectionsBtn').addEventListener('click', function() {
 $('#addSectionsModal').modal('show');
 });
 
+// حوالي السطر 90
 document.getElementById('addSectionsForm').addEventListener('submit', function(e) {
-e.preventDefault();
-const languageId = document.getElementById('languageSelect').value;
-const sections = document.getElementById('sectionsTags').value;
+    e.preventDefault();
+    const languageId = document.getElementById('languageSelect').value;
+    const sectionsTags = document.getElementById('sectionsTags').value;
 
-fetch('', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-        'action': 'add_sections',
-        'languageId': languageId,
-        'sections': sections
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'action': 'add_sections',
+            'languageId': languageId,
+            'sectionsTags': sectionsTags
+        })
     })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        Swal.fire('تم!', data.message, 'success');
-        $('#addSectionsModal').modal('hide');
-        this.reset();
-    } else {
-        Swal.fire('خطأ!', data.message, 'error');
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-    Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الأقسام.', 'error');
-});
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire('تم!', data.message, 'success');
+            $('#addSectionsModal').modal('hide');
+            this.reset();
+        } else {
+            Swal.fire('خطأ!', data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الأقسام.', 'error');
+    });
 });
 
 // إضافة لغة جديدة

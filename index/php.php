@@ -148,30 +148,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 exit;
 
-            case 'add_sections':
-                $languageId = $_POST['languageId'];
-                $sectionsTags = json_decode($_POST['sectionsTags'], true);
-                
-                try {
-                    $db->beginTransaction();
-                    
-                    foreach ($sectionsTags as $section) {
-                        $sectionName = trim($section['value']);
-                        if (!empty($sectionName)) {
-                            $stmt = $db->prepare('INSERT INTO sections (name, language_id) VALUES (:name, :language_id)');
-                            $stmt->bindValue(':name', $sectionName, PDO::PARAM_STR);
-                            $stmt->bindValue(':language_id', $languageId, PDO::PARAM_INT);
-                            $stmt->execute();
-                        }
-                    }
-                    
-                    $db->commit();
-                    echo json_encode(['success' => true, 'message' => 'تمت إضافة الأقسام بنجاح!']);
-                } catch (Exception $e) {
-                    $db->rollBack();
-                    echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة الأقسام: ' . $e->getMessage()]);
-                }
-                exit;
+     // حوالي السطر 80
+case 'add_sections':
+    $languageId = $_POST['languageId'];
+    $sectionsTags = json_decode($_POST['sectionsTags'], true);
+    
+    try {
+        $db->beginTransaction();
+        
+        foreach ($sectionsTags as $section) {
+            $sectionName = trim($section['value']);
+            if (!empty($sectionName)) {
+                $stmt = $db->prepare('INSERT INTO sections (name, language_id) VALUES (:name, :language_id)');
+                $stmt->bindValue(':name', $sectionName, PDO::PARAM_STR);
+                $stmt->bindValue(':language_id', $languageId, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        }
+        
+        $db->commit();
+        echo json_encode(['success' => true, 'message' => 'تمت إضافة الأقسام بنجاح!']);
+    } catch (Exception $e) {
+        $db->rollBack();
+        echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة الأقسام: ' . $e->getMessage()]);
+    }
+    exit;
 
             case 'add_language':
                 $languageTags = json_decode($_POST['languageTags'], true);
