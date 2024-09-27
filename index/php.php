@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $courseLink = $_POST['courseLink'];
-    $courseTags = json_decode($_POST['courseTags'], true);
+    $courseTags = isset($_POST['courseTags']) ? json_decode($_POST['courseTags'], true) : [];
     $courseLanguage = $_POST['courseLanguage'];
     $apiKey = "AIzaSyDGPD8_t3EAlU4f_pMOGjECkVQr-p3oRvY"; // استبدل بمفتاح API الخاص بك
 
@@ -261,25 +261,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $courseId = $db->lastInsertId();
 
                 // إضافة التاجات
-                foreach ($courseTags as $tag) {
-                    $tagName = trim($tag['value']);
-                    if (!empty($tagName)) {
-                        // إضافة التاج إذا لم يكن موجودًا
-                        $stmt = $db->prepare('INSERT OR IGNORE INTO tags (name) VALUES (:name)');
-                        $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                        $stmt->execute();
+                if (!empty($courseTags)) {
+                    foreach ($courseTags as $tag) {
+                        $tagName = trim($tag['value']);
+                        if (!empty($tagName)) {
+                            // إضافة التاج إذا لم يكن موجودًا
+                            $stmt = $db->prepare('INSERT OR IGNORE INTO tags (name) VALUES (:name)');
+                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
+                            $stmt->execute();
 
-                        // الحصول على معرف التاج
-                        $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
-                        $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                        $stmt->execute();
-                        $tagId = $stmt->fetchColumn();
+                            // الحصول على معرف التاج
+                            $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
+                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $tagId = $stmt->fetchColumn();
 
-                        // ربط التاج بالكورس
-                        $stmt = $db->prepare('INSERT INTO course_tags (course_id, tag_id) VALUES (:course_id, :tag_id)');
-                        $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-                        $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
-                        $stmt->execute();
+                            // ربط التاج بالكورس
+                            $stmt = $db->prepare('INSERT INTO course_tags (course_id, tag_id) VALUES (:course_id, :tag_id)');
+                            $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
+                            $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
+                            $stmt->execute();
+                        }
                     }
                 }
 
@@ -308,19 +310,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $lessonId = $db->lastInsertId();
 
                     // إضافة التاجات للدرس
-                    foreach ($courseTags as $tag) {
-                        $tagName = trim($tag['value']);
-                        if (!empty($tagName)) {
-                            $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
-                            $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
-                            $stmt->execute();
-                            $tagId = $stmt->fetchColumn();
-
-                            if ($tagId) {
-                                $stmt = $db->prepare('INSERT INTO lesson_tags (lesson_id, tag_id) VALUES (:lesson_id, :tag_id)');
-                                $stmt->bindValue(':lesson_id', $lessonId, PDO::PARAM_INT);
-                                $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
+                    if (!empty($courseTags)) {
+                        foreach ($courseTags as $tag) {
+                            $tagName = trim($tag['value']);
+                            if (!empty($tagName)) {
+                                $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
+                                $stmt->bindValue(':name', $tagName, PDO::PARAM_STR);
                                 $stmt->execute();
+                                $tagId = $stmt->fetchColumn();
+
+                                if ($tagId) {
+                                    $stmt = $db->prepare('INSERT INTO lesson_tags (lesson_id, tag_id) VALUES (:lesson_id, :tag_id)');
+                                    $stmt->bindValue(':lesson_id', $lessonId, PDO::PARAM_INT);
+                                    $stmt->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
+                                    $stmt->execute();
+                                }
                             }
                         }
                     }

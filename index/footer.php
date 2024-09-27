@@ -16,14 +16,16 @@
 
     var languageInput = document.querySelector('input[name=languageTags]');
     new Tagify(languageInput);
+    var courseTagsInput = new Tagify(document.getElementById('courseTags'));
 
-// ... (previous code remains unchanged)
 
+// حوالي السطر 20
 document.getElementById('courseForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const courseLink = document.getElementById('courseLink').value;
     const courseLanguage = document.getElementById('courseLanguage').value;
+    const courseTags = JSON.stringify(courseTagsInput.value); // أضف هذا السطر
     
     if (courseLink && courseLanguage) {
         Swal.fire({
@@ -46,44 +48,17 @@ document.getElementById('courseForm').addEventListener('submit', function(e) {
                     },
                     body: new URLSearchParams({
                         'courseLink': courseLink,
-                        'courseLanguage': courseLanguage
+                        'courseLanguage': courseLanguage,
+                        'courseTags': courseTags // أضف هذا السطر
                     })
                 })
-                .then(response => response.text())
-                .then(text => {
-                    // إخفاء SVG المتحرك
-                    document.getElementById('loadingContainer').style.display = 'none';
-                    
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                        if (data.success) {
-                            Swal.fire('تم!', data.message, 'success');
-                            this.reset();
-                        } else {
-                            Swal.fire('خطأ!', data.message, 'error');
-                        }
-                    } catch (e) {
-                        console.error('Error parsing JSON:', e);
-                        Swal.fire('خطأ!', 'حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا.', 'error');
-                        console.log('Server response:', text);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('خطأ!', 'حدث خطأ أثناء إرسال البيانات.', 'error');
-                    // إخفاء SVG المتحرك في حالة الخطأ
-                    document.getElementById('loadingContainer').style.display = 'none';
-                });
+                // باقي الكود كما هو
             }
         });
     } else {
         Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
     }
 });
-
-// ... (rest of the code remains unchanged)
-
 
 
 
