@@ -149,10 +149,10 @@ function getStatusLabel($status) {
         .progress-bar {
             line-height: 25px;
         }
-        .completed {
-            text-decoration: line-through;
-            font-weight: bold;
-        }
+    .completed {
+    text-decoration: line-through;
+    font-weight: 700 !important;
+}
         .thumbnail-img {
             width: 60px;
             height: auto;
@@ -178,6 +178,23 @@ function getStatusLabel($status) {
         .badge.bg-info { background-color: #17a2b8 !important; }
         .badge.bg-primary { background-color: #007bff !important; }
         .badge.bg-secondary { background-color: #6c757d !important; }
+    #lessonsTable {
+        width: 100% !important;
+    }
+    
+    .dataTables_wrapper {
+        overflow-x: hidden;
+overflow-y: hidden;
+    }
+    
+    .table-responsive {
+        overflow-x: hidden;
+    }
+    #lessonsTable td, #lessonsTable th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
     </style>
 </head>
 <body>
@@ -330,7 +347,11 @@ function getStatusLabel($status) {
                 { responsivePriority: 1, targets: 0 },
                 { responsivePriority: 2, targets: -1 }
             ],
-            order: [[1, 'asc']]
+            order: [[1, 'asc']],
+            scrollY: false,
+            scrollCollapse: false,
+            paging: true,
+            searching: false
         });
         
         // تهيئة Tagify للأقسام الجديدة
@@ -345,41 +366,48 @@ function getStatusLabel($status) {
             "timeOut": "3000"
         };
         
-        // زر المشاهدة
-        $('.watch-button').on('click', function() {
-            var lessonId = $(this).data('lesson-id');
-            var views = parseInt($(this).data('views'));
-            var newViews = views === 0 ? 1 : 0;
-            var button = $(this);
-            
-            $.ajax({
-                url: 'lessons_actions.php',
-                type: 'POST',
-                data: {
-                    action: 'toggle_watch',
-                    lesson_id: lessonId,
-                    views: newViews
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        button.data('views', newViews);
-                        button.html('<i class="fas fa-eye"></i> ' + (newViews === 1 ? 'تم المشاهدة' : 'مشاهدة'));
-                        toastr.success(response.message);
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('حدث خطأ في الاتصال بالخادم.');
+  $('.watch-button').on('click', function() {
+    var lessonId = $(this).data('lesson-id');
+    var views = parseInt($(this).data('views'));
+    var newViews = views === 0 ? 1 : 0;
+    var button = $(this);
+    var row = button.closest('tr');
+    var lessonTitle = row.find('.lesson-title');
+    
+    $.ajax({
+        url: 'lessons_actions.php',
+        type: 'POST',
+        data: {
+            action: 'toggle_watch',
+            lesson_id: lessonId,
+            views: newViews
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                button.data('views', newViews);
+                button.html('<i class="fas fa-eye"></i> ' + (newViews === 1 ? 'تم المشاهدة' : 'مشاهدة'));
+                if (newViews === 1) {
+                    lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
+                } else {
+                    lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
                 }
-            });
-        });
-        
+                toastr.success(response.message);
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function() {
+            toastr.error('حدث خطأ في الاتصال بالخادم.');
+        }
+    });
+});
         // مربع اختيار إكمال الدرس
         $('.mark-complete-checkbox').on('change', function() {
             var lessonId = $(this).data('lesson-id');
             var isCompleted = $(this).is(':checked');
+            var row = $(this).closest('tr');
+            var lessonTitle = row.find('.lesson-title');
             
             $.ajax({
                 url: 'lessons_actions.php',
@@ -392,12 +420,13 @@ function getStatusLabel($status) {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        var row = $('#lesson-row-' + lessonId);
                         if (isCompleted) {
                             row.addClass('completed');
+                            lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
                             row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-success').text('مكتمل');
                         } else {
                             row.removeClass('completed');
+                            lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
                             row.find('.lesson-status').removeClass().addClass('lesson-status badge bg-warning').text('غير مكتمل');
                         }
                         updateCompletionPercentage();
@@ -620,23 +649,26 @@ function getStatusLabel($status) {
         });
     }
     
-    function updateLessonStatusUI(lessonId, status) {
-        var row = $('#lesson-row-' + lessonId);
-        var statusBadge = row.find('.lesson-status');
-        
-        // تحديث الصف
-        row.removeClass('completed');
-        if (status === 'completed') {
-            row.addClass('completed');
-        }
-        
-        // تحديث شارة الحالة
-        statusBadge.removeClass().addClass('lesson-status badge ' + getStatusBadgeClass(status));
-        statusBadge.text(getStatusLabel(status));
-        
-        // تحديث مربع الاختيار
-        row.find('.mark-complete-checkbox').prop('checked', status === 'completed');
+ function updateLessonStatusUI(lessonId, status) {
+    var row = $('#lesson-row-' + lessonId);
+    var statusBadge = row.find('.lesson-status');
+    var lessonTitle = row.find('.lesson-title');
+    
+    // تحديث الصف
+    row.removeClass('completed');
+    lessonTitle.css({'text-decoration': 'none', 'font-weight': 'normal'});
+    if (status === 'completed') {
+        row.addClass('completed');
+        lessonTitle.css({'text-decoration': 'line-through', 'font-weight': 'bold'});
     }
+    
+    // تحديث شارة الحالة
+    statusBadge.removeClass().addClass('lesson-status badge ' + getStatusBadgeClass(status));
+    statusBadge.text(getStatusLabel(status));
+    
+    // تحديث مربع الاختيار
+    row.find('.mark-complete-checkbox').prop('checked', status === 'completed');
+}
     
     function getStatusBadgeClass(status) {
         switch (status) {
