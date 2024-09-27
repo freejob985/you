@@ -7,6 +7,21 @@ try {
     die("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
 }
 
+// إنشاء جدول العلاقة بين التاجات والأقسام
+try {
+    $db->exec('CREATE TABLE IF NOT EXISTS tag_sections (
+        tag_id INTEGER,
+        section_id INTEGER,
+        FOREIGN KEY (tag_id) REFERENCES tags(id),
+        FOREIGN KEY (section_id) REFERENCES sections(id),
+        PRIMARY KEY (tag_id, section_id)
+    )');
+    echo "تم إنشاء جدول tag_sections بنجاح.";
+} catch(PDOException $e) {
+    echo "حدث خطأ أثناء إنشاء جدول tag_sections: " . $e->getMessage();
+}
+
+
 // إنشاء جدول التاجات
 $db->exec('CREATE TABLE IF NOT EXISTS tags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,6 +55,8 @@ $db->exec('CREATE TABLE IF NOT EXISTS lessons (
     duration INTEGER,
     section_id INTEGER,
     status TEXT,
+    thumbnail TEXT,
+    views INTEGER DEFAULT 0,
     FOREIGN KEY (course_id) REFERENCES courses(id),
     FOREIGN KEY (section_id) REFERENCES sections(id)
 )');
@@ -77,7 +94,7 @@ function getPlaylistItems($playlistId, $apiKey) {
 }
 
 function getVideoDetails($videoId, $apiKey) {
-    $url = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id={$videoId}&key={$apiKey}";
+    $url = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id={$videoId}&key={$apiKey}";
     
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -201,20 +218,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // إضافة الدروس إلى قاعدة البيانات
                 foreach ($playlistItemsResponse['items'] as $item) {
-                    $videoId = $item['snippet']['resourceId']['videoId'];
-                    $title = $item['snippet']['title'];
-                    $url = "https://www.youtube.com/watch?v=" . $videoId;
-                    
-                    $videoResponse = getVideoDetails($videoId, $apiKey);
-                    $duration = isset($videoResponse['items'][0]['contentDetails']['duration']) ? ISO8601ToSeconds($videoResponse['items'][0]['contentDetails']['duration']) : 0;
+                $videoId = $item['snippet']['resourceId']['videoId'];
+    $title = $item['snippet']['title'];
+    $url = "https://www.youtube.com/watch?v=" . $videoId;
+    
+    $videoResponse = getVideoDetails($videoId, $apiKey);
+    $duration = isset($videoResponse['items'][0]['contentDetails']['duration']) ? ISO8601ToSeconds($videoResponse['items'][0]['contentDetails']['duration']) : 0;
+    $thumbnail = isset($videoResponse['items'][0]['snippet']['thumbnails']['high']['url']) ? $videoResponse['items'][0]['snippet']['thumbnails']['high']['url'] : '';
 
-                    $stmt = $db->prepare('INSERT INTO lessons (title, url, course_id, duration, status) VALUES (:title, :url, :course_id, :duration, :status)');
-                    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
-                    $stmt->bindValue(':url', $url, PDO::PARAM_STR);
-                    $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-                    $stmt->bindValue(':duration', $duration, PDO::PARAM_INT);
-                    $stmt->bindValue(':status', 'active', PDO::PARAM_STR);
-                    $stmt->execute();
+    $stmt = $db->prepare('INSERT INTO lessons (title, url, course_id, duration, status, thumbnail, views) VALUES (:title, :url, :course_id, :duration, :status, :thumbnail, :views)');
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':url', $url, PDO::PARAM_STR);
+    $stmt->bindValue(':course_id', $courseId, PDO::PARAM_INT);
+    $stmt->bindValue(':duration', $duration, PDO::PARAM_INT);
+    $stmt->bindValue(':status', 'active', PDO::PARAM_STR);
+    $stmt->bindValue(':thumbnail', $thumbnail, PDO::PARAM_STR);
+    $stmt->bindValue(':views', 0, PDO::PARAM_INT);
+
+    $stmt->execute();
 
                     $lessonId = $db->lastInsertId();
 
