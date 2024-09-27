@@ -104,6 +104,23 @@ function getStatusLabel($status) {
             return 'غير محدد';
     }
 }
+
+function getStatusColor($status) {
+    switch ($status) {
+        case 'completed': return '#000000';
+        case 'watch':
+        case 'review': return '#007bff';
+        case 'problem':
+        case 'retry':
+        case 'retry_again': return '#ffc107';
+        case 'discussion':
+        case 'search': return '#17a2b8';
+        case 'excluded': return '#dc3545';
+        case 'project': return '#6c757d';
+        default: return '#7E0C0CFF';
+    }
+}
+
 function getCompletionPercentage($db) {
     $course_id = $_POST['course_id'] ?? null;
 
@@ -193,21 +210,24 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
             margin-bottom: 20px;
         }
         .card-header {
-            background-color: #7E0C0CFF;
             color: white;
             border-radius: 15px 15px 0 0;
             padding: 15px;
+            transition: background-color 0.3s ease;
         }
-        .card-body {
-            padding: 20px;
+        .completed-card .card-header {
+            background-color: #000000 !important;
         }
         .lesson-title {
             font-weight: bold;
-            color: #FFFFFFFF;
+            color: #FFFFFF;
         }
         .completed {
             text-decoration: line-through;
-            color: #FFFFFFFF;
+            color: #FFFFFF;
+        }
+        .card-body {
+            padding: 20px;
         }
         .progress {
             height: 25px;
@@ -242,9 +262,6 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         }
         .grayscale {
             filter: grayscale(100%);
-        }
-        .completed-card .card-header {
-            background-color: #000000 !important;
         }
         .pagination .page-link {
             width: 40px;
@@ -295,7 +312,7 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
             <?php foreach ($currentLessons as $lesson): ?>
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 <?php echo ($lesson['status'] === 'completed') ? 'completed-card' : ''; ?>">
-                        <div class="card-header">
+                        <div class="card-header" style="background-color: <?php echo getStatusColor($lesson['status']); ?>;">
                             <h5 class="card-title mb-0">
                                 <span class="lesson-title <?php echo ($lesson['status'] === 'completed') ? 'completed' : ''; ?>" data-lesson-id="<?php echo $lesson['id']; ?>">
                                     <?php echo htmlspecialchars($lesson['title']); ?>
@@ -458,7 +475,7 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
             } else {
                 lessonCard.removeClass('completed-card');
                 thumbnail.removeClass('grayscale');
-                cardHeader.css('background-color', '#7E0C0CFF');
+                cardHeader.css('background-color', getStatusColor(status));
             }
 
             // تحديث حالة الـ checkbox
@@ -497,45 +514,47 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
         }
 
         // تحديث حدث النقر على زر المشاهدة
-        $('.watch-button').click(function() {
-            const lessonId = $(this).data('lesson-id');
-            const views = $(this).data('views');
-            const newViews = views === 0 ? 1 : 0;
-            const button = $(this);
 
-            $.ajax({
-                url: 'lessons_actions.php',
-                method: 'POST',
-                data: {
-                    action: 'toggle_watch',
-                    lesson_id: lessonId,
-                    views: newViews
-                },
-                success: function(response) {
-                    if (response.success) {
-                        button.data('views', newViews);
-                        button.removeClass('btn-primary btn-success')
-                              .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
-                        button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
-                        toastr.success('تم تحديث حالة المشاهدة');
-                        
-                        // تحديث حالة الدرس إلى "مكتمل" إذا تم المشاهدة
-                        if (newViews > 0) {
-                            updateLessonStatus(lessonId, 'completed');
-                            button.closest('.card').find('.mark-complete-checkbox').prop('checked', true);
-                        } else {
-                            updateLessonStatus(lessonId, 'active');
-                            button.closest('.card').find('.mark-complete-checkbox').prop('checked', false);
-                        }
-                        
-                        // تحديث نسبة الإكمال
-                        updateCompletionPercentage();
-                    } else {
-                        toastr.error(response.message);
-                    }
-                }
-            });
-        });
+
+
+
+// تحديث حدث النقر على زر المشاهدة
+// تحديث حدث النقر على زر المشاهدة
+$('.watch-button').click(function() {
+    const lessonId = $(this).data('lesson-id');
+    const views = $(this).data('views');
+    const newViews = views === 0 ? 1 : 0;
+    const button = $(this);
+    const checkbox = button.closest('.card').find('.mark-complete-checkbox');
+
+    $.ajax({
+        url: 'lessons_actions.php',
+        method: 'POST',
+        data: {
+            action: 'toggle_watch',
+            lesson_id: lessonId,
+            views: newViews
+        },
+        success: function(response) {
+            if (response.success) {
+                button.data('views', newViews);
+                button.removeClass('btn-primary btn-success')
+                      .addClass(newViews > 0 ? 'btn-success' : 'btn-primary');
+                button.html(`<i class="fas ${newViews > 0 ? 'fa-check' : 'fa-eye'}"></i> ${newViews > 0 ? 'تم المشاهدة' : 'مشاهدة'}`);
+                
+                checkbox.prop('checked', newViews > 0);
+                
+                updateLessonStatus(lessonId, newViews > 0 ? 'completed' : 'active');
+                toastr.success('تم تحديث حالة الدرس');
+                
+                // تحديث نسبة الإكمال
+                updateCompletionPercentage();
+            } else {
+                toastr.error(response.message);
+            }
+        }
+    });
+});
 
         // تحديث حدث تغيير صندوق الاختيار
         $('.mark-complete-checkbox').change(function() {
@@ -722,6 +741,22 @@ $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
                 case 'excluded': return 'مستبعد';
                 case 'project': return 'مشروع تطبيقي';
                 default: return 'غير محدد';
+            }
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'completed': return '#000000';
+                case 'watch':
+                case 'review': return '#007bff';
+                case 'problem':
+                case 'retry':
+                case 'retry_again': return '#ffc107';
+                case 'discussion':
+                case 'search': return '#17a2b8';
+                case 'excluded': return '#dc3545';
+                case 'project': return '#6c757d';
+                default: return '#7E0C0CFF';
             }
         }
 

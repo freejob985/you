@@ -53,8 +53,9 @@ function toggleWatch($db) {
     }
 
     try {
-        $stmt = $db->prepare('UPDATE lessons SET views = :views WHERE id = :lesson_id');
+        $stmt = $db->prepare('UPDATE lessons SET views = :views, status = :status WHERE id = :lesson_id');
         $stmt->bindValue(':views', $views, PDO::PARAM_INT);
+        $stmt->bindValue(':status', $views == 1 ? 'completed' : 'active', PDO::PARAM_STR);
         $stmt->bindValue(':lesson_id', $lesson_id, PDO::PARAM_INT);
         $stmt->execute();
 
