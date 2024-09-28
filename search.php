@@ -1,4 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+// header('Content-Type: application/json');
+
 require_once 'search/search_operations.php';
 
 $languages = getLanguages($db);
@@ -161,9 +165,24 @@ $statuses = getStatuses();
         
         <div class="bg-white shadow-lg rounded-lg p-6">
             <form id="searchForm" class="mb-6">
-                <input type="text" name="search" placeholder="ابحث عن درس..." class="w-full px-3 py-2 border rounded-md">
+                <div class="flex flex-wrap -mx-3 mb-4">
+                    <div class="w-full px-3">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="search">
+                            البحث
+                        </label>
+                        <div class="relative">
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 pr-10 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="search" name="search" type="text" placeholder="ادخل كلمات البحث هنا...">
+                            <img src="https://cdn-icons-png.flaticon.com/128/3850/3850203.png" alt="Search Icon" class="search-icon">
+                        </div>
+                    </div>
+                </div>
                 
-                <div id="filtersSection" class="mt-4">
+                <button type="button" id="toggleFilters" class="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                    <i class="fas fa-filter"></i>
+                </button>
+
+                <div id="filtersSection" class="hidden">
+                    <!-- New filter checkboxes with Material Design -->
                     <div class="flex flex-wrap -mx-3 mb-4">
                         <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                             <h3 class="text-lg font-semibold mb-2">اللغات</h3>
@@ -193,11 +212,11 @@ $statuses = getStatuses();
                             <?php endforeach; ?>
                         </div>
                         <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                            <h3 class="text-lg font-semibold mb-2">الحالة</h3>
-                            <?php foreach ($statuses as $status => $label): ?>
+                            <h3 class="text-lg font-semibold mb-2">الحالات</h3>
+                            <?php foreach ($statuses as $key => $value): ?>
                                 <div class="md-checkbox">
-                                    <input type="checkbox" id="status_<?php echo $status; ?>" name="statuses[]" value="<?php echo $status; ?>">
-                                    <label for="status_<?php echo $status; ?>"><?php echo $label; ?></label>
+                                    <input type="checkbox" id="status_<?php echo $key; ?>" name="statuses[]" value="<?php echo $key; ?>">
+                                    <label for="status_<?php echo $key; ?>"><?php echo $value; ?></label>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -271,36 +290,36 @@ $statuses = getStatuses();
             return statusLabels[status] || 'غير محدد';
         }
 
-        function displayResults(response) {
-            const resultsContainer = $('#searchResults');
-            resultsContainer.empty();
+    function displayResults(results) {
+    const resultsContainer = $('#searchResults');
+    resultsContainer.empty();
 
-            if (response.success && Array.isArray(response.results)) {
-                if (response.results.length === 0) {
-                    resultsContainer.html('<p>لا توجد نتائج للبحث.</p>');
-                } else {
-                    response.results.forEach(lesson => {
-                        const card = $('<div>').addClass('lesson-card');
-                        card.html(`
-                            <h3>${lesson.title}</h3>
-                            <p>الكورس: ${lesson.course_title || 'غير محدد'}</p>
-                            <p>اللغة: ${lesson.language_name || 'غير محددة'}</p>
-                            <p>القسم: ${lesson.section_name || 'غير محدد'}</p>
-                            <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
-                        `);
-                        resultsContainer.append(card);
-                    });
-                }
-            } else {
-                resultsContainer.html('<p>حدث خطأ أثناء جلب النتائج. يرجى المحاولة مرة أخرى.</p>');
-                console.error('Error in response:', response);
-            }
+    if (results.length === 0) {
+        resultsContainer.html('<p class="text-center">لا توجد نتائج</p>');
+        return;
+    }
 
-            // تحديث التصفح (pagination) إذا كان موجودًا
-            if (response.totalPages) {
-                displayPagination(response.currentPage, response.totalPages);
-            }
-        }
+    results.forEach(lesson => {
+        const card = $('<div>').addClass('lesson-card');
+        card.html(`
+            <h3>${lesson.title}</h3>
+            <p>الكورس: ${lesson.course_title}</p>
+            <p>اللغة: ${lesson.language_name}</p>
+            <p>القسم: ${lesson.section_name}</p>
+            <p>المدة: ${formatDuration(lesson.duration)}</p>
+            <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
+            <a href="${lesson.url}" target="_blank" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
+        `);
+        resultsContainer.append(card);
+    });
+}
+
+function formatDuration(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours > 0 ? hours + ":" : ""}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
 
         function displayPagination(currentPage, totalPages) {
             const paginationContainer = $('#pagination');
@@ -326,40 +345,38 @@ $statuses = getStatuses();
             }
         }
 
-        function performSearch(page = 1) {
-            const formData = new FormData($('#searchForm')[0]);
-            formData.append('page', page);
+  function performSearch(page = 1) {
+    const formData = new FormData($('#searchForm')[0]);
+    formData.append('page', page);
 
-            $.ajax({
-                url: 'search/search_operations.php',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        displayResults(response);
-                    } else {
-                        $('#searchResults').html('<p>حدث خطأ: ' + (response.message || 'خطأ غير معروف') + '</p>');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                    console.log(xhr.responseText);
-                    $('#searchResults').html('<p>حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى.</p>');
-                }
-            });
+    $.ajax({
+        url: 'search/search_operations.php',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            displayResults(response.results);
+            displayPagination(response.currentPage, response.totalPages);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            console.log(xhr.responseText); // لعرض الاستجابة الكاملة في وحدة التحكم
+            alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
         }
+    });
+}
 
         $('#searchForm').submit(function(e) {
             e.preventDefault();
             performSearch();
         });
 
-        // تنفيذ البحث الأولي عند تحميل الصفحة
+        // Load initial results
         performSearch();
     });
     </script>
+
 </body>
 </html>
