@@ -46,29 +46,34 @@ function searchLessons($db, $filters, $page = 1, $perPage = 48) {
               WHERE 1=1';
     $params = [];
 
-    if (!empty($filters['language'])) {
-        $query .= ' AND l.language_id = :language_id';
-        $params[':language_id'] = $filters['language'];
+    if (!empty($filters['languages'])) {
+        $placeholders = implode(',', array_fill(0, count($filters['languages']), '?'));
+        $query .= " AND l.language_id IN ($placeholders)";
+        $params = array_merge($params, $filters['languages']);
     }
 
-    if (!empty($filters['course'])) {
-        $query .= ' AND l.course_id = :course_id';
-        $params[':course_id'] = $filters['course'];
+    if (!empty($filters['courses'])) {
+        $placeholders = implode(',', array_fill(0, count($filters['courses']), '?'));
+        $query .= " AND l.course_id IN ($placeholders)";
+        $params = array_merge($params, $filters['courses']);
     }
 
-    if (!empty($filters['section'])) {
-        $query .= ' AND l.section_id = :section_id';
-        $params[':section_id'] = $filters['section'];
+    if (!empty($filters['sections'])) {
+        $placeholders = implode(',', array_fill(0, count($filters['sections']), '?'));
+        $query .= " AND l.section_id IN ($placeholders)";
+        $params = array_merge($params, $filters['sections']);
     }
 
-    if (!empty($filters['status'])) {
-        $query .= ' AND l.status = :status';
-        $params[':status'] = $filters['status'];
+    if (!empty($filters['statuses'])) {
+        $placeholders = implode(',', array_fill(0, count($filters['statuses']), '?'));
+        $query .= " AND l.status IN ($placeholders)";
+        $params = array_merge($params, $filters['statuses']);
     }
 
     if (!empty($filters['search'])) {
-        $query .= ' AND (l.title LIKE :search OR c.title LIKE :search)';
-        $params[':search'] = '%' . $filters['search'] . '%';
+        $query .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
+        $params[] = '%' . $filters['search'] . '%';
+        $params[] = '%' . $filters['search'] . '%';
     }
 
     // Count total results
@@ -79,9 +84,9 @@ function searchLessons($db, $filters, $page = 1, $perPage = 48) {
     // Pagination
     $totalPages = ceil($totalResults / $perPage);
     $offset = ($page - 1) * $perPage;
-    $query .= ' LIMIT :limit OFFSET :offset';
-    $params[':limit'] = $perPage;
-    $params[':offset'] = $offset;
+    $query .= ' LIMIT ? OFFSET ?';
+    $params[] = $perPage;
+    $params[] = $offset;
 
     $stmt = $db->prepare($query);
     $stmt->execute($params);

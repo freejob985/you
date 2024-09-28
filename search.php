@@ -302,12 +302,15 @@ $statuses = getStatuses();
     results.forEach(lesson => {
         const card = $('<div>').addClass('lesson-card');
         card.html(`
+            <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail">
             <h3>${lesson.title}</h3>
             <p>الكورس: ${lesson.course_title}</p>
             <p>اللغة: ${lesson.language_name}</p>
             <p>القسم: ${lesson.section_name}</p>
-            <p>المدة: ${formatDuration(lesson.duration)}</p>
-            <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
+            <div class="lesson-info">
+                <p>المدة: ${formatDuration(lesson.duration)}</p>
+                <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
+            </div>
             <a href="${lesson.url}" target="_blank" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
         `);
         resultsContainer.append(card);
@@ -375,6 +378,14 @@ function formatDuration(seconds) {
 
         // Load initial results
         performSearch();
+
+        let searchTimeout;
+        $('#search').on('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                performSearch();
+            }, 300); // تأخير 300 مللي ثانية لتجنب الطلبات المتكررة
+        });
     });
     </script>
 
