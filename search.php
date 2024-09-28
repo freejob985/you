@@ -1,3 +1,6 @@
+<!-- ===========================================================
+اسم الملف: search.php
+=========================================================== -->
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -5,10 +8,11 @@ ini_set('display_errors', 1);
 
 require_once 'search/search_operations.php';
 
-$languages = getLanguages($db);
-$courses = getCourses($db);
-$sections = getSections($db);
+$languages = getLanguages();
+$courses = getCourses();
+$sections = getSections();
 $statuses = getStatuses();
+// print_r($courses);
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -290,39 +294,39 @@ $statuses = getStatuses();
             return statusLabels[status] || 'غير محدد';
         }
 
-    function displayResults(results) {
-    const resultsContainer = $('#searchResults');
-    resultsContainer.empty();
+        function displayResults(results) {
+            const resultsContainer = $('#searchResults');
+            resultsContainer.empty();
 
-    if (results.length === 0) {
-        resultsContainer.html('<p class="text-center">لا توجد نتائج</p>');
-        return;
-    }
+            if (results.length === 0) {
+                resultsContainer.html('<p class="text-center">لا توجد نتائج</p>');
+                return;
+            }
 
-    results.forEach(lesson => {
-        const card = $('<div>').addClass('lesson-card');
-        card.html(`
-            <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail">
-            <h3>${lesson.title}</h3>
-            <p>الكورس: ${lesson.course_title}</p>
-            <p>اللغة: ${lesson.language_name}</p>
-            <p>القسم: ${lesson.section_name}</p>
-            <div class="lesson-info">
-                <p>المدة: ${formatDuration(lesson.duration)}</p>
-                <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
-            </div>
-            <a href="${lesson.url}" target="_blank" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
-        `);
-        resultsContainer.append(card);
-    });
-}
+            results.forEach(lesson => {
+                const card = $('<div>').addClass('lesson-card');
+                card.html(`
+                    <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail">
+                    <h3>${lesson.title}</h3>
+                    <p>الكورس: ${lesson.course_title}</p>
+                    <p>اللغة: ${lesson.language_name}</p>
+                    <p>القسم: ${lesson.section_name}</p>
+                    <div class="lesson-info">
+                        <p>المدة: ${formatDuration(lesson.duration)}</p>
+                        <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
+                    </div>
+                    <a href="${lesson.url}" target="_blank" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
+                `);
+                resultsContainer.append(card);
+            });
+        }
 
-function formatDuration(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours > 0 ? hours + ":" : ""}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
+        function formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hours > 0 ? hours + ":" : ""}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
 
         function displayPagination(currentPage, totalPages) {
             const paginationContainer = $('#pagination');
@@ -348,28 +352,28 @@ function formatDuration(seconds) {
             }
         }
 
-  function performSearch(page = 1) {
-    const formData = new FormData($('#searchForm')[0]);
-    formData.append('page', page);
+        function performSearch(page = 1) {
+            const formData = new FormData($('#searchForm')[0]);
+            formData.append('page', page);
 
-    $.ajax({
-        url: 'search/search_operations.php',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        success: function(response) {
-            displayResults(response.results);
-            displayPagination(response.currentPage, response.totalPages);
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-            console.log(xhr.responseText); // لعرض الاستجابة الكاملة في وحدة التحكم
-            alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
+            $.ajax({
+                url: 'search/search_operations.php',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    displayResults(response.results);
+                    displayPagination(response.currentPage, response.totalPages);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    console.log(xhr.responseText); // لعرض الاستجابة الكاملة في وحدة التحكم
+                    alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
+                }
+            });
         }
-    });
-}
 
         $('#searchForm').submit(function(e) {
             e.preventDefault();
@@ -386,6 +390,56 @@ function formatDuration(seconds) {
                 performSearch();
             }, 300); // تأخير 300 مللي ثانية لتجنب الطلبات المتكررة
         });
+
+        // تحديث الكورسات والأقسام عند تغيير اختيار اللغة
+        $('input[name="languages[]"]').change(function() {
+            updateCoursesAndSections();
+        });
+
+        function updateCoursesAndSections() {
+            var selectedLanguages = $('input[name="languages[]"]:checked').map(function() {
+                return this.value;
+            }).get();
+
+            $.ajax({
+                url: 'search/search_operations.php',
+                method: 'POST',
+                data: {
+                    action: 'get_courses_and_sections',
+                    languages: selectedLanguages
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        updateCheckboxes('#coursesSection', response.courses, 'courses');
+                        updateCheckboxes('#sectionsSection', response.sections, 'sections');
+                    } else {
+                        console.error('Error:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                }
+            });
+        }
+
+        function updateCheckboxes(containerId, items, name) {
+            var container = $(containerId);
+            container.empty();
+            
+            items.forEach(function(item) {
+                var checkbox = `
+                    <div class="md-checkbox">
+                        <input type="checkbox" id="${name}_${item.id}" name="${name}[]" value="${item.id}">
+                        <label for="${name}_${item.id}">${item.title || item.name}</label>
+                    </div>
+                `;
+                container.append(checkbox);
+            });
+        }
+
+        // تحديث الكورسات والأقسام عند تحميل الصفحة
+        updateCoursesAndSections();
     });
     </script>
 

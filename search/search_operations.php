@@ -1,25 +1,70 @@
 <?php
+
+ini_set('log_errors', 1);
+ini_set('error_log', 'D:\server\htdocs\you\search\custom_error.log');
+// error_log(message: "بدء تنفيذ السكريبت");
+
+// courses_handler.php
+
 // Establish database connection
 try {
     $db = new PDO('sqlite:../courses.db'); 
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    error_log("Database connection successful");
 } catch(PDOException $e) {
-    die("Error connecting to database: " . $e->getMessage());
+    error_log("Database connection failed: " . $e->getMessage());
+    die("Error connecting to the database. Please try again later.");
 }
 
-function getLanguages($db) {
-    $stmt = $db->query('SELECT id, name FROM tags WHERE id IN (SELECT DISTINCT language_id FROM courses)');
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+// بعد إنشاء الاتصال، قم بإضافة هذا الكود للتحقق من وجود البيانات
+$tables = ['tags', 'courses', 'sections'];
+foreach ($tables as $table) {
+    try {
+        $stmt = $db->query("SELECT COUNT(*) FROM $table");
+        $count = $stmt->fetchColumn();
+        error_log("Number of rows in $table: $count");
+    } catch(PDOException $e) {
+        error_log("Failed to count rows in $table: " . $e->getMessage());
+    }
 }
 
-function getCourses($db) {
-    $stmt = $db->query('SELECT id, title FROM courses');
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+function getLanguages() {
+    global $db;
+    try {
+        $stmt = $db->query('SELECT * FROM tags');
+        $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        error_log("Fetched " . count($languages) . " languages.");
+        return $languages;
+    } catch(PDOException $e) {
+        error_log("Error fetching languages: " . $e->getMessage());
+        return [];
+    }
 }
 
-function getSections($db) {
-    $stmt = $db->query('SELECT id, name FROM sections');
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+function getCourses() {
+    global $db;
+    try {
+        $stmt = $db->query('SELECT id, title FROM courses');
+        $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        error_log("Fetched " . count($courses) . " courses.");
+        return $courses;
+    } catch(PDOException $e) {
+        error_log("Error fetching courses: " . $e->getMessage());
+        return [];
+    }
+}
+
+function getSections() {
+    global $db;
+    try {
+        $stmt = $db->query('SELECT id, name FROM sections');
+        $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        error_log("Fetched " . count($sections) . " sections.");
+        return $sections;
+    } catch(PDOException $e) {
+        error_log("Error fetching sections: " . $e->getMessage());
+        return [];
+    }
 }
 
 function getStatuses() {
@@ -37,80 +82,203 @@ function getStatuses() {
     ];
 }
 
-function searchLessons($db, $filters, $page = 1, $perPage = 48) {
-    $query = 'SELECT l.*, c.title as course_title, t.name as language_name, s.name as section_name 
-              FROM lessons l
-              LEFT JOIN courses c ON l.course_id = c.id
-              LEFT JOIN tags t ON l.language_id = t.id
-              LEFT JOIN sections s ON l.section_id = s.id
-              WHERE 1=1';
-    $params = [];
+function searchLessons($filters, $page = 1, $perPage = 48) {
+    global $db;
+    try {
+        $query = 'SELECT l.*, c.title as course_title, t.name as language_name, s.name as section_name 
+                  FROM lessons l
+                  LEFT JOIN courses c ON l.course_id = c.id
+                  LEFT JOIN tags t ON l.language_id = t.id
+                  LEFT JOIN sections s ON l.section_id = s.id
+                  WHERE 1=1';
+        $params = [];
 
-    if (!empty($filters['languages'])) {
-        $placeholders = implode(',', array_fill(0, count($filters['languages']), '?'));
-        $query .= " AND l.language_id IN ($placeholders)";
-        $params = array_merge($params, $filters['languages']);
+        if (!empty($filters['languages'])) {
+            $placeholders = implode(',', array_fill(0, count($filters['languages']), '?'));
+            $query .= " AND l.language_id IN ($placeholders)";
+            $params = array_merge($params, $filters['languages']);
+        }
+
+        if (!empty($filters['courses'])) {
+            $placeholders = implode(',', array_fill(0, count($filters['courses']), '?'));
+            $query .= " AND l.course_id IN ($placeholders)";
+            $params = array_merge($params, $filters['courses']);
+        }
+
+        if (!empty($filters['sections'])) {
+            $placeholders = implode(',', array_fill(0, count($filters['sections']), '?'));
+            $query .= " AND l.section_id IN ($placeholders)";
+            $params = array_merge($params, $filters['sections']);
+        }
+
+        if (!empty($filters['statuses'])) {
+            $placeholders = implode(',', array_fill(0, count($filters['statuses']), '?'));
+            $query .= " AND l.status IN ($placeholders)";
+            $params = array_merge($params, $filters['statuses']);
+        }
+
+        if (!empty($filters['search'])) {
+            $query .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
+            $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $filters['search'] . '%';
+        }
+
+        // Count total results
+        $countQuery = 'SELECT COUNT(*) FROM lessons l
+                       LEFT JOIN courses c ON l.course_id = c.id
+                       LEFT JOIN tags t ON l.language_id = t.id
+                       LEFT JOIN sections s ON l.section_id = s.id
+                       WHERE 1=1';
+
+        if (!empty($filters['languages'])) {
+            $countQuery .= " AND l.language_id IN ($placeholders)";
+        }
+        if (!empty($filters['courses'])) {
+            $countQuery .= " AND l.course_id IN ($placeholders)";
+        }
+        if (!empty($filters['sections'])) {
+            $countQuery .= " AND l.section_id IN ($placeholders)";
+        }
+        if (!empty($filters['statuses'])) {
+            $countQuery .= " AND l.status IN ($placeholders)";
+        }
+        if (!empty($filters['search'])) {
+            $countQuery .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
+        }
+
+        $countStmt = $db->prepare($countQuery);
+        $countStmt->execute($params);
+        $totalResults = $countStmt->fetchColumn();
+
+        // Pagination
+        $totalPages = ceil($totalResults / $perPage);
+        $offset = ($page - 1) * $perPage;
+        $query .= ' LIMIT ? OFFSET ?';
+        $params[] = $perPage;
+        $params[] = $offset;
+
+        $stmt = $db->prepare($query);
+        foreach ($params as $index => $param) {
+            // Bind parameters starting from 1
+            $stmt->bindValue($index + 1, $param);
+        }
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return [
+            'results' => $results,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ];
+    } catch(PDOException $e) {
+        error_log("Error searching lessons: " . $e->getMessage());
+        return [
+            'results' => [],
+            'totalPages' => 0,
+            'currentPage' => $page,
+            'error' => 'An error occurred while searching for lessons.'
+        ];
     }
-
-    if (!empty($filters['courses'])) {
-        $placeholders = implode(',', array_fill(0, count($filters['courses']), '?'));
-        $query .= " AND l.course_id IN ($placeholders)";
-        $params = array_merge($params, $filters['courses']);
-    }
-
-    if (!empty($filters['sections'])) {
-        $placeholders = implode(',', array_fill(0, count($filters['sections']), '?'));
-        $query .= " AND l.section_id IN ($placeholders)";
-        $params = array_merge($params, $filters['sections']);
-    }
-
-    if (!empty($filters['statuses'])) {
-        $placeholders = implode(',', array_fill(0, count($filters['statuses']), '?'));
-        $query .= " AND l.status IN ($placeholders)";
-        $params = array_merge($params, $filters['statuses']);
-    }
-
-    if (!empty($filters['search'])) {
-        $query .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
-        $params[] = '%' . $filters['search'] . '%';
-        $params[] = '%' . $filters['search'] . '%';
-    }
-
-    // Count total results
-    $countStmt = $db->prepare(str_replace('SELECT l.*, c.title as course_title, t.name as language_name, s.name as section_name', 'SELECT COUNT(*)', $query));
-    $countStmt->execute($params);
-    $totalResults = $countStmt->fetchColumn();
-
-    // Pagination
-    $totalPages = ceil($totalResults / $perPage);
-    $offset = ($page - 1) * $perPage;
-    $query .= ' LIMIT ? OFFSET ?';
-    $params[] = $perPage;
-    $params[] = $offset;
-
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return [
-        'results' => $results,
-        'totalPages' => $totalPages,
-        'currentPage' => $page
-    ];
 }
 
+function get_courses_and_sections($languages) {
+    global $db;
+    try {
+        $courses = [];
+        $sections = [];
+
+        if (!empty($languages)) {
+            $placeholders = implode(',', array_fill(0, count($languages), '?'));
+            
+            // Fetch courses
+            $courseQuery = "SELECT DISTINCT c.id, c.title FROM courses c WHERE c.language_id IN ($placeholders)";
+            $courseStmt = $db->prepare($courseQuery);
+            $courseStmt->execute($languages);
+            $courses = $courseStmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Fetched " . count($courses) . " courses for selected languages.");
+
+            // Fetch sections
+            $sectionQuery = "SELECT DISTINCT s.id, s.name FROM sections s WHERE s.language_id IN ($placeholders)";
+            $sectionStmt = $db->prepare($sectionQuery);
+            $sectionStmt->execute($languages);
+            $sections = $sectionStmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Fetched " . count($sections) . " sections for selected languages.");
+        }
+
+        return [
+            'success' => true,
+            'courses' => $courses,
+            'sections' => $sections
+        ];
+    } catch(PDOException $e) {
+        error_log("Error fetching courses and sections: " . $e->getMessage());
+        return [
+            'success' => false,
+            'courses' => [],
+            'sections' => [],
+            'error' => 'An error occurred while fetching courses and sections.'
+        ];
+    }
+}
+
+// Example usage of the functions
+// Uncomment the lines below for testing purposes
+/*
+$languages = getLanguages();
+$courses = getCourses();
+$sections = getSections();
+
+print_r($languages);
+print_r($courses);
+print_r($sections);
+*/
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            // الحالات الأخرى...
+
+            case 'get_courses_and_sections':
+                // تأكد من أن اللغات تأتي كمصفوفة
+                $languages = isset($_POST['languages']) && is_array($_POST['languages']) 
+                             ? array_map('intval', $_POST['languages']) 
+                             : [];
+                echo json_encode(get_courses_and_sections($languages));
+                exit;
+
+            // يمكنك إضافة حالات أخرى هنا...
+
+            default:
+                echo json_encode(['error' => 'Invalid action.']);
+                exit;
+        }
+    }
+
+    // تعديل المفاتيح لتتوافق مع دالة searchLessons
     $filters = [
-        'language' => $_POST['language'] ?? '',
-        'course' => $_POST['course'] ?? '',
-        'section' => $_POST['section'] ?? '',
-        'status' => $_POST['status'] ?? '',
-        'search' => $_POST['search'] ?? ''
+        'languages' => isset($_POST['languages']) && is_array($_POST['languages']) 
+                      ? array_map('intval', $_POST['languages']) 
+                      : [],
+        'courses' => isset($_POST['courses']) && is_array($_POST['courses']) 
+                    ? array_map('intval', $_POST['courses']) 
+                    : [],
+        'sections' => isset($_POST['sections']) && is_array($_POST['sections']) 
+                     ? array_map('intval', $_POST['sections']) 
+                     : [],
+        'statuses' => isset($_POST['statuses']) && is_array($_POST['statuses']) 
+                     ? $_POST['statuses'] 
+                     : [],
+        'search' => isset($_POST['search']) ? trim($_POST['search']) : ''
     ];
 
     $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
-    $searchResults = searchLessons($db, $filters, $page);
+    $perPage = isset($_POST['perPage']) ? intval($_POST['perPage']) : 48; // اختياري: السماح للعميل بتحديد perPage
+
+    $searchResults = searchLessons($filters, $page, $perPage);
 
     echo json_encode($searchResults);
     exit;
 }
+?>
