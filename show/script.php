@@ -33,26 +33,23 @@ $(document).ready(function() {
     });
 
     // دالة لإضافة عناصر لقائمة التشغيل
-    function addPlaylistItem(title, lessonId, isActive, isCompleted, views) {
-        const activeClass = isActive ? 'active' : '';
-        const completedClass = isCompleted ? 'completed font-bold' : '';
-        const checkedAttribute = isCompleted ? 'checked' : '';
-        const viewsText = views > 0 ? `${views} مشاهدة` : 'غير مشاهد';
-        $('#playlist').append(`
-            <li class="list-group-item cursor-pointer ${activeClass} ${completedClass}" data-lesson-id="${lessonId}">
-                <div class="form-check d-flex justify-content-between align-items-center">
-                    <div>
-                        <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
-                        <label class="form-check-label" for="lesson-${lessonId}">
-                            ${title}
-                        </label>
-                    </div>
-                    <small class="text-muted">${viewsText}</small>
-                </div>
-            </li>
-        `);
-    }
-
+function addPlaylistItem(title, lessonId, isActive, isCompleted) {
+    const activeClass = isActive ? 'active' : '';
+    const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
+    const checkedAttribute = isCompleted ? 'checked' : '';
+    const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
+    
+    $('#playlist').append(`
+        <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
+            <div class="form-check">
+                <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
+                    ${title}
+                </label>
+            </div>
+        </li>
+    `);
+}
     // دالة لإضافة تعليق
     function addComment(commentId, comment, date) {
         const profileImage = 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724';
@@ -100,10 +97,10 @@ $(document).ready(function() {
         data: { action: 'get_playlist', course_id: <?php echo isset($courseId) ? $courseId : 0; ?> },
         dataType: 'json',
         success: function(response) {
-            console.log('Raw response:', response); // إضافة سجل للاستجابة الكاملة
+            console.log('Raw response:', response);
             if (response.success && Array.isArray(response.playlistItems) && response.playlistItems.length > 0) {
                 response.playlistItems.forEach(item => {
-                    addPlaylistItem(item.title, item.id, item.id == lessonId, item.status === 'completed', item.views);
+                    addPlaylistItem(item.title, item.id, item.id == lessonId, item.status === 'completed');
                 });
                 // تحديث الإحصائيات
                 updateStatistics(response.statistics);
@@ -127,48 +124,56 @@ $(document).ready(function() {
     });
 
     // تحديث حالة الدرس عند تغيير الشيك بوكس
-    $('#playlist').on('change', '.mark-complete', function(e) {
-        e.stopPropagation();
-        const lessonId = $(this).closest('li').data('lesson-id');
-        const isCompleted = $(this).is(':checked');
-        const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
-
-        // إرسال طلب AJAX لتحديث حالة الدرس
-        $.ajax({
-            url: 'show/ajax_handler.php',
-            method: 'POST',
-            data: { 
-                action: 'change_lesson_status', 
-                lesson_id: lessonId, 
-                status: isCompleted ? 'completed' : 'active',
-                course_id: courseId
-            },
-            dataType: 'json',
-            success: function(response) {
-                console.log('Response:', response);
-                if (response.success) {
-                    const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
-                    if (isCompleted) {
-                        listItem.addClass('completed font-bold');
-                    } else {
-                        listItem.removeClass('completed font-bold');
-                    }
-                    toastr.success('تم تحديث حالة الدرس بنجاح');
-                    updateStatistics(response.statistics);
+$('#playlist').on('change', '.mark-complete', function(e) {
+    e.stopPropagation();
+    const lessonId = $(this).closest('li').data('lesson-id');
+    const isCompleted = $(this).is(':checked');
+    const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
+    // إرسال طلب AJAX لتحديث حالة الدرس
+    $.ajax({
+        url: 'show/ajax_handler.php',
+        method: 'POST',
+        data: { 
+            action: 'change_lesson_status', 
+            lesson_id: lessonId, 
+            status: isCompleted ? 'completed' : 'active',
+            course_id: courseId
+        },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Response:', response);
+            if (response.success) {
+                const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
+                const label = listItem.find('.form-check-label');
+                if (isCompleted) {
+                    label.css({
+                        'text-decoration': 'line-through',
+                        'font-weight': 'bold'
+                    });
+                    listItem.css('background', '#aaccff');
                 } else {
-                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
+                    label.css({
+                        'text-decoration': 'none',
+                        'font-weight': 'normal'
+                    });
+                    listItem.css('background', '');
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('AJAX Error:', textStatus, errorThrown);
-                console.log('Response Text:', jqXHR.responseText);
-                toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+                toastr.success('تم تحديث حالة الدرس بنجاح');
+                updateStatistics(response.statistics);
+            } else {
+                toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
             }
-        });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            console.log('Response Text:', jqXHR.responseText);
+            toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+        }
     });
+});
 
-    // التعامل مع إرسال نموذج التعليق
-    $('#commentForm').submit(function(e) {
+
+ $('#commentForm').submit(function(e) {
         e.preventDefault();
         const comment = tinymce.get('comment').getContent();
 
