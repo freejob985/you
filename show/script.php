@@ -21,11 +21,14 @@ $(document).ready(function() {
     }
 
     // دالة لإضافة تعليق
-    function addComment(comment, date) {
+    function addComment(comment, date, profileImage) {
         $('#comments').prepend(`
-            <div class="bg-gray-50 p-3 rounded mb-2">
-                <p>${comment}</p>
-                <small class="text-muted">${date}</small>
+            <div class="bg-gray-50 p-3 rounded mb-2 flex">
+                <img src="${profileImage}" alt="Profile" class="w-12 h-12 rounded-full mr-3">
+                <div>
+                    <p>${comment}</p>
+                    <small class="text-muted">${date}</small>
+                </div>
             </div>
         `);
     }
@@ -77,7 +80,7 @@ $(document).ready(function() {
     // التعامل مع إرسال نموذج التعليق
     $('#commentForm').submit(function(e) {
         e.preventDefault();
-        const comment = $('#comment').val();
+        const comment = tinymce.get('comment').getContent();
 
         // التحقق من صحة البيانات
         if (comment.trim() === '') {
@@ -98,9 +101,9 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    addComment(comment, 'الآن');
+                    addComment(comment, 'الآن', 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724');
                     toastr.success('تم إضافة التعليق بنجاح');
-                    $('#commentForm')[0].reset();
+                    tinymce.get('comment').setContent('');
                 } else {
                     toastr.error('حدث خطأ أثناء إضافة التعليق');
                 }
@@ -163,7 +166,7 @@ $(document).ready(function() {
             console.log('Raw response:', response);
             if (Array.isArray(response)) {
                 response.forEach(comment => {
-                    addComment(comment.content, comment.created_at);
+                    addComment(comment.content, comment.created_at, 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724');
                 });
             } else {
                 console.log('No comments returned');
@@ -172,8 +175,6 @@ $(document).ready(function() {
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
             console.log('Response Text:', jqXHR.responseText);
-            console.log('Status:', jqXHR.status);
-            console.log('Status Text:', jqXHR.statusText);
             toastr.error('حدث خطأ أثناء جلب التعليقات');
         }
     });

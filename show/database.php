@@ -79,11 +79,16 @@ function getPlaylistItems($courseId) {
 }
 
 function addComment($lessonId, $comment) {
-    $db = connectDB();
-    $stmt = $db->prepare("INSERT INTO comments (lesson_id, content) VALUES (:lesson_id, :content)");
-    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-    $stmt->bindParam(':content', $comment, PDO::PARAM_STR);
-    return $stmt->execute();
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("INSERT INTO comments (lesson_id, content) VALUES (:lesson_id, :content)");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->bindParam(':content', $comment, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "addComment error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
+    }
 }
 
 function getComments($lessonId) {
@@ -95,7 +100,7 @@ function getComments($lessonId) {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         file_put_contents('debug.log', "getComments error: " . $e->getMessage() . "\n", FILE_APPEND);
-        throw $e;
+        return [];
     }
 }
 
