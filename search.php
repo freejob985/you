@@ -155,10 +155,19 @@ $statuses = getStatuses();
             background-color: #f9fafb;
         }
         .toggle-filters-btn {
-            margin-bottom: 15px;
+            background: none;
+            border: none;
             cursor: pointer;
-            color: #2196F3;
-            text-decoration: underline;
+            font-size: 24px; /* حجم الأيقونة */
+            color: #000; /* لون الأيقونة */
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+        .toggle-filters-btn:hover {
+            transform: scale(1.1);
+        }
+        .toggle-filters-btn.active {
+            transform: rotate(180deg);
         }
         .filters-grid {
             display: grid;
@@ -203,7 +212,9 @@ $statuses = getStatuses();
                 
                 <!-- زر إظهار/إخفاء الفلاتر -->
                 <div class="flex justify-end">
-                    <span class="toggle-filters-btn">إظهار/إخفاء الفلاتر</span>
+                    <button class="toggle-filters-btn" aria-label="إظهار/إخفاء الفلاتر">
+                        <i class="fas fa-filter"></i>
+                    </button>
                 </div>
                 
                 <!-- قسم الفلاتر -->
@@ -459,6 +470,63 @@ $statuses = getStatuses();
         $('#clearFilters').click(function() {
             $('.filters-section input[type="checkbox"]').prop('checked', false);
             performSearch();
+        });
+
+        function updateCoursesAndSections() {
+            const selectedLanguages = $('input[name="languages[]"]:checked').map(function() {
+                return this.value;
+            }).get();
+
+            $.ajax({
+                url: 'search/search_operations.php',
+                method: 'POST',
+                data: {
+                    action: 'get_courses_and_sections',
+                    languages: selectedLanguages
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        updateFilterOptions('#coursesFilter', response.courses);
+                        updateFilterOptions('#sectionsFilter', response.sections);
+                        
+                        // إعادة تعيين التحديدات السابقة
+                        $('input[name="courses[]"]:checked').prop('checked', false);
+                        $('input[name="sections[]"]:checked').prop('checked', false);
+                        
+                        performSearch();
+                    } else {
+                        console.error('Error:', response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function updateFilterOptions(filterId, options) {
+            const filterContainer = $(filterId);
+            filterContainer.empty();
+            
+            if (options.length === 0) {
+                filterContainer.append('<p>لا توجد خيارات متاحة</p>');
+            } else {
+                options.forEach(function(option) {
+                    const checkboxHtml = `
+                        <div class="md-checkbox">
+                            <input type="checkbox" id="${filterId.slice(1)}_${option.id}" name="${filterId.slice(1)}[]" value="${option.id}">
+                            <label for="${filterId.slice(1)}_${option.id}">${option.title || option.name}</label>
+                        </div>
+                    `;
+                    filterContainer.append(checkboxHtml);
+                });
+            }
+        }
+
+        // تحديث الكورسات والأقسام عند تغيير اختيار اللغة
+        $('input[name="languages[]"]').change(function() {
+            updateCoursesAndSections();
         });
     });
     </script>
