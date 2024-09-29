@@ -145,6 +145,21 @@ $statuses = getStatuses();
             text-transform: uppercase;
             color: #fff;
         }
+        /* أنماط للفلاتر */
+        .filters-section {
+            display: none; /* إخفاء الفلاتر بشكل افتراضي */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+        }
+        .toggle-filters-btn {
+            margin-bottom: 15px;
+            cursor: pointer;
+            color: #2196F3;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -177,6 +192,60 @@ $statuses = getStatuses();
                         <div class="relative">
                             <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 pr-10 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="search" name="search" type="text" placeholder="ادخل كلمات البحث هنا...">
                             <img src="https://cdn-icons-png.flaticon.com/128/3850/3850203.png" alt="Search Icon" class="search-icon">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- زر إظهار/إخفاء الفلاتر -->
+                <div class="flex justify-end">
+                    <span class="toggle-filters-btn">إظهار/إخفاء الفلاتر</span>
+                </div>
+                
+                <!-- قسم الفلاتر -->
+                <div class="filters-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- فلاتر اللغة -->
+                        <div>
+                            <h5 class="mb-2 font-semibold">اللغة</h5>
+                            <?php foreach ($languages as $language): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="language_<?php echo $language['id']; ?>" name="languages[]" value="<?php echo $language['id']; ?>">
+                                    <label for="language_<?php echo $language['id']; ?>"><?php echo htmlspecialchars($language['name']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- فلاتر الكورس -->
+                        <div>
+                            <h5 class="mb-2 font-semibold">الكورس</h5>
+                            <?php foreach ($courses as $course): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="course_<?php echo $course['id']; ?>" name="courses[]" value="<?php echo $course['id']; ?>">
+                                    <label for="course_<?php echo $course['id']; ?>"><?php echo htmlspecialchars($course['title']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- فلاتر القسم -->
+                        <div>
+                            <h5 class="mb-2 font-semibold">القسم</h5>
+                            <?php foreach ($sections as $section): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="section_<?php echo $section['id']; ?>" name="sections[]" value="<?php echo $section['id']; ?>">
+                                    <label for="section_<?php echo $section['id']; ?>"><?php echo htmlspecialchars($section['name']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- فلاتر الحالة -->
+                        <div>
+                            <h5 class="mb-2 font-semibold">الحالة</h5>
+                            <?php foreach ($statuses as $key => $status): ?>
+                                <div class="md-checkbox">
+                                    <input type="checkbox" id="status_<?php echo $key; ?>" name="statuses[]" value="<?php echo htmlspecialchars($key); ?>">
+                                    <label for="status_<?php echo $key; ?>"><?php echo htmlspecialchars($status); ?></label>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -256,12 +325,12 @@ $statuses = getStatuses();
             results.forEach(lesson => {
                 const card = $('<div>').addClass('lesson-card');
                 card.html(`
-                    <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail">
+                    <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail w-full h-48 object-cover mb-4">
                     <h3>${lesson.title}</h3>
                     <p>الكورس: ${lesson.course_title}</p>
                     <p>اللغة: ${lesson.language_name}</p>
                     <p>القسم: ${lesson.section_name}</p>
-                    <div class="lesson-info">
+                    <div class="lesson-info flex items-center justify-between mt-2">
                         <p>المدة: ${formatDuration(lesson.duration)}</p>
                         <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
                     </div>
@@ -302,18 +371,56 @@ $statuses = getStatuses();
             }
         }
 
+        function getSelectedFilters() {
+            const languages = [];
+            $('input[name="languages[]"]:checked').each(function() {
+                languages.push($(this).val());
+            });
+
+            const courses = [];
+            $('input[name="courses[]"]:checked').each(function() {
+                courses.push($(this).val());
+            });
+
+            const sections = [];
+            $('input[name="sections[]"]:checked').each(function() {
+                sections.push($(this).val());
+            });
+
+            const statuses = [];
+            $('input[name="statuses[]"]:checked').each(function() {
+                statuses.push($(this).val());
+            });
+
+            return {
+                languages: languages,
+                courses: courses,
+                sections: sections,
+                statuses: statuses
+            };
+        }
+
         function performSearch(page = 1) {
             const searchQuery = $('#search').val();
+            const filters = getSelectedFilters();
             
             $.ajax({
                 url: 'search/search_operations.php',
                 method: 'POST',
                 data: {
                     search: searchQuery,
-                    page: page
+                    page: page,
+                    languages: filters.languages,
+                    courses: filters.courses,
+                    sections: filters.sections,
+                    statuses: filters.statuses
                 },
                 dataType: 'json',
                 success: function(response) {
+                    if (response.error) {
+                        alert(response.error);
+                        return;
+                    }
                     displayResults(response.results);
                     displayPagination(response.currentPage, response.totalPages);
                 },
@@ -339,6 +446,16 @@ $statuses = getStatuses();
             searchTimeout = setTimeout(function() {
                 performSearch();
             }, 300);
+        });
+
+        // إظهار/إخفاء الفلاتر
+        $('.toggle-filters-btn').click(function() {
+            $('.filters-section').slideToggle();
+        });
+
+        // إعادة البحث عند تغيير أي فلتر
+        $('.filters-section input[type="checkbox"]').change(function() {
+            performSearch();
         });
     });
     </script>

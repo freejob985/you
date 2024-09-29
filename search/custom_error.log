@@ -461,3 +461,369 @@ Stack trace:
 [29-Sep-2024 14:07:12 Europe/Berlin] Number of rows in tags: 2
 [29-Sep-2024 14:07:12 Europe/Berlin] Number of rows in courses: 2
 [29-Sep-2024 14:07:12 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:16:27 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in tags: 0
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in courses: 0
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in sections: 0
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in lessons: 0
+[29-Sep-2024 14:16:27 Europe/Berlin] Fetched 0 languages.
+[29-Sep-2024 14:16:27 Europe/Berlin] Fetched 0 courses.
+[29-Sep-2024 14:16:27 Europe/Berlin] Fetched 0 sections.
+[29-Sep-2024 14:16:27 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:16:27 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:03 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:03 Europe/Berlin] Fetched 2 languages.
+[29-Sep-2024 14:17:03 Europe/Berlin] Fetched 2 courses.
+[29-Sep-2024 14:17:03 Europe/Berlin] Fetched 5 sections.
+[29-Sep-2024 14:17:03 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:03 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:12 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:12 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:12 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:13 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:13 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:20 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:20 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:20 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:21 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:21 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:21 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:21 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:21 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:22 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:22 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:22 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:22 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:22 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:23 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:23 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:23 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:23 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:23 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:24 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:24 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:24 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:24 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:24 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:28 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:28 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:28 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:32 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:32 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:32 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:32 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:32 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:33 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:33 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:33 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:33 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:33 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:39 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:39 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:39 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:39 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:39 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:52 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:52 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:52 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:52 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:52 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:17:53 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:17:53 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:17:53 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:17:53 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:17:53 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:36 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:36 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:36 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:36 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:36 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:37 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:37 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:37 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:37 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:37 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:46 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:46 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:46 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:47 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:47 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:47 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:47 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:48 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:48 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:49 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:49 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:18:49 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:18:49 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:20:36 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:20:36 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:20:36 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:20:37 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:20:37 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:20:37 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:20:37 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:20:37 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:23 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in tags: 0
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in courses: 0
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in sections: 0
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in lessons: 0
+[29-Sep-2024 14:34:23 Europe/Berlin] Fetched 0 languages.
+[29-Sep-2024 14:34:23 Europe/Berlin] Fetched 0 courses.
+[29-Sep-2024 14:34:23 Europe/Berlin] Fetched 0 sections.
+[29-Sep-2024 14:34:23 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:23 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:27 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:27 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:27 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:27 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:27 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:28 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:28 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:28 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:28 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:28 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:46 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:46 Europe/Berlin] Fetched 2 languages.
+[29-Sep-2024 14:34:46 Europe/Berlin] Fetched 2 courses.
+[29-Sep-2024 14:34:46 Europe/Berlin] Fetched 5 sections.
+[29-Sep-2024 14:34:46 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:46 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:49 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:49 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:49 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:49 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:49 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:53 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:53 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:53 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:53 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:53 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:54 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:54 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:54 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:55 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:55 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:55 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:55 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:55 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:57 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:57 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:57 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:57 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:57 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:58 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:58 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:58 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:58 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:58 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:34:59 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:34:59 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:34:59 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:34:59 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:34:59 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:11 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:11 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:11 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:11 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:11 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:12 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:12 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:12 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:12 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:12 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:13 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:13 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:13 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:13 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:13 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:35:14 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:35:14 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:35:14 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:35:14 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:35:14 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:17 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:17 Europe/Berlin] Number of rows in tags: 0
+[29-Sep-2024 14:36:17 Europe/Berlin] Number of rows in courses: 0
+[29-Sep-2024 14:36:17 Europe/Berlin] Number of rows in sections: 0
+[29-Sep-2024 14:36:17 Europe/Berlin] Number of rows in lessons: 0
+[29-Sep-2024 14:36:17 Europe/Berlin] Fetched 0 languages.
+[29-Sep-2024 14:36:17 Europe/Berlin] Fetched 0 courses.
+[29-Sep-2024 14:36:17 Europe/Berlin] Fetched 0 sections.
+[29-Sep-2024 14:36:18 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:18 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:18 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:18 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:18 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:47 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:47 Europe/Berlin] Fetched 2 languages.
+[29-Sep-2024 14:36:47 Europe/Berlin] Fetched 2 courses.
+[29-Sep-2024 14:36:47 Europe/Berlin] Fetched 5 sections.
+[29-Sep-2024 14:36:47 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:47 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:51 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:51 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:51 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:51 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:51 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:52 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:52 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:52 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:53 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:53 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:53 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:53 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:53 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:55 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in lessons: 62
+[29-Sep-2024 14:36:55 Europe/Berlin] Fetched 2 languages.
+[29-Sep-2024 14:36:55 Europe/Berlin] Fetched 2 courses.
+[29-Sep-2024 14:36:55 Europe/Berlin] Fetched 5 sections.
+[29-Sep-2024 14:36:55 Europe/Berlin] Database connection successful
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in tags: 2
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in courses: 2
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in sections: 5
+[29-Sep-2024 14:36:55 Europe/Berlin] Number of rows in lessons: 62

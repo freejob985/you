@@ -2,13 +2,11 @@
 
 ini_set('log_errors', 1);
 ini_set('error_log', 'D:\server\htdocs\you\search\custom_error.log');
-// error_log(message: "بدء تنفيذ السكريبت");
-
-// courses_handler.php
+// error_log("بدء تنفيذ السكريبت");
 
 // Establish database connection
 try {
-    $db = new PDO('sqlite:../courses.db'); 
+        $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     error_log("Database connection successful");
 } catch(PDOException $e) {
@@ -17,7 +15,7 @@ try {
 }
 
 // بعد إنشاء الاتصال، قم بإضافة هذا الكود للتحقق من وجود البيانات
-$tables = ['tags', 'courses', 'sections'];
+$tables = ['tags', 'courses', 'sections', 'lessons'];
 foreach ($tables as $table) {
     try {
         $stmt = $db->query("SELECT COUNT(*) FROM $table");
@@ -82,7 +80,7 @@ function getStatuses() {
     ];
 }
 
-function searchLessons($search, $page = 1, $perPage = 48) {
+function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
     global $db;
     try {
         $query = 'SELECT l.*, c.title as course_title, t.name as language_name, s.name as section_name 
@@ -93,10 +91,57 @@ function searchLessons($search, $page = 1, $perPage = 48) {
                   WHERE 1=1';
         $params = [];
 
+        // البحث النصي
         if (!empty($search)) {
-            $query .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
-            $params[] = '%' . $search . '%';
-            $params[] = '%' . $search . '%';
+            $query .= ' AND (l.title LIKE :search OR c.title LIKE :search)';
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        // تطبيق الفلاتر
+        if (!empty($filters)) {
+            // فلترة اللغات
+            if (!empty($filters['languages'])) {
+                $placeholders = [];
+                foreach ($filters['languages'] as $index => $language_id) {
+                    $placeholder = ':language' . $index;
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $language_id;
+                }
+                $query .= ' AND l.language_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الكورسات
+            if (!empty($filters['courses'])) {
+                $placeholders = [];
+                foreach ($filters['courses'] as $index => $course_id) {
+                    $placeholder = ':course' . $index;
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $course_id;
+                }
+                $query .= ' AND l.course_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الأقسام
+            if (!empty($filters['sections'])) {
+                $placeholders = [];
+                foreach ($filters['sections'] as $index => $section_id) {
+                    $placeholder = ':section' . $index;
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $section_id;
+                }
+                $query .= ' AND l.section_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الحالات
+            if (!empty($filters['statuses'])) {
+                $placeholders = [];
+                foreach ($filters['statuses'] as $index => $status) {
+                    $placeholder = ':status' . $index;
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $status;
+                }
+                $query .= ' AND l.status IN (' . implode(',', $placeholders) . ')';
+            }
         }
 
         // Count total results
@@ -105,27 +150,85 @@ function searchLessons($search, $page = 1, $perPage = 48) {
                        LEFT JOIN tags t ON l.language_id = t.id
                        LEFT JOIN sections s ON l.section_id = s.id
                        WHERE 1=1';
+        $countParams = [];
 
         if (!empty($search)) {
-            $countQuery .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
+            $countQuery .= ' AND (l.title LIKE :search OR c.title LIKE :search)';
+            $countParams[':search'] = '%' . $search . '%';
+        }
+
+        // تطبيق الفلاتر على استعلام العد
+        if (!empty($filters)) {
+            // فلترة اللغات
+            if (!empty($filters['languages'])) {
+                $placeholders = [];
+                foreach ($filters['languages'] as $index => $language_id) {
+                    $placeholder = ':count_language' . $index;
+                    $placeholders[] = $placeholder;
+                    $countParams[$placeholder] = $language_id;
+                }
+                $countQuery .= ' AND l.language_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الكورسات
+            if (!empty($filters['courses'])) {
+                $placeholders = [];
+                foreach ($filters['courses'] as $index => $course_id) {
+                    $placeholder = ':count_course' . $index;
+                    $placeholders[] = $placeholder;
+                    $countParams[$placeholder] = $course_id;
+                }
+                $countQuery .= ' AND l.course_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الأقسام
+            if (!empty($filters['sections'])) {
+                $placeholders = [];
+                foreach ($filters['sections'] as $index => $section_id) {
+                    $placeholder = ':count_section' . $index;
+                    $placeholders[] = $placeholder;
+                    $countParams[$placeholder] = $section_id;
+                }
+                $countQuery .= ' AND l.section_id IN (' . implode(',', $placeholders) . ')';
+            }
+
+            // فلترة الحالات
+            if (!empty($filters['statuses'])) {
+                $placeholders = [];
+                foreach ($filters['statuses'] as $index => $status) {
+                    $placeholder = ':count_status' . $index;
+                    $placeholders[] = $placeholder;
+                    $countParams[$placeholder] = $status;
+                }
+                $countQuery .= ' AND l.status IN (' . implode(',', $placeholders) . ')';
+            }
         }
 
         $countStmt = $db->prepare($countQuery);
-        $countStmt->execute($params);
+        foreach ($countParams as $key => $value) {
+            $countStmt->bindValue($key, $value);
+        }
+        $countStmt->execute();
         $totalResults = $countStmt->fetchColumn();
 
         // Pagination
         $totalPages = ceil($totalResults / $perPage);
         $offset = ($page - 1) * $perPage;
-        $query .= ' LIMIT ? OFFSET ?';
-        $params[] = $perPage;
-        $params[] = $offset;
+        $query .= ' LIMIT :perPage OFFSET :offset';
+        $params[':perPage'] = $perPage;
+        $params[':offset'] = $offset;
 
         $stmt = $db->prepare($query);
-        foreach ($params as $index => $param) {
-            // Bind parameters starting from 1
-            $stmt->bindValue($index + 1, $param);
+        
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            if (strpos($key, 'perPage') !== false || strpos($key, 'offset') !== false) {
+                $stmt->bindValue($key, $value, PDO::PARAM_INT);
+            } else {
+                $stmt->bindValue($key, $value);
+            }
         }
+
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -202,8 +305,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
-            // الحالات الأخرى...
-
             case 'get_courses_and_sections':
                 // تأكد من أن اللغات تأتي كمصفوفة
                 $languages = isset($_POST['languages']) && is_array($_POST['languages']) 
@@ -220,11 +321,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // جمع معايير البحث والفلاتر
     $search = isset($_POST['search']) ? trim($_POST['search']) : '';
     $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
     $perPage = isset($_POST['perPage']) ? intval($_POST['perPage']) : 48;
 
-    $searchResults = searchLessons($search, $page, $perPage);
+    // جمع الفلاتر من الطلب
+    $filters = [];
+    if (isset($_POST['filters']) && is_array($_POST['filters'])) {
+        // فلترة اللغات
+        if (isset($_POST['filters']['languages']) && is_array($_POST['filters']['languages'])) {
+            $filters['languages'] = array_map('intval', $_POST['filters']['languages']);
+        }
+
+        // فلترة الكورسات
+        if (isset($_POST['filters']['courses']) && is_array($_POST['filters']['courses'])) {
+            $filters['courses'] = array_map('intval', $_POST['filters']['courses']);
+        }
+
+        // فلترة الأقسام
+        if (isset($_POST['filters']['sections']) && is_array($_POST['filters']['sections'])) {
+            $filters['sections'] = array_map('intval', $_POST['filters']['sections']);
+        }
+
+        // فلترة الحالات
+        if (isset($_POST['filters']['statuses']) && is_array($_POST['filters']['statuses'])) {
+            // تأكد من أن القيم موجودة في قائمة الحالات المسموح بها
+            $allowedStatuses = array_keys(getStatuses());
+            $filters['statuses'] = array_intersect($_POST['filters']['statuses'], $allowedStatuses);
+        }
+    }
+
+    $searchResults = searchLessons($search, $page, $perPage, $filters);
 
     echo json_encode($searchResults);
     exit;
