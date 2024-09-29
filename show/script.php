@@ -97,8 +97,7 @@ $(document).ready(function() {
             data: { action: 'add_comment', lesson_id: lessonId, comment: comment },
             dataType: 'json',
             success: function(response) {
-                const result = JSON.parse(response);
-                if (result.success) {
+                if (response.success) {
                     addComment(comment, 'الآن');
                     toastr.success('تم إضافة التعليق بنجاح');
                     $('#commentForm')[0].reset();
@@ -138,8 +137,7 @@ $(document).ready(function() {
             data: { action: 'add_code', lesson_id: lessonId, language: language, code: code },
             dataType: 'json',
             success: function(response) {
-                const result = JSON.parse(response);
-                if (result.success) {
+                if (response.success) {
                     addCodeExample(language, code);
                     toastr.success('تم إضافة الكود بنجاح');
                     $('#codeForm')[0].reset();
@@ -163,10 +161,13 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(response) {
             console.log('Raw response:', response);
-            const comments = JSON.parse(response);
-            comments.forEach(comment => {
-                addComment(comment.content, comment.created_at);
-            });
+            if (Array.isArray(response)) {
+                response.forEach(comment => {
+                    addComment(comment.content, comment.created_at);
+                });
+            } else {
+                console.log('No comments returned');
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
@@ -184,10 +185,14 @@ $(document).ready(function() {
         data: { action: 'get_codes', lesson_id: lessonId },
         dataType: 'json',
         success: function(response) {
-            const codes = JSON.parse(response);
-            codes.forEach(code => {
-                addCodeExample(code.language, code.code);
-            });
+            console.log('Raw response:', response);
+            if (Array.isArray(response)) {
+                response.forEach(code => {
+                    addCodeExample(code.language, code.code);
+                });
+            } else {
+                console.log('No codes returned');
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);

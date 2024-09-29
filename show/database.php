@@ -5,9 +5,10 @@ function connectDB() {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $db;
     } catch(PDOException $e) {
-        die("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
+        throw new Exception("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
     }
 }
+
 function dd(...$variables) {
     $debugTrace = debug_backtrace();
     $file = $debugTrace[0]['file'];
@@ -86,11 +87,16 @@ function addComment($lessonId, $comment) {
 }
 
 function getComments($lessonId) {
-    $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM comments WHERE lesson_id = :lesson_id ORDER BY created_at DESC");
-    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("SELECT * FROM comments WHERE lesson_id = :lesson_id ORDER BY created_at DESC");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getComments error: " . $e->getMessage() . "\n", FILE_APPEND);
+        throw $e;
+    }
 }
 
 function addCode($lessonId, $language, $code) {
@@ -103,9 +109,15 @@ function addCode($lessonId, $language, $code) {
 }
 
 function getCodes($lessonId) {
-    $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM codes WHERE lesson_id = :lesson_id ORDER BY id");
-    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("SELECT * FROM codes WHERE lesson_id = :lesson_id ORDER BY id");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getCodes error: " . $e->getMessage() . "\n", FILE_APPEND);
+        throw $e;
+    }
 }
+?>
