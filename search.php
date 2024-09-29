@@ -376,35 +376,6 @@ $statuses = getStatuses();
             }
         }
 
-        function getSelectedFilters() {
-            const languages = [];
-            $('input[name="languages[]"]:checked').each(function() {
-                languages.push($(this).val());
-            });
-
-            const courses = [];
-            $('input[name="courses[]"]:checked').each(function() {
-                courses.push($(this).val());
-            });
-
-            const sections = [];
-            $('input[name="sections[]"]:checked').each(function() {
-                sections.push($(this).val());
-            });
-
-            const statuses = [];
-            $('input[name="statuses[]"]:checked').each(function() {
-                statuses.push($(this).val());
-            });
-
-            return {
-                languages: languages,
-                courses: courses,
-                sections: sections,
-                statuses: statuses
-            };
-        }
-
         function performSearch(page = 1) {
             const searchQuery = $('#search').val();
             const filters = getSelectedFilters();
@@ -415,10 +386,7 @@ $statuses = getStatuses();
                 data: {
                     search: searchQuery,
                     page: page,
-                    languages: filters.languages,
-                    courses: filters.courses,
-                    sections: filters.sections,
-                    statuses: filters.statuses
+                    filters: filters
                 },
                 dataType: 'json',
                 success: function(response) {
@@ -435,6 +403,23 @@ $statuses = getStatuses();
                     alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
                 }
             });
+        }
+
+        function getSelectedFilters() {
+            return {
+                languages: $('input[name="languages[]"]:checked').map(function() {
+                    return this.value;
+                }).get(),
+                courses: $('input[name="courses[]"]:checked').map(function() {
+                    return this.value;
+                }).get(),
+                sections: $('input[name="sections[]"]:checked').map(function() {
+                    return this.value;
+                }).get(),
+                statuses: $('input[name="statuses[]"]:checked').map(function() {
+                    return this.value;
+                }).get()
+            };
         }
 
         $('#searchForm').submit(function(e) {
@@ -458,7 +443,7 @@ $statuses = getStatuses();
             $('.filters-section').slideToggle();
         });
 
-        // إعادة البحث عند تغيير أي فلتر
+        // تحديث البحث عند تغيير أي فلتر
         $('.filters-section input[type="checkbox"]').change(function() {
             performSearch();
         });

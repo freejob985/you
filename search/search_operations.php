@@ -262,14 +262,12 @@ function get_courses_and_sections($languages) {
             $courseStmt = $db->prepare($courseQuery);
             $courseStmt->execute($languages);
             $courses = $courseStmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Fetched " . count($courses) . " courses for selected languages.");
 
             // Fetch sections
             $sectionQuery = "SELECT DISTINCT s.id, s.name FROM sections s WHERE s.language_id IN ($placeholders)";
             $sectionStmt = $db->prepare($sectionQuery);
             $sectionStmt->execute($languages);
             $sections = $sectionStmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Fetched " . count($sections) . " sections for selected languages.");
         }
 
         return [
@@ -278,7 +276,6 @@ function get_courses_and_sections($languages) {
             'sections' => $sections
         ];
     } catch(PDOException $e) {
-        error_log("Error fetching courses and sections: " . $e->getMessage());
         return [
             'success' => false,
             'courses' => [],
@@ -286,6 +283,17 @@ function get_courses_and_sections($languages) {
             'error' => 'An error occurred while fetching courses and sections.'
         ];
     }
+}
+
+// في بداية الملف، بعد التحقق من طريقة الطلب POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] === 'get_courses_and_sections') {
+        $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
+        echo json_encode(get_courses_and_sections($languages));
+        exit;
+    }
+    
+    // ... (باقي الكود)
 }
 
 // Example usage of the functions
