@@ -253,6 +253,13 @@ $statuses = getStatuses();
                             <?php endforeach; ?>
                         </div>
                     </div>
+                    <!-- إضافة هذا الكود في نهاية قسم الفلاتر -->
+                    <div class="flex justify-center mt-4">
+                        <button id="clearFilters" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                            <i class="fas fa-eraser mr-2"></i>
+                            <span>مسح الفلاتر</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="flex justify-center mt-6">
@@ -445,6 +452,12 @@ $statuses = getStatuses();
 
         // تحديث البحث عند تغيير أي فلتر
         $('.filters-section input[type="checkbox"]').change(function() {
+            performSearch();
+        });
+
+        // إضافة هذا الكود داخل $(document).ready(function() { ... });
+        $('#clearFilters').click(function() {
+            $('.filters-section input[type="checkbox"]').prop('checked', false);
             performSearch();
         });
     });
