@@ -63,15 +63,18 @@ function getCourseDetails($courseId) {
 }
 
 function getPlaylistItems($courseId) {
-    $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM lessons WHERE course_id = :course_id");
-    $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    file_put_contents('debug.log', "getPlaylistItems result: " . print_r($result, true) . "\n", FILE_APPEND);
-    
-    // If no results, return an empty array instead of false
-    return $result ? $result : [];
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("SELECT * FROM lessons WHERE course_id = :course_id");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        file_put_contents('debug.log', "getPlaylistItems result: " . print_r($result, true) . "\n", FILE_APPEND);
+        return $result ? $result : [];
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getPlaylistItems error: " . $e->getMessage() . "\n", FILE_APPEND);
+        throw $e;
+    }
 }
 
 function addComment($lessonId, $comment) {

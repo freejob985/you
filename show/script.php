@@ -162,6 +162,7 @@ $(document).ready(function() {
         data: { action: 'get_comments', lesson_id: lessonId },
         dataType: 'json',
         success: function(response) {
+            console.log('Raw response:', response);
             const comments = JSON.parse(response);
             comments.forEach(comment => {
                 addComment(comment.content, comment.created_at);
@@ -170,6 +171,8 @@ $(document).ready(function() {
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
             console.log('Response Text:', jqXHR.responseText);
+            console.log('Status:', jqXHR.status);
+            console.log('Status Text:', jqXHR.statusText);
             toastr.error('حدث خطأ أثناء جلب التعليقات');
         }
     });
@@ -237,5 +240,22 @@ $(document).ready(function() {
             $('body').removeClass('sidebar-open');
         }
     });
+});
+
+// Initialize TinyMCE
+tinymce.init({
+    selector: '#comment',
+    height: 300,
+    menubar: false,
+    plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount'
+    ],
+    toolbar: 'undo redo | formatselect | ' +
+    'bold italic backcolor | alignleft aligncenter ' +
+    'alignright alignjustify | bullist numlist outdent indent | ' +
+    'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 });
 </script>
