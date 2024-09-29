@@ -184,21 +184,35 @@ function getCourseStatistics($courseId) {
         $totalLessons = $stmt->fetch(PDO::FETCH_ASSOC)['total_lessons'];
 
         // الدروس المكتملة
-        $stmt = $db->prepare("SELECT COUNT(*) as completed_lessons FROM lessons WHERE course_id = :course_id AND status = 'completed'");
+        $stmt = $db->prepare("SELECT COUNT(*) as completed_lessons FROM lessons WHERE course_id = :course_id AND status = 'completed' AND views > 0");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $completedLessons = $stmt->fetch(PDO::FETCH_ASSOC)['completed_lessons'];
 
         // الدروس غير المكتملة
-        $stmt = $db->prepare("SELECT COUNT(*) as incomplete_lessons FROM lessons WHERE course_id = :course_id AND status != 'completed'");
+        $stmt = $db->prepare("SELECT COUNT(*) as incomplete_lessons FROM lessons WHERE course_id = :course_id AND (status != 'completed' OR views = 0)");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $incompleteLessons = $stmt->fetch(PDO::FETCH_ASSOC)['incomplete_lessons'];
 
+        // الحالات
+        $stmt = $db->prepare("SELECT DISTINCT status FROM lessons WHERE course_id = :course_id");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $statuses = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // الأقسام
+        $stmt = $db->prepare("SELECT DISTINCT section FROM lessons WHERE course_id = :course_id");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $sections = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
         return [
             'total_lessons' => $totalLessons,
             'completed_lessons' => $completedLessons,
-            'incomplete_lessons' => $incompleteLessons
+            'incomplete_lessons' => $incompleteLessons,
+            'statuses' => $statuses,
+            'sections' => $sections
         ];
     } catch (Exception $e) {
         file_put_contents('debug.log', "getCourseStatistics error: " . $e->getMessage() . "\n", FILE_APPEND);

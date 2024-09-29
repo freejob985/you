@@ -159,5 +159,23 @@
     /* تنسيق الدرس المكتمل */
     .completed {
         text-decoration: line-through;
+        font-weight: bold;
+    }
+    /* تكبير القائمة */
+    #playlist {
+        font-size: 1.1em;
+    }
+    #playlist .list-group-item {
+        padding: 12px 20px;
+    }
+    /* تنسيق الإحصائيات */
+    #playlistStatistics {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+    #playlistStatistics p {
+        margin-bottom: 10px;
     }
 </style>

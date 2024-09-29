@@ -33,17 +33,21 @@ $(document).ready(function() {
     });
 
     // دالة لإضافة عناصر لقائمة التشغيل
-    function addPlaylistItem(title, lessonId, isActive, isCompleted) {
+    function addPlaylistItem(title, lessonId, isActive, isCompleted, views) {
         const activeClass = isActive ? 'active' : '';
-        const completedClass = isCompleted ? 'completed' : '';
-        const checkedAttribute = isCompleted ? 'checked' : '';
+        const completedClass = (isCompleted && views > 0) ? 'completed' : '';
+        const checkedAttribute = (isCompleted && views > 0) ? 'checked' : '';
+        const viewsText = views > 0 ? `${views} مشاهدة` : 'غير مشاهد';
         $('#playlist').append(`
             <li class="list-group-item cursor-pointer ${activeClass} ${completedClass}" data-lesson-id="${lessonId}">
-                <div class="form-check">
-                    <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
-                    <label class="form-check-label" for="lesson-${lessonId}">
-                        ${title}
-                    </label>
+                <div class="form-check d-flex justify-content-between align-items-center">
+                    <div>
+                        <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                        <label class="form-check-label" for="lesson-${lessonId}">
+                            ${title}
+                        </label>
+                    </div>
+                    <small class="text-muted">${viewsText}</small>
                 </div>
             </li>
         `);
@@ -80,10 +84,12 @@ $(document).ready(function() {
     }
 
     // تحديث الإحصائيات
-    function updateStatistics(completedCount, incompleteCount) {
+    function updateStatistics(statistics) {
         $('#playlistStatistics').html(`
-            <p><strong>الدروس المكتملة:</strong> ${completedCount}</p>
-            <p><strong>الدروس غير المكتملة:</strong> ${incompleteCount}</p>
+            <p><strong>الدروس المكتملة:</strong> ${statistics.completed_lessons}</p>
+            <p><strong>الدروس غير المكتملة:</strong> ${statistics.incomplete_lessons}</p>
+            <p><strong>الحالات:</strong> ${statistics.statuses.join(', ')}</p>
+            <p><strong>الأقسام:</strong> ${statistics.sections.join(', ')}</p>
         `);
     }
 
@@ -97,10 +103,10 @@ $(document).ready(function() {
             console.log('Raw response:', response); // إضافة سجل للاستجابة الكاملة
             if (response.success && Array.isArray(response.playlistItems) && response.playlistItems.length > 0) {
                 response.playlistItems.forEach(item => {
-                    addPlaylistItem(item.title, item.id, item.id == lessonId, item.completed == 1);
+                    addPlaylistItem(item.title, item.id, item.id == lessonId, item.status === 'completed', item.views);
                 });
                 // تحديث الإحصائيات
-                updateStatistics(response.counts.completed, response.counts.incomplete);
+                updateStatistics(response.statistics);
             } else {
                 console.log('No playlist items returned or error occurred');
                 toastr.warning('لا توجد عناصر في قائمة التشغيل أو حدث خطأ');
@@ -149,7 +155,7 @@ $(document).ready(function() {
                     }
                     toastr.success('تم تحديث حالة الدرس بنجاح');
                     // تحديث الإحصائيات
-                    updateStatistics(response.completedCount, response.incompleteCount);
+                    updateStatistics(response.statistics);
                 } else {
                     toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
                 }
@@ -409,6 +415,16 @@ $(document).ready(function() {
             }
         }
     });
+
+    // تحديث الإحصائيات
+    function updateStatistics(statistics) {
+        $('#playlistStatistics').html(`
+            <p><strong>الدروس المكتملة:</strong> ${statistics.completed_lessons}</p>
+            <p><strong>الدروس غير المكتملة:</strong> ${statistics.incomplete_lessons}</p>
+            <p><strong>الحالات:</strong> ${statistics.statuses.join(', ')}</p>
+            <p><strong>الأقسام:</strong> ${statistics.sections.join(', ')}</p>
+        `);
+    }
 
 });
 </script>
