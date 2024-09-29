@@ -71,7 +71,7 @@ $(document).ready(function() {
     // التعامل مع النقر على عناصر قائمة التشغيل
     $('#playlist').on('click', 'li', function() {
         const clickedLessonId = $(this).data('lesson-id');
-        window.location.href = `show.php?id=${clickedLessonId}`;
+        window.location.href = `show.php?lesson_id=${clickedLessonId}`;
     });
 
     // التعامل مع إرسال نموذج التعليق

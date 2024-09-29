@@ -49,7 +49,7 @@ function getYoutubeVideoId($url) {
 
 function getLessonDetails($lessonId) {
     $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM lessons WHERE lesson_id = :lesson_id");
+    $stmt = $db->prepare("SELECT * FROM lessons WHERE id = :lesson_id");
     $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
