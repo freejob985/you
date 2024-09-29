@@ -94,16 +94,16 @@ $(document).ready(function() {
         data: { action: 'get_playlist', course_id: <?php echo isset($courseId) ? $courseId : 0; ?> },
         dataType: 'json',
         success: function(response) {
-            console.log('Raw response:', response);
-            if (Array.isArray(response.playlistItems) && response.playlistItems.length > 0) {
+            console.log('Raw response:', response); // إضافة سجل للاستجابة الكاملة
+            if (response.success && Array.isArray(response.playlistItems) && response.playlistItems.length > 0) {
                 response.playlistItems.forEach(item => {
                     addPlaylistItem(item.title, item.id, item.id == lessonId, item.completed == 1);
                 });
                 // تحديث الإحصائيات
                 updateStatistics(response.counts.completed, response.counts.incomplete);
             } else {
-                console.log('No playlist items returned');
-                toastr.warning('لا توجد عناصر في قائمة التشغيل');
+                console.log('No playlist items returned or error occurred');
+                toastr.warning('لا توجد عناصر في قائمة التشغيل أو حدث خطأ');
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -125,14 +125,21 @@ $(document).ready(function() {
         e.stopPropagation();
         const lessonId = $(this).closest('li').data('lesson-id');
         const isCompleted = $(this).is(':checked');
+        const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
 
         // إرسال طلب AJAX لتحديث حالة الدرس
         $.ajax({
             url: 'show/ajax_handler.php',
             method: 'POST',
-            data: { action: 'update_lesson_status', lesson_id: lessonId, completed: isCompleted ? 1 : 0 },
+            data: { 
+                action: 'change_lesson_status', 
+                lesson_id: lessonId, 
+                status: isCompleted ? 'completed' : 'active',
+                course_id: courseId
+            },
             dataType: 'json',
             success: function(response) {
+                console.log('Response:', response); // إضافة هذا السطر للتصحيح
                 if (response.success) {
                     const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
                     if (isCompleted) {
@@ -144,7 +151,7 @@ $(document).ready(function() {
                     // تحديث الإحصائيات
                     updateStatistics(response.completedCount, response.incompleteCount);
                 } else {
-                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

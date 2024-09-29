@@ -21,14 +21,25 @@ try {
                     file_put_contents('debug.log', "Course ID: $courseId\n", FILE_APPEND);
                     $playlistItems = getPlaylistItems($courseId);
                     file_put_contents('debug.log', "Playlist Items: " . print_r($playlistItems, true) . "\n", FILE_APPEND);
-                    $json_output = json_encode($playlistItems);
-                    if ($json_output === false) {
-                        file_put_contents('debug.log', "JSON encode error: " . json_last_error_msg() . "\n", FILE_APPEND);
+                    if ($playlistItems === false) {
                         ob_end_clean();
-                        echo json_encode(['error' => 'Failed to encode JSON']);
+                        echo json_encode(['success' => false, 'error' => 'Failed to fetch playlist items']);
                     } else {
-                        ob_end_clean();
-                        echo $json_output;
+                        $counts = getCourseStatistics($courseId);
+                        $response = [
+                            'success' => true,
+                            'playlistItems' => $playlistItems,
+                            'counts' => $counts
+                        ];
+                        $json_output = json_encode($response);
+                        if ($json_output === false) {
+                            file_put_contents('debug.log', "JSON encode error: " . json_last_error_msg() . "\n", FILE_APPEND);
+                            ob_end_clean();
+                            echo json_encode(['success' => false, 'error' => 'Failed to encode JSON']);
+                        } else {
+                            ob_end_clean();
+                            echo $json_output;
+                        }
                     }
                     break;
                 case 'get_comments':
@@ -48,6 +59,24 @@ try {
                     $statistics = getCourseStatistics($courseId);
                     ob_end_clean();
                     echo json_encode($statistics);
+                    break;
+                case 'change_lesson_status':
+                    $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
+                    $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
+                    $courseId = isset($_POST['course_id']) ? intval($_POST['course_id']) : 0;
+                    $result = updateLessonStatus($lessonId, $newStatus);
+                    if ($result) {
+                        $statistics = getCourseStatistics($courseId);
+                        ob_end_clean();
+                        echo json_encode([
+                            'success' => true, 
+                            'completedCount' => $statistics['completed_lessons'],
+                            'incompleteCount' => $statistics['incomplete_lessons']
+                        ]);
+                    } else {
+                        ob_end_clean();
+                        echo json_encode(['success' => false, 'error' => 'فشل تحديث حالة الدرس']);
+                    }
                     break;
                 default:
                     ob_end_clean();
@@ -102,9 +131,20 @@ try {
                 case 'change_lesson_status':
                     $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
                     $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
+                    $courseId = isset($_POST['course_id']) ? intval($_POST['course_id']) : 0;
                     $result = updateLessonStatus($lessonId, $newStatus);
-                    ob_end_clean();
-                    echo json_encode(['success' => $result]);
+                    if ($result) {
+                        $statistics = getCourseStatistics($courseId);
+                        ob_end_clean();
+                        echo json_encode([
+                            'success' => true, 
+                            'completedCount' => $statistics['completed_lessons'],
+                            'incompleteCount' => $statistics['incomplete_lessons']
+                        ]);
+                    } else {
+                        ob_end_clean();
+                        echo json_encode(['success' => false, 'error' => 'فشل تحديث حالة الدرس']);
+                    }
                     break;
                 default:
                     ob_end_clean();
