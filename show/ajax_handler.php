@@ -58,7 +58,18 @@ try {
                 case 'add_comment':
                     $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
                     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
-                    $result = addComment($lessonId, $comment);
+                    file_put_contents('debug.log', "add_comment action called with lessonId: $lessonId, comment: $comment\n", FILE_APPEND);
+                    $commentId = addComment($lessonId, $comment);
+                    ob_end_clean();
+                    if ($commentId) {
+                        echo json_encode(['success' => true, 'comment_id' => $commentId]);
+                    } else {
+                        echo json_encode(['success' => false]);
+                    }
+                    break;
+                case 'delete_comment':
+                    $commentId = isset($_POST['comment_id']) ? intval($_POST['comment_id']) : 0;
+                    $result = deleteComment($commentId);
                     ob_end_clean();
                     echo json_encode(['success' => $result]);
                     break;
@@ -66,7 +77,17 @@ try {
                     $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
                     $language = isset($_POST['language']) ? $_POST['language'] : '';
                     $code = isset($_POST['code']) ? $_POST['code'] : '';
-                    $result = addCode($lessonId, $language, $code);
+                    $codeId = addCode($lessonId, $language, $code);
+                    ob_end_clean();
+                    if ($codeId) {
+                        echo json_encode(['success' => true, 'code_id' => $codeId]);
+                    } else {
+                        echo json_encode(['success' => false]);
+                    }
+                    break;
+                case 'delete_code':
+                    $codeId = isset($_POST['code_id']) ? intval($_POST['code_id']) : 0;
+                    $result = deleteCode($codeId);
                     ob_end_clean();
                     echo json_encode(['success' => $result]);
                     break;

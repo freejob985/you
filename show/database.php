@@ -81,10 +81,12 @@ function getPlaylistItems($courseId) {
 function addComment($lessonId, $comment) {
     try {
         $db = connectDB();
+        file_put_contents('debug.log', "addComment called with lessonId: $lessonId, comment: $comment\n", FILE_APPEND);
         $stmt = $db->prepare("INSERT INTO comments (lesson_id, content) VALUES (:lesson_id, :content)");
         $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
         $stmt->bindParam(':content', $comment, PDO::PARAM_STR);
-        return $stmt->execute();
+        $stmt->execute();
+        return $db->lastInsertId();
     } catch (Exception $e) {
         file_put_contents('debug.log', "addComment error: " . $e->getMessage() . "\n", FILE_APPEND);
         return false;
@@ -104,13 +106,31 @@ function getComments($lessonId) {
     }
 }
 
+function deleteComment($commentId) {
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("DELETE FROM comments WHERE id = :comment_id");
+        $stmt->bindParam(':comment_id', $commentId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "deleteComment error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
+    }
+}
+
 function addCode($lessonId, $language, $code) {
-    $db = connectDB();
-    $stmt = $db->prepare("INSERT INTO codes (lesson_id, language, code) VALUES (:lesson_id, :language, :code)");
-    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-    $stmt->bindParam(':language', $language, PDO::PARAM_STR);
-    $stmt->bindParam(':code', $code, PDO::PARAM_STR);
-    return $stmt->execute();
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("INSERT INTO codes (lesson_id, language, code) VALUES (:lesson_id, :language, :code)");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->bindParam(':language', $language, PDO::PARAM_STR);
+        $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+        $stmt->execute();
+        return $db->lastInsertId();
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "addCode error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
+    }
 }
 
 function getCodes($lessonId) {
@@ -123,6 +143,18 @@ function getCodes($lessonId) {
     } catch (Exception $e) {
         file_put_contents('debug.log', "getCodes error: " . $e->getMessage() . "\n", FILE_APPEND);
         throw $e;
+    }
+}
+
+function deleteCode($codeId) {
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("DELETE FROM codes WHERE id = :code_id");
+        $stmt->bindParam(':code_id', $codeId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "deleteCode error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
     }
 }
 ?>

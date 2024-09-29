@@ -16,5 +16,18 @@
     </div>
     <div id="comments" class="mt-4">
         <!-- سيتم إضافة التعليقات هنا ديناميكياً -->
+        <!-- مثال على هيكل التعليق -->
+        <!--
+        <div class="bg-gray-50 p-3 rounded mb-2 flex comment-card" data-comment-id="{comment_id}">
+            <img src="{profile_image_url}" alt="Profile" class="w-12 h-12 rounded-full mr-3">
+            <div class="flex-grow">
+                <p>{comment_content}</p>
+                <small class="text-muted">{comment_date}</small>
+            </div>
+            <button class="btn btn-danger btn-sm delete-comment">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+        -->
     </div>
 </div>
