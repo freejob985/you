@@ -64,7 +64,7 @@ try {
                     if ($commentId) {
                         echo json_encode(['success' => true, 'comment_id' => $commentId]);
                     } else {
-                        echo json_encode(['success' => false]);
+                        echo json_encode(['success' => false, 'error' => 'Failed to add comment']);
                     }
                     break;
                 case 'delete_comment':

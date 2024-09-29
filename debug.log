@@ -8098,3 +8098,371 @@ getPlaylistItems result: Array
 
 )
 
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [url] => https://www.youtube.com/watch?v=4cnWsVeL5A0
+            [course_id] => 1
+            [duration] => 204
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/4cnWsVeL5A0/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [url] => https://www.youtube.com/watch?v=TM6pz0ySpI8
+            [course_id] => 1
+            [duration] => 874
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/TM6pz0ySpI8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [url] => https://www.youtube.com/watch?v=2Wi_U1xvFy8
+            [course_id] => 1
+            [duration] => 515
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/2Wi_U1xvFy8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [url] => https://www.youtube.com/watch?v=_A2skxqbnxI
+            [course_id] => 1
+            [duration] => 117
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/_A2skxqbnxI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [url] => https://www.youtube.com/watch?v=T_nH8zUqHOE
+            [course_id] => 1
+            [duration] => 369
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/T_nH8zUqHOE/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [url] => https://www.youtube.com/watch?v=9s24NaEv0Mc
+            [course_id] => 1
+            [duration] => 1418
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/9s24NaEv0Mc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [url] => https://www.youtube.com/watch?v=QnpDNSHMtbE
+            [course_id] => 1
+            [duration] => 853
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/QnpDNSHMtbE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => p,a,s,w,x
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [url] => https://www.youtube.com/watch?v=jxDOyk3FY_M
+            [course_id] => 1
+            [duration] => 1257
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jxDOyk3FY_M/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [url] => https://www.youtube.com/watch?v=7TthAWtfyxA
+            [course_id] => 1
+            [duration] => 1663
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7TthAWtfyxA/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [url] => https://www.youtube.com/watch?v=Tgn_uWPuKjs
+            [course_id] => 1
+            [duration] => 398
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Tgn_uWPuKjs/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [url] => https://www.youtube.com/watch?v=jqlNl9ygnJI
+            [course_id] => 1
+            [duration] => 631
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jqlNl9ygnJI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [url] => https://www.youtube.com/watch?v=oAkTaZHR33Y
+            [course_id] => 1
+            [duration] => 516
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oAkTaZHR33Y/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [url] => https://www.youtube.com/watch?v=4cnWsVeL5A0
+            [course_id] => 1
+            [duration] => 204
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/4cnWsVeL5A0/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [url] => https://www.youtube.com/watch?v=TM6pz0ySpI8
+            [course_id] => 1
+            [duration] => 874
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/TM6pz0ySpI8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [url] => https://www.youtube.com/watch?v=2Wi_U1xvFy8
+            [course_id] => 1
+            [duration] => 515
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/2Wi_U1xvFy8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [url] => https://www.youtube.com/watch?v=_A2skxqbnxI
+            [course_id] => 1
+            [duration] => 117
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/_A2skxqbnxI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [url] => https://www.youtube.com/watch?v=T_nH8zUqHOE
+            [course_id] => 1
+            [duration] => 369
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/T_nH8zUqHOE/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [url] => https://www.youtube.com/watch?v=9s24NaEv0Mc
+            [course_id] => 1
+            [duration] => 1418
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/9s24NaEv0Mc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [url] => https://www.youtube.com/watch?v=QnpDNSHMtbE
+            [course_id] => 1
+            [duration] => 853
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/QnpDNSHMtbE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => p,a,s,w,x
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [url] => https://www.youtube.com/watch?v=jxDOyk3FY_M
+            [course_id] => 1
+            [duration] => 1257
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jxDOyk3FY_M/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [url] => https://www.youtube.com/watch?v=7TthAWtfyxA
+            [course_id] => 1
+            [duration] => 1663
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7TthAWtfyxA/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [url] => https://www.youtube.com/watch?v=Tgn_uWPuKjs
+            [course_id] => 1
+            [duration] => 398
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Tgn_uWPuKjs/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [url] => https://www.youtube.com/watch?v=jqlNl9ygnJI
+            [course_id] => 1
+            [duration] => 631
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jqlNl9ygnJI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [url] => https://www.youtube.com/watch?v=oAkTaZHR33Y
+            [course_id] => 1
+            [duration] => 516
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oAkTaZHR33Y/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+)
+

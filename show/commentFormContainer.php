@@ -9,7 +9,7 @@
         <form id="commentForm">
             <div class="mb-3">
                 <label for="comment" class="form-label">التعليق</label>
-                <textarea class="form-control" id="comment" rows="5" required></textarea>
+                <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">إرسال التعليق</button>
         </form>
