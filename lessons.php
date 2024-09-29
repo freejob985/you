@@ -1,4 +1,3 @@
-
 <?php
 // تضمين ملف api_functions.php
 require_once 'lessons/php.php';
@@ -53,6 +52,9 @@ require_once 'lessons/header.php';
                                 </span>
                             </p>
                             <div class="btn-group d-flex flex-wrap" role="group">
+<a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
+    <i class="fas fa-eye"></i> عرض الدرس
+</a>
                           <button class="btn <?php echo ($lesson['views'] > 0) ? 'btn-success' : 'btn-primary'; ?> btn-sm watch-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
     <i class="fas <?php echo ($lesson['views'] > 0) ? 'fa-check' : 'fa-eye'; ?>"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
 </button>
@@ -73,6 +75,9 @@ require_once 'lessons/header.php';
                                 <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="flexSwitchCheckDefault">تم الإكمال</label>
                             </div>
+                            <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
+                                <i class="fas fa-eye"></i> عرض الدرس
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -181,52 +181,6 @@ $statuses = getStatuses();
                     </div>
                 </div>
                 
-                <button type="button" id="toggleFilters" class="mb-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
-                    <i class="fas fa-filter"></i>
-                </button>
-
-                <div id="filtersSection" class="hidden">
-                    <!-- New filter checkboxes with Material Design -->
-                    <div class="flex flex-wrap -mx-3 mb-4">
-                        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                            <h3 class="text-lg font-semibold mb-2">اللغات</h3>
-                            <?php foreach ($languages as $language): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="lang_<?php echo $language['id']; ?>" name="languages[]" value="<?php echo $language['id']; ?>">
-                                    <label for="lang_<?php echo $language['id']; ?>"><?php echo $language['name']; ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                            <h3 class="text-lg font-semibold mb-2">الكورسات</h3>
-                            <?php foreach ($courses as $course): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="course_<?php echo $course['id']; ?>" name="courses[]" value="<?php echo $course['id']; ?>">
-                                    <label for="course_<?php echo $course['id']; ?>"><?php echo $course['title']; ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                            <h3 class="text-lg font-semibold mb-2">الأقسام</h3>
-                            <?php foreach ($sections as $section): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="section_<?php echo $section['id']; ?>" name="sections[]" value="<?php echo $section['id']; ?>">
-                                    <label for="section_<?php echo $section['id']; ?>"><?php echo $section['name']; ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                            <h3 class="text-lg font-semibold mb-2">الحالات</h3>
-                            <?php foreach ($statuses as $key => $value): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="status_<?php echo $key; ?>" name="statuses[]" value="<?php echo $key; ?>">
-                                    <label for="status_<?php echo $key; ?>"><?php echo $value; ?></label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="flex justify-center mt-6">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         بحث
@@ -258,10 +212,6 @@ $statuses = getStatuses();
 
     <script>
     $(document).ready(function() {
-        $('#toggleFilters').click(function() {
-            $('#filtersSection').toggleClass('hidden');
-        });
-
         function getStatusBadgeClass(status) {
             switch (status) {
                 case 'completed': return 'bg-success';
@@ -353,15 +303,15 @@ $statuses = getStatuses();
         }
 
         function performSearch(page = 1) {
-            const formData = new FormData($('#searchForm')[0]);
-            formData.append('page', page);
-
+            const searchQuery = $('#search').val();
+            
             $.ajax({
                 url: 'search/search_operations.php',
                 method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: {
+                    search: searchQuery,
+                    page: page
+                },
                 dataType: 'json',
                 success: function(response) {
                     displayResults(response.results);
@@ -369,7 +319,7 @@ $statuses = getStatuses();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
-                    console.log(xhr.responseText); // لعرض الاستجابة الكاملة في وحدة التحكم
+                    console.log(xhr.responseText);
                     alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
                 }
             });
@@ -388,58 +338,8 @@ $statuses = getStatuses();
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(function() {
                 performSearch();
-            }, 300); // تأخير 300 مللي ثانية لتجنب الطلبات المتكررة
+            }, 300);
         });
-
-        // تحديث الكورسات والأقسام عند تغيير اختيار اللغة
-        $('input[name="languages[]"]').change(function() {
-            updateCoursesAndSections();
-        });
-
-        function updateCoursesAndSections() {
-            var selectedLanguages = $('input[name="languages[]"]:checked').map(function() {
-                return this.value;
-            }).get();
-
-            $.ajax({
-                url: 'search/search_operations.php',
-                method: 'POST',
-                data: {
-                    action: 'get_courses_and_sections',
-                    languages: selectedLanguages
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        updateCheckboxes('#coursesSection', response.courses, 'courses');
-                        updateCheckboxes('#sectionsSection', response.sections, 'sections');
-                    } else {
-                        console.error('Error:', response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                }
-            });
-        }
-
-        function updateCheckboxes(containerId, items, name) {
-            var container = $(containerId);
-            container.empty();
-            
-            items.forEach(function(item) {
-                var checkbox = `
-                    <div class="md-checkbox">
-                        <input type="checkbox" id="${name}_${item.id}" name="${name}[]" value="${item.id}">
-                        <label for="${name}_${item.id}">${item.title || item.name}</label>
-                    </div>
-                `;
-                container.append(checkbox);
-            });
-        }
-
-        // تحديث الكورسات والأقسام عند تحميل الصفحة
-        updateCoursesAndSections();
     });
     </script>
 

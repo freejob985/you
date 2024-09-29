@@ -82,7 +82,7 @@ function getStatuses() {
     ];
 }
 
-function searchLessons($filters, $page = 1, $perPage = 48) {
+function searchLessons($search, $page = 1, $perPage = 48) {
     global $db;
     try {
         $query = 'SELECT l.*, c.title as course_title, t.name as language_name, s.name as section_name 
@@ -93,34 +93,10 @@ function searchLessons($filters, $page = 1, $perPage = 48) {
                   WHERE 1=1';
         $params = [];
 
-        if (!empty($filters['languages'])) {
-            $placeholders = implode(',', array_fill(0, count($filters['languages']), '?'));
-            $query .= " AND l.language_id IN ($placeholders)";
-            $params = array_merge($params, $filters['languages']);
-        }
-
-        if (!empty($filters['courses'])) {
-            $placeholders = implode(',', array_fill(0, count($filters['courses']), '?'));
-            $query .= " AND l.course_id IN ($placeholders)";
-            $params = array_merge($params, $filters['courses']);
-        }
-
-        if (!empty($filters['sections'])) {
-            $placeholders = implode(',', array_fill(0, count($filters['sections']), '?'));
-            $query .= " AND l.section_id IN ($placeholders)";
-            $params = array_merge($params, $filters['sections']);
-        }
-
-        if (!empty($filters['statuses'])) {
-            $placeholders = implode(',', array_fill(0, count($filters['statuses']), '?'));
-            $query .= " AND l.status IN ($placeholders)";
-            $params = array_merge($params, $filters['statuses']);
-        }
-
-        if (!empty($filters['search'])) {
+        if (!empty($search)) {
             $query .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
-            $params[] = '%' . $filters['search'] . '%';
-            $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $search . '%';
+            $params[] = '%' . $search . '%';
         }
 
         // Count total results
@@ -130,19 +106,7 @@ function searchLessons($filters, $page = 1, $perPage = 48) {
                        LEFT JOIN sections s ON l.section_id = s.id
                        WHERE 1=1';
 
-        if (!empty($filters['languages'])) {
-            $countQuery .= " AND l.language_id IN ($placeholders)";
-        }
-        if (!empty($filters['courses'])) {
-            $countQuery .= " AND l.course_id IN ($placeholders)";
-        }
-        if (!empty($filters['sections'])) {
-            $countQuery .= " AND l.section_id IN ($placeholders)";
-        }
-        if (!empty($filters['statuses'])) {
-            $countQuery .= " AND l.status IN ($placeholders)";
-        }
-        if (!empty($filters['search'])) {
+        if (!empty($search)) {
             $countQuery .= ' AND (l.title LIKE ? OR c.title LIKE ?)';
         }
 
@@ -256,27 +220,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // تعديل المفاتيح لتتوافق مع دالة searchLessons
-    $filters = [
-        'languages' => isset($_POST['languages']) && is_array($_POST['languages']) 
-                      ? array_map('intval', $_POST['languages']) 
-                      : [],
-        'courses' => isset($_POST['courses']) && is_array($_POST['courses']) 
-                    ? array_map('intval', $_POST['courses']) 
-                    : [],
-        'sections' => isset($_POST['sections']) && is_array($_POST['sections']) 
-                     ? array_map('intval', $_POST['sections']) 
-                     : [],
-        'statuses' => isset($_POST['statuses']) && is_array($_POST['statuses']) 
-                     ? $_POST['statuses'] 
-                     : [],
-        'search' => isset($_POST['search']) ? trim($_POST['search']) : ''
-    ];
-
+    $search = isset($_POST['search']) ? trim($_POST['search']) : '';
     $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
-    $perPage = isset($_POST['perPage']) ? intval($_POST['perPage']) : 48; // اختياري: السماح للعميل بتحديد perPage
+    $perPage = isset($_POST['perPage']) ? intval($_POST['perPage']) : 48;
 
-    $searchResults = searchLessons($filters, $page, $perPage);
+    $searchResults = searchLessons($search, $page, $perPage);
 
     echo json_encode($searchResults);
     exit;
