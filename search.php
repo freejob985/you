@@ -160,6 +160,11 @@ $statuses = getStatuses();
             color: #2196F3;
             text-decoration: underline;
         }
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* تغيير إلى 4 أعمدة */
+            gap: 1rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -203,7 +208,7 @@ $statuses = getStatuses();
                 
                 <!-- قسم الفلاتر -->
                 <div class="filters-section">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="filters-grid">
                         <!-- فلاتر اللغة -->
                         <div>
                             <h5 class="mb-2 font-semibold">اللغة</h5>
