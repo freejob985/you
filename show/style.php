@@ -44,13 +44,14 @@
         .sidebar {
             position: fixed;
             top: 0;
-            right: -600px;
-            width: 600px;
+            right: -300px; /* تغيير من -600px إلى -300px لجعل الشريط الجانبي أضيق */
+            width: 300px; /* تغيير من 600px إلى 300px */
             height: 100%;
             background-color: #fff;
             transition: right 0.3s ease-in-out;
             z-index: 1000;
             overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar.open {
             right: 0;
@@ -72,7 +73,7 @@
             transition: right 0.3s ease-in-out;
         }
         .sidebar-toggle.open {
-            right: 610px;
+            right: 310px; /* تغيير من 610px إلى 310px */
         }
         .comment-card {
             border: 1px solid #e2e8f0;

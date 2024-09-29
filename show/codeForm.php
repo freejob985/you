@@ -13,11 +13,12 @@
                                 <option value="python">Python</option>
                                 <option value="php">PHP</option>
                                 <option value="java">Java</option>
+                                <!-- يمكن إضافة المزيد من اللغات هنا -->
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="code" class="form-label">الكود</label>
-                            <textarea class="form-control" id="code" rows="5" required></textarea>
+                            <textarea class="form-control" id="code" rows="10" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">إضافة الكود</button>
                     </form>

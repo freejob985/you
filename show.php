@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عرض الدرس</title>
     
-
-
-<?php include_once("show/style.php");?>
-
+    <?php include_once("show/style.php");?>
 
 </head>
 <body class="bg-gray-100">
@@ -26,15 +23,11 @@
         <div class="row">
             <!-- المحتوى الرئيسي -->
             <div class="col-md-12 p-4">
-   <?php include_once("show/mainContent.php");?>
-
+                <?php include_once("show/mainContent.php");?>
                 
                 <!-- التعليقات -->
-<?php include_once("show/commentFormContainer.php");?>
-<?php include_once("show/codeForm.php");?>
-
-                <!-- نموذج إضافة كود برمجي -->
-  
+                <?php include_once("show/commentFormContainer.php");?>
+                <?php include_once("show/codeForm.php");?>
             </div>
         </div>
     </div>
@@ -51,7 +44,7 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
     
- <?php include_once("show/script.php");?>
+    <?php include_once("show/script.php");?>
 
 </body>
 </html>
