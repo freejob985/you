@@ -33,23 +33,32 @@ $(document).ready(function() {
     });
 
     // دالة لإضافة عناصر لقائمة التشغيل
-    function addPlaylistItem(title, lessonId, isActive) {
+    function addPlaylistItem(title, lessonId, isActive, isCompleted) {
         const activeClass = isActive ? 'active' : '';
+        const completedClass = isCompleted ? 'completed' : '';
+        const checkedAttribute = isCompleted ? 'checked' : '';
         $('#playlist').append(`
-            <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}">
-                ${title}
+            <li class="list-group-item cursor-pointer ${activeClass} ${completedClass}" data-lesson-id="${lessonId}">
+                <div class="form-check">
+                    <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                    <label class="form-check-label" for="lesson-${lessonId}">
+                        ${title}
+                    </label>
+                </div>
             </li>
         `);
     }
 
     // دالة لإضافة تعليق
-    function addComment(commentId, comment, date, profileImage) {
+    function addComment(commentId, comment, date) {
+        const profileImage = 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724';
         $('#comments').prepend(`
-            <div class="bg-gray-50 p-3 rounded mb-2 flex comment-card" data-comment-id="${commentId}">
-                <img src="${profileImage}" alt="Profile" class="w-12 h-12 rounded-full mr-3">
-                <div class="flex-grow">
-                    <p>${comment}</p>
-                    <small class="text-muted">${date}</small>
+            <div class="comment-card" data-comment-id="${commentId}">
+                <img src="${profileImage}" alt="Profile" class="comment-image">
+                <div class="comment-content">
+                    <p class="comment-author">اسم المستخدم</p>
+                    <p class="comment-text">${comment}</p>
+                    <small class="comment-date">${date}</small>
                 </div>
                 <button class="btn btn-danger btn-sm delete-comment"><i class="fas fa-trash-alt"></i></button>
             </div>
@@ -63,10 +72,19 @@ $(document).ready(function() {
             <div class="code-block mb-4" data-code-id="${codeId}">
                 <h4 class="text-lg font-semibold mb-2 text-white">${language}</h4>
                 <pre><code class="language-${language}" id="${codeElementId}">${code}</code></pre>
+                <button class="btn btn-primary btn-sm copy-code mt-2"><i class="fas fa-copy"></i> نسخ الكود</button>
                 <button class="btn btn-danger btn-sm delete-code mt-2"><i class="fas fa-trash-alt"></i></button>
             </div>
         `);
         hljs.highlightElement(document.getElementById(codeElementId));
+    }
+
+    // تحديث الإحصائيات
+    function updateStatistics(completedCount, incompleteCount) {
+        $('#playlistStatistics').html(`
+            <p><strong>الدروس المكتملة:</strong> ${completedCount}</p>
+            <p><strong>الدروس غير المكتملة:</strong> ${incompleteCount}</p>
+        `);
     }
 
     // جلب قائمة التشغيل
@@ -77,10 +95,12 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(response) {
             console.log('Raw response:', response);
-            if (Array.isArray(response) && response.length > 0) {
-                response.forEach(item => {
-                    addPlaylistItem(item.title, item.id, item.id == lessonId);
+            if (Array.isArray(response.playlistItems) && response.playlistItems.length > 0) {
+                response.playlistItems.forEach(item => {
+                    addPlaylistItem(item.title, item.id, item.id == lessonId, item.completed == 1);
                 });
+                // تحديث الإحصائيات
+                updateStatistics(response.counts.completed, response.counts.incomplete);
             } else {
                 console.log('No playlist items returned');
                 toastr.warning('لا توجد عناصر في قائمة التشغيل');
@@ -94,9 +114,45 @@ $(document).ready(function() {
     });
 
     // التعامل مع النقر على عناصر قائمة التشغيل
-    $('#playlist').on('click', 'li', function() {
+    $('#playlist').on('click', 'li', function(e) {
+        if ($(e.target).is('.mark-complete')) return;
         const clickedLessonId = $(this).data('lesson-id');
         window.location.href = `show.php?lesson_id=${clickedLessonId}`;
+    });
+
+    // تحديث حالة الدرس عند تغيير الشيك بوكس
+    $('#playlist').on('change', '.mark-complete', function(e) {
+        e.stopPropagation();
+        const lessonId = $(this).closest('li').data('lesson-id');
+        const isCompleted = $(this).is(':checked');
+
+        // إرسال طلب AJAX لتحديث حالة الدرس
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { action: 'update_lesson_status', lesson_id: lessonId, completed: isCompleted ? 1 : 0 },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
+                    if (isCompleted) {
+                        listItem.addClass('completed');
+                    } else {
+                        listItem.removeClass('completed');
+                    }
+                    toastr.success('تم تحديث حالة الدرس بنجاح');
+                    // تحديث الإحصائيات
+                    updateStatistics(response.completedCount, response.incompleteCount);
+                } else {
+                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+            }
+        });
     });
 
     // التعامل مع إرسال نموذج التعليق
@@ -124,7 +180,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log('Add comment response:', response);
                 if (response.success) {
-                    addComment(response.comment_id, comment, 'الآن', 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724');
+                    addComment(response.comment_id, comment, 'الآن');
                     toastr.success('تم إضافة التعليق بنجاح');
                     tinymce.get('comment').setContent('');
                 } else {
@@ -190,7 +246,7 @@ $(document).ready(function() {
             console.log('Raw response:', response);
             if (Array.isArray(response)) {
                 response.forEach(comment => {
-                    addComment(comment.id, comment.content, comment.created_at, 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724');
+                    addComment(comment.id, comment.content, comment.created_at);
                 });
             } else {
                 console.log('No comments returned');
@@ -299,6 +355,21 @@ $(document).ready(function() {
                     }
                 });
             }
+        });
+    });
+
+    // نسخ الكود
+    $('#codeExamples').on('click', '.copy-code', function() {
+        const codeBlock = $(this).closest('.code-block');
+        const codeId = codeBlock.data('code-id');
+        const codeElement = codeBlock.find('code')[0];
+        const codeText = codeElement.innerText;
+
+        navigator.clipboard.writeText(codeText).then(() => {
+            toastr.success('تم نسخ الكود إلى الحافظة');
+        }).catch(err => {
+            console.error('Could not copy text: ', err);
+            toastr.error('حدث خطأ أثناء نسخ الكود');
         });
     });
 

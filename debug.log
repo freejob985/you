@@ -8466,3 +8466,1122 @@ getPlaylistItems result: Array
 
 )
 
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [url] => https://www.youtube.com/watch?v=4cnWsVeL5A0
+            [course_id] => 1
+            [duration] => 204
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/4cnWsVeL5A0/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [url] => https://www.youtube.com/watch?v=TM6pz0ySpI8
+            [course_id] => 1
+            [duration] => 874
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/TM6pz0ySpI8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [url] => https://www.youtube.com/watch?v=2Wi_U1xvFy8
+            [course_id] => 1
+            [duration] => 515
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/2Wi_U1xvFy8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [url] => https://www.youtube.com/watch?v=_A2skxqbnxI
+            [course_id] => 1
+            [duration] => 117
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/_A2skxqbnxI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [url] => https://www.youtube.com/watch?v=T_nH8zUqHOE
+            [course_id] => 1
+            [duration] => 369
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/T_nH8zUqHOE/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [url] => https://www.youtube.com/watch?v=9s24NaEv0Mc
+            [course_id] => 1
+            [duration] => 1418
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/9s24NaEv0Mc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [url] => https://www.youtube.com/watch?v=QnpDNSHMtbE
+            [course_id] => 1
+            [duration] => 853
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/QnpDNSHMtbE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => p,a,s,w,x
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [url] => https://www.youtube.com/watch?v=jxDOyk3FY_M
+            [course_id] => 1
+            [duration] => 1257
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jxDOyk3FY_M/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [url] => https://www.youtube.com/watch?v=7TthAWtfyxA
+            [course_id] => 1
+            [duration] => 1663
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7TthAWtfyxA/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [url] => https://www.youtube.com/watch?v=Tgn_uWPuKjs
+            [course_id] => 1
+            [duration] => 398
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Tgn_uWPuKjs/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [url] => https://www.youtube.com/watch?v=jqlNl9ygnJI
+            [course_id] => 1
+            [duration] => 631
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jqlNl9ygnJI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [url] => https://www.youtube.com/watch?v=oAkTaZHR33Y
+            [course_id] => 1
+            [duration] => 516
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oAkTaZHR33Y/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+)
+
+getPlaylistItems error: SQLSTATE[HY000]: General error: 1 incomplete input
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [url] => https://www.youtube.com/watch?v=4cnWsVeL5A0
+            [course_id] => 1
+            [duration] => 204
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/4cnWsVeL5A0/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [url] => https://www.youtube.com/watch?v=TM6pz0ySpI8
+            [course_id] => 1
+            [duration] => 874
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/TM6pz0ySpI8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [url] => https://www.youtube.com/watch?v=2Wi_U1xvFy8
+            [course_id] => 1
+            [duration] => 515
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/2Wi_U1xvFy8/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [url] => https://www.youtube.com/watch?v=_A2skxqbnxI
+            [course_id] => 1
+            [duration] => 117
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/_A2skxqbnxI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [url] => https://www.youtube.com/watch?v=T_nH8zUqHOE
+            [course_id] => 1
+            [duration] => 369
+            [section_id] => 
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/T_nH8zUqHOE/hqdefault.jpg
+            [views] => 1
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [url] => https://www.youtube.com/watch?v=9s24NaEv0Mc
+            [course_id] => 1
+            [duration] => 1418
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/9s24NaEv0Mc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [url] => https://www.youtube.com/watch?v=QnpDNSHMtbE
+            [course_id] => 1
+            [duration] => 853
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/QnpDNSHMtbE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => p,a,s,w,x
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [url] => https://www.youtube.com/watch?v=jxDOyk3FY_M
+            [course_id] => 1
+            [duration] => 1257
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jxDOyk3FY_M/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [url] => https://www.youtube.com/watch?v=7TthAWtfyxA
+            [course_id] => 1
+            [duration] => 1663
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7TthAWtfyxA/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [url] => https://www.youtube.com/watch?v=Tgn_uWPuKjs
+            [course_id] => 1
+            [duration] => 398
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Tgn_uWPuKjs/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [url] => https://www.youtube.com/watch?v=jqlNl9ygnJI
+            [course_id] => 1
+            [duration] => 631
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/jqlNl9ygnJI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [url] => https://www.youtube.com/watch?v=oAkTaZHR33Y
+            [course_id] => 1
+            [duration] => 516
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oAkTaZHR33Y/hqdefault.jpg
+            [views] => 0
+            [language_id] => 1
+            [section_tags] => 
+        )
+
+    [12] => Array
+        (
+            [id] => 13
+            [title] => 001 - ReactJS بالعربية - Basics - Intro مقدمة الدورة
+            [url] => https://www.youtube.com/watch?v=p0nHbX_H3to
+            [course_id] => 2
+            [duration] => 473
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/p0nHbX_H3to/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [13] => Array
+        (
+            [id] => 14
+            [title] => 002 - ReactJS بالعربية - Basics - Hello world
+            [url] => https://www.youtube.com/watch?v=JkRIQd-ge6c
+            [course_id] => 2
+            [duration] => 380
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/JkRIQd-ge6c/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [14] => Array
+        (
+            [id] => 15
+            [title] => 003 - ReactJS بالعربية - Basics - JSX
+            [url] => https://www.youtube.com/watch?v=MTKSdCGnkq0
+            [course_id] => 2
+            [duration] => 390
+            [section_id] => 4
+            [status] => completed
+            [thumbnail] => https://i.ytimg.com/vi/MTKSdCGnkq0/hqdefault.jpg
+            [views] => 1
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [15] => Array
+        (
+            [id] => 16
+            [title] => 004 - ReactJS بالعربية - Basics - Local setup (MPA)
+            [url] => https://www.youtube.com/watch?v=O4W9LUtWWbw
+            [course_id] => 2
+            [duration] => 611
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/O4W9LUtWWbw/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [16] => Array
+        (
+            [id] => 17
+            [title] => 005 - ReactJs بالعربية - Basics - create-react-app (SPA Setup)
+            [url] => https://www.youtube.com/watch?v=_raqY2pKrAQ
+            [course_id] => 2
+            [duration] => 292
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/_raqY2pKrAQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [17] => Array
+        (
+            [id] => 18
+            [title] => 006 - ReactJs بالعربية - Basics - Component basics
+            [url] => https://www.youtube.com/watch?v=R_0X3T1XdHA
+            [course_id] => 2
+            [duration] => 620
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/R_0X3T1XdHA/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [18] => Array
+        (
+            [id] => 19
+            [title] => 007 ReactJs بالعربية - Basics - Props
+            [url] => https://www.youtube.com/watch?v=dcSeKHS5oWc
+            [course_id] => 2
+            [duration] => 259
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/dcSeKHS5oWc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [19] => Array
+        (
+            [id] => 20
+            [title] => 008 - ReactJS بالعربية - Basics - State
+            [url] => https://www.youtube.com/watch?v=Fz1hO5ikzsE
+            [course_id] => 2
+            [duration] => 312
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Fz1hO5ikzsE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [20] => Array
+        (
+            [id] => 21
+            [title] => 009 - ReactsJs  بالعربية - Basics - events & updating the state
+            [url] => https://www.youtube.com/watch?v=D2QI1vKoN84
+            [course_id] => 2
+            [duration] => 435
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/D2QI1vKoN84/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [21] => Array
+        (
+            [id] => 22
+            [title] => 010 - ReactJS بالعربية - Basics - onChange event
+            [url] => https://www.youtube.com/watch?v=Qtu6p_4Z55c
+            [course_id] => 2
+            [duration] => 431
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Qtu6p_4Z55c/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [22] => Array
+        (
+            [id] => 23
+            [title] => 011 - ReactJS بالعربية - Basics -  Lists & Loops
+            [url] => https://www.youtube.com/watch?v=P4ODAIYTcBk
+            [course_id] => 2
+            [duration] => 236
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/P4ODAIYTcBk/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [23] => Array
+        (
+            [id] => 24
+            [title] => 012 - ReactJS بالعربية - Basics - conditions
+            [url] => https://www.youtube.com/watch?v=nc1wHaNbVPw
+            [course_id] => 2
+            [duration] => 213
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/nc1wHaNbVPw/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [24] => Array
+        (
+            [id] => 25
+            [title] => 013 - ReactJS بالعربية - Basics - lifeCycle hooks
+            [url] => https://www.youtube.com/watch?v=8lRds_dYLSg
+            [course_id] => 2
+            [duration] => 310
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/8lRds_dYLSg/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [25] => Array
+        (
+            [id] => 26
+            [title] => 014 - ReactJS بالعربية - Basics - ملاحظات هامة
+            [url] => https://www.youtube.com/watch?v=uH627tjCrpU
+            [course_id] => 2
+            [duration] => 213
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/uH627tjCrpU/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [26] => Array
+        (
+            [id] => 27
+            [title] => 015 ReactJS بالعربية - Conditions & Loop - conditions before template
+            [url] => https://www.youtube.com/watch?v=73R_ZZkB9rY
+            [course_id] => 2
+            [duration] => 226
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/73R_ZZkB9rY/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [27] => Array
+        (
+            [id] => 28
+            [title] => 016 - ReactJs بالعربية - Conditions & Loop - print array of objects
+            [url] => https://www.youtube.com/watch?v=zM94hU3NMkc
+            [course_id] => 2
+            [duration] => 219
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/zM94hU3NMkc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [28] => Array
+        (
+            [id] => 29
+            [title] => 017 - ReactJS بالعربية - Conditions & Loop - Better performance with components
+            [url] => https://www.youtube.com/watch?v=2-MXvtHtu3Y
+            [course_id] => 2
+            [duration] => 461
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/2-MXvtHtu3Y/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [29] => Array
+        (
+            [id] => 30
+            [title] => 018 ReactJS بالعربية - Todolist app with react بناء تطبيق
+            [url] => https://www.youtube.com/watch?v=RvZWkhJuZxQ
+            [course_id] => 2
+            [duration] => 1452
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/RvZWkhJuZxQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [30] => Array
+        (
+            [id] => 31
+            [title] => 019 - ReactJS بالعربية - Forms - Controlled components
+            [url] => https://www.youtube.com/watch?v=7_tKfJaqWpk
+            [course_id] => 2
+            [duration] => 231
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7_tKfJaqWpk/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [31] => Array
+        (
+            [id] => 32
+            [title] => 020 - ReactJS بالعربية - Forms - Textarea
+            [url] => https://www.youtube.com/watch?v=2hM295XO-Gc
+            [course_id] => 2
+            [duration] => 109
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/2hM295XO-Gc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [32] => Array
+        (
+            [id] => 33
+            [title] => 021 - ReactJS بالعربية - Forms - Select
+            [url] => https://www.youtube.com/watch?v=-TicL0n1VsM
+            [course_id] => 2
+            [duration] => 176
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/-TicL0n1VsM/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [33] => Array
+        (
+            [id] => 34
+            [title] => 022 - ReacJS بالعربية - Forms - Checkbox
+            [url] => https://www.youtube.com/watch?v=629bGLeOtjc
+            [course_id] => 2
+            [duration] => 189
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/629bGLeOtjc/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [34] => Array
+        (
+            [id] => 35
+            [title] => 023 - ReactJS بالعربية - Forms - Radio
+            [url] => https://www.youtube.com/watch?v=8CgG_cSzXoE
+            [course_id] => 2
+            [duration] => 286
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/8CgG_cSzXoE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [35] => Array
+        (
+            [id] => 36
+            [title] => 024 - ReactJS بالعربية - Forms - Handling Multiple Inputs
+            [url] => https://www.youtube.com/watch?v=NG0quiQGc70
+            [course_id] => 2
+            [duration] => 356
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/NG0quiQGc70/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [36] => Array
+        (
+            [id] => 37
+            [title] => 025 - ReactJS بالعربية - Forms - Fromik تعرف على أهمية
+            [url] => https://www.youtube.com/watch?v=qr3a5K1IhlQ
+            [course_id] => 2
+            [duration] => 213
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/qr3a5K1IhlQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [37] => Array
+        (
+            [id] => 38
+            [title] => 026 - ReactJS بالعربية - Formik - First form
+            [url] => https://www.youtube.com/watch?v=RS5zglWBpSM
+            [course_id] => 2
+            [duration] => 440
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/RS5zglWBpSM/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [38] => Array
+        (
+            [id] => 39
+            [title] => 027 - ReactJS بالعربية - Formik - Field type
+            [url] => https://www.youtube.com/watch?v=T2EfCDrOA4g
+            [course_id] => 2
+            [duration] => 288
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/T2EfCDrOA4g/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [39] => Array
+        (
+            [id] => 40
+            [title] => 028 - ReactJS بالعربية - Fromik - Validation  & ErrorMessage Component
+            [url] => https://www.youtube.com/watch?v=fPBf9MqtSko
+            [course_id] => 2
+            [duration] => 514
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/fPBf9MqtSko/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [40] => Array
+        (
+            [id] => 41
+            [title] => 029 - ReactJS بالعربية - Formik - Nested Objects
+            [url] => https://www.youtube.com/watch?v=wUfKNXA2rBk
+            [course_id] => 2
+            [duration] => 240
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/wUfKNXA2rBk/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [41] => Array
+        (
+            [id] => 42
+            [title] => 030 - ReactJS بالعربية - Formik - Array of strings
+            [url] => https://www.youtube.com/watch?v=oymrQ2cYoxk
+            [course_id] => 2
+            [duration] => 627
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oymrQ2cYoxk/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [42] => Array
+        (
+            [id] => 43
+            [title] => 031 - ReactJS بالعربية - Formik - FieldArray + Array of Objects
+            [url] => https://www.youtube.com/watch?v=ySFIsUQIeuE
+            [course_id] => 2
+            [duration] => 482
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/ySFIsUQIeuE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [43] => Array
+        (
+            [id] => 44
+            [title] => 032 - ReactJS بالعربية - Styling - add css files
+            [url] => https://www.youtube.com/watch?v=SukGtLa2EyE
+            [course_id] => 2
+            [duration] => 291
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/SukGtLa2EyE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [44] => Array
+        (
+            [id] => 45
+            [title] => 033 - ReactJS بالعربية - Styling - Dynamic class name
+            [url] => https://www.youtube.com/watch?v=4ZZQDW53AL8
+            [course_id] => 2
+            [duration] => 319
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/4ZZQDW53AL8/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [45] => Array
+        (
+            [id] => 46
+            [title] => 034 - ReactJS بالعربية - Styling - set styles dynamically
+            [url] => https://www.youtube.com/watch?v=SSe1DOimpIU
+            [course_id] => 2
+            [duration] => 341
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/SSe1DOimpIU/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [46] => Array
+        (
+            [id] => 47
+            [title] => 035 - ReactJS بالعربية - Styling - using JS to set classes dynamically
+            [url] => https://www.youtube.com/watch?v=ZcxWeOvl0ZY
+            [course_id] => 2
+            [duration] => 364
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/ZcxWeOvl0ZY/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [47] => Array
+        (
+            [id] => 48
+            [title] => 036 - ReactJS بالعربية - Styling - classnames package
+            [url] => https://www.youtube.com/watch?v=EQwHtjtugg4
+            [course_id] => 2
+            [duration] => 225
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/EQwHtjtugg4/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [48] => Array
+        (
+            [id] => 49
+            [title] => 037 - ReactJS بالعربية - Http Requests - GET Request to fetch data from api
+            [url] => https://www.youtube.com/watch?v=oLUOm9MYJUY
+            [course_id] => 2
+            [duration] => 489
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/oLUOm9MYJUY/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [49] => Array
+        (
+            [id] => 50
+            [title] => 038 - ReactJS بالعربية - Http Ajax Requests - View User
+            [url] => https://www.youtube.com/watch?v=e5G0AXPNtyQ
+            [course_id] => 2
+            [duration] => 566
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/e5G0AXPNtyQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [50] => Array
+        (
+            [id] => 51
+            [title] => 039 - ReactJS بالعربية - Http Ajax Requests - حذف مستخدم
+            [url] => https://www.youtube.com/watch?v=DG8Z1AOc_rg
+            [course_id] => 2
+            [duration] => 612
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/DG8Z1AOc_rg/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [51] => Array
+        (
+            [id] => 52
+            [title] => 040 - ReactJS بالعربية - Http Ajax Requests - Create UsersForm Component
+            [url] => https://www.youtube.com/watch?v=7NHdULFkAIQ
+            [course_id] => 2
+            [duration] => 601
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/7NHdULFkAIQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [52] => Array
+        (
+            [id] => 53
+            [title] => 041 - ReactJS بالعربية - Http Ajax Requests - Edit User
+            [url] => https://www.youtube.com/watch?v=Mdzf8BXCxFQ
+            [course_id] => 2
+            [duration] => 313
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Mdzf8BXCxFQ/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [53] => Array
+        (
+            [id] => 54
+            [title] => 042 - ReactJS بالعربية - Http Ajax Requests - Add User
+            [url] => https://www.youtube.com/watch?v=3SOvtulWwu0
+            [course_id] => 2
+            [duration] => 210
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/3SOvtulWwu0/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [54] => Array
+        (
+            [id] => 55
+            [title] => 043 - ReactJS بالعربية - React Router - Basics
+            [url] => https://www.youtube.com/watch?v=PFGyzIGs8sE
+            [course_id] => 2
+            [duration] => 284
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/PFGyzIGs8sE/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [55] => Array
+        (
+            [id] => 56
+            [title] => 044 - ReactJS بالعربية - React Router - URL Parameters
+            [url] => https://www.youtube.com/watch?v=kT8pFBQzD5o
+            [course_id] => 2
+            [duration] => 1084
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/kT8pFBQzD5o/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [56] => Array
+        (
+            [id] => 57
+            [title] => 045 - ReactJS بالعربية - Routing - Redirect
+            [url] => https://www.youtube.com/watch?v=aG5ODUHZleo
+            [course_id] => 2
+            [duration] => 403
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/aG5ODUHZleo/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [57] => Array
+        (
+            [id] => 58
+            [title] => 046 - ReactJS بالعربية - React Router - Router Switch + Add User Page
+            [url] => https://www.youtube.com/watch?v=8cgGyOCWNy4
+            [course_id] => 2
+            [duration] => 324
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/8cgGyOCWNy4/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [58] => Array
+        (
+            [id] => 59
+            [title] => 047 - ReactJS بالعربية - React Router - NavLink
+            [url] => https://www.youtube.com/watch?v=zf2O2sRTZL0
+            [course_id] => 2
+            [duration] => 358
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/zf2O2sRTZL0/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [59] => Array
+        (
+            [id] => 60
+            [title] => 048 - ReactJS بالعربية - React Router - No Match 404
+            [url] => https://www.youtube.com/watch?v=pceU9dkZ6D0
+            [course_id] => 2
+            [duration] => 208
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/pceU9dkZ6D0/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [60] => Array
+        (
+            [id] => 61
+            [title] => 049 - ReactJS بالعربية - React Router - Preventing Transitions
+            [url] => https://www.youtube.com/watch?v=Gt3ALsK2Pxg
+            [course_id] => 2
+            [duration] => 249
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/Gt3ALsK2Pxg/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+    [61] => Array
+        (
+            [id] => 62
+            [title] => 050 - ReactJS بالعربية - React Router - withRouter HOC
+            [url] => https://www.youtube.com/watch?v=mUR4u3fKkpI
+            [course_id] => 2
+            [duration] => 241
+            [section_id] => 
+            [status] => active
+            [thumbnail] => https://i.ytimg.com/vi/mUR4u3fKkpI/hqdefault.jpg
+            [views] => 0
+            [language_id] => 2
+            [section_tags] => 
+        )
+
+)
+

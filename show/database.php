@@ -157,4 +157,52 @@ function deleteCode($codeId) {
         return false;
     }
 }
+
+// إضافة دالة لتحديث حالة الدرس
+function updateLessonStatus($lessonId, $status) {
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("UPDATE lessons SET status = :status WHERE id = :lesson_id");
+        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "updateLessonStatus error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
+    }
+}
+
+// إضافة دالة للحصول على إحصائيات الدروس
+function getCourseStatistics($courseId) {
+    try {
+        $db = connectDB();
+
+        // إجمالي الدروس
+        $stmt = $db->prepare("SELECT COUNT(*) as total_lessons FROM lessons WHERE course_id = :course_id");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $totalLessons = $stmt->fetch(PDO::FETCH_ASSOC)['total_lessons'];
+
+        // الدروس المكتملة
+        $stmt = $db->prepare("SELECT COUNT(*) as completed_lessons FROM lessons WHERE course_id = :course_id AND status = 'completed'");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $completedLessons = $stmt->fetch(PDO::FETCH_ASSOC)['completed_lessons'];
+
+        // الدروس غير المكتملة
+        $stmt = $db->prepare("SELECT COUNT(*) as incomplete_lessons FROM lessons WHERE course_id = :course_id AND status != 'completed'");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        $incompleteLessons = $stmt->fetch(PDO::FETCH_ASSOC)['incomplete_lessons'];
+
+        return [
+            'total_lessons' => $totalLessons,
+            'completed_lessons' => $completedLessons,
+            'incomplete_lessons' => $incompleteLessons
+        ];
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getCourseStatistics error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return [];
+    }
+}
 ?>

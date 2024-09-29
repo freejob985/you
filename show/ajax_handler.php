@@ -43,6 +43,12 @@ try {
                     ob_end_clean();
                     echo json_encode($codes);
                     break;
+                case 'get_statistics':
+                    $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
+                    $statistics = getCourseStatistics($courseId);
+                    ob_end_clean();
+                    echo json_encode($statistics);
+                    break;
                 default:
                     ob_end_clean();
                     echo json_encode(['error' => 'Invalid action']);
@@ -75,12 +81,14 @@ try {
                     break;
                 case 'add_code':
                     $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
-                    $language = isset($_POST['language']) ? $_POST['language'] : '';
+                    // تعديل: الحصول على اللغة من تفاصيل الدرس
+                    $lessonDetails = getLessonDetails($lessonId);
+                    $language = $lessonDetails['language_id'];
                     $code = isset($_POST['code']) ? $_POST['code'] : '';
                     $codeId = addCode($lessonId, $language, $code);
                     ob_end_clean();
                     if ($codeId) {
-                        echo json_encode(['success' => true, 'code_id' => $codeId]);
+                        echo json_encode(['success' => true, 'code_id' => $codeId, 'language' => $language]);
                     } else {
                         echo json_encode(['success' => false]);
                     }
@@ -88,6 +96,13 @@ try {
                 case 'delete_code':
                     $codeId = isset($_POST['code_id']) ? intval($_POST['code_id']) : 0;
                     $result = deleteCode($codeId);
+                    ob_end_clean();
+                    echo json_encode(['success' => $result]);
+                    break;
+                case 'change_lesson_status':
+                    $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
+                    $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
+                    $result = updateLessonStatus($lessonId, $newStatus);
                     ob_end_clean();
                     echo json_encode(['success' => $result]);
                     break;

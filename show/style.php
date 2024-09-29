@@ -40,12 +40,13 @@
         border-radius: 8px;
         padding: 16px;
         margin-bottom: 16px;
+        position: relative;
     }
     .sidebar {
         position: fixed;
         top: 0;
-        right: -400px; /* تغيير من -300px إلى -400px لزيادة عرض الشريط الجانبي */
-        width: 400px; /* تغيير من 300px إلى 400px */
+        right: -400px;
+        width: 400px;
         height: 100%;
         background-color: #fff;
         transition: right 0.3s ease-in-out;
@@ -73,15 +74,17 @@
         transition: right 0.3s ease-in-out;
     }
     .sidebar-toggle.open {
-        right: 410px; /* يجب أن يكون أكبر من عرض الشريط الجانبي بـ 10px */
+        right: 410px;
     }
     .comment-card {
         border: 1px solid #e2e8f0;
         border-radius: 8px;
         padding: 16px;
         margin-bottom: 16px;
-        background-color: #f8fafc;
+        background-color: #fff;
         position: relative;
+        display: flex;
+        align-items: center;
     }
     .comment-card .delete-comment {
         position: absolute;
@@ -92,11 +95,12 @@
         width: 64px;
         height: 64px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 50%;
         margin-left: 16px;
     }
     .comment-content {
-        flex: 2;
+        flex-grow: 1;
+        margin-right: 16px;
     }
     .comment-author {
         font-weight: bold;
@@ -137,10 +141,23 @@
     }
     /* إزاحة الصفحة عند فتح الشريط الجانبي */
     body.sidebar-open {
-        margin-right: 400px; /* يجب أن يكون نفس عرض الشريط الجانبي */
+        margin-right: 400px;
     }
-    /* تنسيق زر حذف الكود */
-    .code-block .delete-code {
+    /* تنسيق زر حذف ونسخ الكود */
+    .code-block .delete-code, .code-block .copy-code {
         margin-top: 10px;
+        margin-right: 5px;
+    }
+    .code-block .copy-code {
+        margin-left: 5px;
+    }
+    /* اتجاه النص في قائمة التشغيل */
+    #playlist li {
+        direction: ltr;
+        text-align: justify;
+    }
+    /* تنسيق الدرس المكتمل */
+    .completed {
+        text-decoration: line-through;
     }
 </style>
