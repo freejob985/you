@@ -12,7 +12,7 @@ if ($lesson) {
     $courseId = $lesson['course_id'];
     $course = getCourseDetails($courseId);
     $playlistItems = getPlaylistItems($courseId);
-
+// dd($playlistItems);
     // استخراج معرف الفيديو من الرابط
     $video_id = getYoutubeVideoId($lesson['url']);
 }

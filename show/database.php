@@ -1,7 +1,7 @@
 <?php
 function connectDB() {
     try {
-        $db = new PDO('sqlite:./courses.db');
+        $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $db;
     } catch(PDOException $e) {
@@ -64,10 +64,14 @@ function getCourseDetails($courseId) {
 
 function getPlaylistItems($courseId) {
     $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM lessons WHERE course_id = :course_id ORDER BY id");
+    $stmt = $db->prepare("SELECT * FROM lessons WHERE course_id = :course_id");
     $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    file_put_contents('debug.log', "getPlaylistItems result: " . print_r($result, true) . "\n", FILE_APPEND);
+    
+    // If no results, return an empty array instead of false
+    return $result ? $result : [];
 }
 
 function addComment($lessonId, $comment) {

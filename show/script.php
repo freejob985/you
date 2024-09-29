@@ -47,11 +47,24 @@ $(document).ready(function() {
         url: 'show/ajax_handler.php',
         method: 'GET',
         data: { action: 'get_playlist', course_id: <?php echo $courseId; ?> },
+        dataType: 'json',
         success: function(response) {
-            const playlist = JSON.parse(response);
-            playlist.forEach(item => {
-                addPlaylistItem(item.title, item.id, item.id == lessonId);
-            });
+            console.log('Raw response:', response);
+            if (Array.isArray(response) && response.length > 0) {
+                response.forEach(item => {
+                    addPlaylistItem(item.title, item.id, item.id == lessonId);
+                });
+            } else {
+                console.log('No playlist items returned');
+                toastr.warning('لا توجد عناصر في قائمة التشغيل');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            console.log('Response Text:', jqXHR.responseText);
+            console.log('Status:', jqXHR.status);
+            console.log('Status Text:', jqXHR.statusText);
+            toastr.error('حدث خطأ أثناء جلب البيانات');
         }
     });
 
@@ -82,6 +95,7 @@ $(document).ready(function() {
             url: 'show/ajax_handler.php',
             method: 'POST',
             data: { action: 'add_comment', lesson_id: lessonId, comment: comment },
+            dataType: 'json',
             success: function(response) {
                 const result = JSON.parse(response);
                 if (result.success) {
@@ -91,6 +105,11 @@ $(document).ready(function() {
                 } else {
                     toastr.error('حدث خطأ أثناء إضافة التعليق');
                 }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء إضافة التعليق');
             }
         });
     });
@@ -117,6 +136,7 @@ $(document).ready(function() {
             url: 'show/ajax_handler.php',
             method: 'POST',
             data: { action: 'add_code', lesson_id: lessonId, language: language, code: code },
+            dataType: 'json',
             success: function(response) {
                 const result = JSON.parse(response);
                 if (result.success) {
@@ -126,6 +146,11 @@ $(document).ready(function() {
                 } else {
                     toastr.error('حدث خطأ أثناء إضافة الكود');
                 }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء إضافة الكود');
             }
         });
     });
@@ -135,11 +160,17 @@ $(document).ready(function() {
         url: 'show/ajax_handler.php',
         method: 'GET',
         data: { action: 'get_comments', lesson_id: lessonId },
+        dataType: 'json',
         success: function(response) {
             const comments = JSON.parse(response);
             comments.forEach(comment => {
                 addComment(comment.content, comment.created_at);
             });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            console.log('Response Text:', jqXHR.responseText);
+            toastr.error('حدث خطأ أثناء جلب التعليقات');
         }
     });
 
@@ -148,11 +179,17 @@ $(document).ready(function() {
         url: 'show/ajax_handler.php',
         method: 'GET',
         data: { action: 'get_codes', lesson_id: lessonId },
+        dataType: 'json',
         success: function(response) {
             const codes = JSON.parse(response);
             codes.forEach(code => {
                 addCodeExample(code.language, code.code);
             });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            console.log('Response Text:', jqXHR.responseText);
+            toastr.error('حدث خطأ أثناء جلب الأكواد');
         }
     });
 
