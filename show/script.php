@@ -86,8 +86,6 @@ $(document).ready(function() {
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
             console.log('Response Text:', jqXHR.responseText);
-            console.log('Status:', jqXHR.status);
-            console.log('Status Text:', jqXHR.statusText);
             toastr.error('حدث خطأ أثناء جلب البيانات');
         }
     });
