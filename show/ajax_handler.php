@@ -25,11 +25,11 @@ try {
                         ob_end_clean();
                         echo json_encode(['success' => false, 'error' => 'Failed to fetch playlist items']);
                     } else {
-                        $counts = getCourseStatistics($courseId);
+                        $statistics = getCourseStatistics($courseId);
                         $response = [
                             'success' => true,
                             'playlistItems' => $playlistItems,
-                            'counts' => $counts
+                            'statistics' => $statistics
                         ];
                         $json_output = json_encode($response);
                         if ($json_output === false) {
@@ -70,8 +70,7 @@ try {
                         ob_end_clean();
                         echo json_encode([
                             'success' => true, 
-                            'completedCount' => $statistics['completed_lessons'],
-                            'incompleteCount' => $statistics['incomplete_lessons']
+                            'statistics' => $statistics
                         ]);
                     } else {
                         ob_end_clean();
@@ -138,8 +137,7 @@ try {
                         ob_end_clean();
                         echo json_encode([
                             'success' => true, 
-                            'completedCount' => $statistics['completed_lessons'],
-                            'incompleteCount' => $statistics['incomplete_lessons']
+                            'statistics' => $statistics
                         ]);
                     } else {
                         ob_end_clean();

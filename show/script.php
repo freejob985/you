@@ -35,8 +35,8 @@ $(document).ready(function() {
     // دالة لإضافة عناصر لقائمة التشغيل
     function addPlaylistItem(title, lessonId, isActive, isCompleted, views) {
         const activeClass = isActive ? 'active' : '';
-        const completedClass = (isCompleted && views > 0) ? 'completed' : '';
-        const checkedAttribute = (isCompleted && views > 0) ? 'checked' : '';
+        const completedClass = isCompleted ? 'completed font-bold' : '';
+        const checkedAttribute = isCompleted ? 'checked' : '';
         const viewsText = views > 0 ? `${views} مشاهدة` : 'غير مشاهد';
         $('#playlist').append(`
             <li class="list-group-item cursor-pointer ${activeClass} ${completedClass}" data-lesson-id="${lessonId}">
@@ -145,16 +145,15 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(response) {
-                console.log('Response:', response); // إضافة هذا السطر للتصحيح
+                console.log('Response:', response);
                 if (response.success) {
                     const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
                     if (isCompleted) {
-                        listItem.addClass('completed');
+                        listItem.addClass('completed font-bold');
                     } else {
-                        listItem.removeClass('completed');
+                        listItem.removeClass('completed font-bold');
                     }
                     toastr.success('تم تحديث حالة الدرس بنجاح');
-                    // تحديث الإحصائيات
                     updateStatistics(response.statistics);
                 } else {
                     toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
