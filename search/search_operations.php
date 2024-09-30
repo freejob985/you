@@ -118,67 +118,9 @@ function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
         }
 
         // حساب إجمالي النتائج
-        $countQuery = 'SELECT COUNT(*) FROM lessons l
-                       LEFT JOIN courses c ON l.course_id = c.id
-                       LEFT JOIN tags t ON l.language_id = t.id
-                       LEFT JOIN sections s ON l.section_id = s.id
-                       WHERE 1=1';
-        $countParams = [];
-
-        if (!empty($search)) {
-            $countQuery .= ' AND (l.title LIKE :search OR c.title LIKE :search)';
-            $countParams[':search'] = '%' . $search . '%';
-        }
-
-        // تطبيق الفلاتر على استعلام العد
-        if (!empty($filters)) {
-            // فلترة اللغات
-            if (!empty($filters['languages'])) {
-                $placeholders = [];
-                foreach ($filters['languages'] as $index => $language_id) {
-                    $placeholder = ':count_language' . $index;
-                    $placeholders[] = $placeholder;
-                    $countParams[$placeholder] = $language_id;
-                }
-                $countQuery .= ' AND l.language_id IN (' . implode(',', $placeholders) . ')';
-            }
-
-            // فلترة الكورسات
-            if (!empty($filters['courses'])) {
-                $placeholders = [];
-                foreach ($filters['courses'] as $index => $course_id) {
-                    $placeholder = ':count_course' . $index;
-                    $placeholders[] = $placeholder;
-                    $countParams[$placeholder] = $course_id;
-                }
-                $countQuery .= ' AND l.course_id IN (' . implode(',', $placeholders) . ')';
-            }
-
-            // فلترة الأقسام
-            if (!empty($filters['sections'])) {
-                $placeholders = [];
-                foreach ($filters['sections'] as $index => $section_id) {
-                    $placeholder = ':count_section' . $index;
-                    $placeholders[] = $placeholder;
-                    $countParams[$placeholder] = $section_id;
-                }
-                $countQuery .= ' AND l.section_id IN (' . implode(',', $placeholders) . ')';
-            }
-
-            // فلترة الحالات
-            if (!empty($filters['statuses'])) {
-                $placeholders = [];
-                foreach ($filters['statuses'] as $index => $status) {
-                    $placeholder = ':count_status' . $index;
-                    $placeholders[] = $placeholder;
-                    $countParams[$placeholder] = $status;
-                }
-                $countQuery .= ' AND l.status IN (' . implode(',', $placeholders) . ')';
-            }
-        }
-
+        $countQuery = 'SELECT COUNT(*) FROM (' . $query . ')';
         $countStmt = $db->prepare($countQuery);
-        foreach ($countParams as $key => $value) {
+        foreach ($params as $key => $value) {
             $countStmt->bindValue($key, $value);
         }
         $countStmt->execute();
@@ -208,7 +150,8 @@ function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
         return [
             'results' => $results,
             'totalPages' => $totalPages,
-            'currentPage' => $page
+            'currentPage' => $page,
+            'totalResults' => $totalResults
         ];
     } catch(PDOException $e) {
         error_log("Error searching lessons: " . $e->getMessage());
@@ -216,6 +159,7 @@ function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
             'results' => [],
             'totalPages' => 0,
             'currentPage' => $page,
+            'totalResults' => 0,
             'error' => 'An error occurred while searching for lessons.'
         ];
     }

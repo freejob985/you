@@ -23,7 +23,14 @@
         <div class="row">
             <!-- المحتوى الرئيسي -->
             <div class="col-md-12 p-4">
-                <?php include_once("show/mainContent.php");?>
+                <?php
+                if (isset($_GET['lesson_id'])) {
+                    $lessonId = $_GET['lesson_id'];
+                    include_once("show/mainContent.php");
+                } else {
+                    echo "<p>لم يتم تحديد درس للعرض.</p>";
+                }
+                ?>
                 
                 <!-- التعليقات -->
                 <?php include_once("show/commentFormContainer.php");?>
@@ -43,7 +50,7 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/7e1mldkbut3yp4tyeob9lt5s57pb8wrb5fqbh11d6n782gm7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/7e1mldkbut3yp4tyeob9lt5s57pb8wrb5fqbh11d6n782gm7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     
     <?php include_once("show/script.php");?>
 

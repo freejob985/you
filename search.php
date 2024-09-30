@@ -285,6 +285,10 @@ $statuses = getStatuses();
                 <!-- سيتم عرض نتائج البحث هنا -->
             </div>
 
+            <div id="searchInfo" class="mt-4 text-center text-gray-600">
+                <!-- سيتم عرض معلومات البحث هنا -->
+            </div>
+
             <div id="pagination" class="mt-8 flex justify-center">
                 <!-- سيتم عرض أزرار التنقل بين الصفحات هنا -->
             </div>
@@ -358,7 +362,7 @@ $statuses = getStatuses();
                         <p>المدة: ${formatDuration(lesson.duration)}</p>
                         <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
                     </div>
-                    <a href="${lesson.url}" target="_blank" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
+                    <a href="show.php?lesson_id=${lesson.id}" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
                 `);
                 resultsContainer.append(card);
             });
@@ -395,12 +399,18 @@ $statuses = getStatuses();
             }
         }
 
+        function displaySearchInfo(totalResults, currentPage, totalPages) {
+            const searchInfo = $('#searchInfo');
+            searchInfo.html(`عدد النتائج: ${totalResults} | الصفحة ${currentPage} من ${totalPages}`);
+        }
+
         function performSearch(page = 1) {
             const searchQuery = $('#search').val();
             const filters = getSelectedFilters();
 
             $.ajax({
-                url: 'search/search_operations.php',                method: 'POST',
+                url: 'search/search_operations.php',
+                method: 'POST',
                 data: {
                     search: searchQuery,
                     page: page,
@@ -414,6 +424,7 @@ $statuses = getStatuses();
                     }
                     displayResults(response.results);
                     displayPagination(response.currentPage, response.totalPages);
+                    displaySearchInfo(response.totalResults, response.currentPage, response.totalPages);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
