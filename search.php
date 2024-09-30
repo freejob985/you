@@ -166,7 +166,7 @@ $statuses = getStatuses();
             grid-template-columns: repeat(4, 1fr); /* 4 أعمدة */
             gap: 1rem;
         }
-        /* أنماط للسكروول */
+        /* أنماط للسكرووول */
         * {
             scrollbar-width: thin;
             scrollbar-color: #888 #f1f1f1;
@@ -184,6 +184,27 @@ $statuses = getStatuses();
         }
         *::-webkit-scrollbar-thumb:hover {
             background: #555;
+        }
+        .lesson-modal .modal-dialog {
+            max-width: 80%;
+        }
+        .lesson-modal .modal-body {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .youtube-icon {
+            color: #FF0000;
+            font-size: 1.5em;
+            margin-left: 10px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -295,6 +316,21 @@ $statuses = getStatuses();
         </div>
     </div>
 
+    <!-- Modal for lesson details -->
+    <div class="modal fade lesson-modal" id="lessonModal" tabindex="-1" aria-labelledby="lessonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lessonModalLabel">تفاصيل الدرس</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Lesson details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer bg-gray-800 text-white py-4">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2023 My Wiki. جميع الحقوق محفوظة.</p>
@@ -362,7 +398,15 @@ $statuses = getStatuses();
                         <p>المدة: ${formatDuration(lesson.duration)}</p>
                         <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
                     </div>
-                    <a href="show.php?lesson_id=${lesson.id}" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
+                    <div class="mt-2">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" onclick="showLessonDetails(${JSON.stringify(lesson).replace(/"/g, '&quot;')})">
+                            تفاصيل الدرس
+                        </button>
+                        <a href="${lesson.url}" target="_blank" class="inline-block">
+                            <i class="fab fa-youtube youtube-icon"></i>
+                        </a>
+                    </div>
+                    <a href="show.php?lesson_id=${lesson.id}" class="mt-2 inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
                 `);
                 resultsContainer.append(card);
             });
@@ -541,7 +585,7 @@ $statuses = getStatuses();
             updateCoursesAndSections();
         });
 
-        // تنعيم الاسكرول
+        // تنعيم الاسكروول
         $('a[href*="#"]:not([href="#"])').click(function() {
             if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
                 var target = $(this.hash);
@@ -555,6 +599,49 @@ $statuses = getStatuses();
             }
         });
     });
+
+    function showLessonDetails(lesson) {
+        const modalBody = $('#lessonModal .modal-body');
+        const tags = lesson.section_tags ? lesson.section_tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join(' ') : '';
+        
+        modalBody.html(`
+            <table class="table table-bordered">
+                <tr><th>العنوان</th><td>${lesson.title}</td></tr>
+                <tr><th>الكورس</th><td>${lesson.course_title}</td></tr>
+                <tr><th>اللغة</th><td>${lesson.language_name}</td></tr>
+                <tr><th>القسم</th><td>${lesson.section_name}</td></tr>
+                <tr><th>المدة</th><td>${formatDuration(lesson.duration)}</td></tr>
+                <tr><th>الحالة</th><td>${getStatusLabel(lesson.status)}</td></tr>
+                <tr><th>المشاهدات</th><td>${lesson.views}</td></tr>
+                <tr><th>التاجات</th><td>${tags}</td></tr>
+            </table>
+        `);
+        
+        $('#lessonModal').modal('show');
+    }
+
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${hours > 0 ? hours + ":" : ""}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function getStatusLabel(status) {
+        const statusLabels = {
+            'completed': 'مكتمل',
+            'watch': 'مشاهدة',
+            'problem': 'مشكلة',
+            'discussion': 'نقاش',
+            'search': 'بحث',
+            'retry': 'إعادة',
+            'retry_again': 'إعادة ثانية',
+            'review': 'مراجعة',
+            'excluded': 'مستبعد',
+            'project': 'مشروع تطبيقي'
+        };
+        return statusLabels[status] || 'غير محدد';
+    }
     </script>
 
 </body>
