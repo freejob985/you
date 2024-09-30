@@ -21688,3 +21688,1847 @@ Request: Array
     [lesson_id] => 35
 )
 
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => completed
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => active
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => completed
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => active
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 6
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 6
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => completed
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => active
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => completed
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => active
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 10
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 10
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 2
+)
+
+Course ID: 2
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 15
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 13
+            [title] => 001 - ReactJS بالعربية - Basics - Intro مقدمة الدورة
+            [status] => active
+        )
+
+    [1] => Array
+        (
+            [id] => 14
+            [title] => 002 - ReactJS بالعربية - Basics - Hello world
+            [status] => active
+        )
+
+    [2] => Array
+        (
+            [id] => 15
+            [title] => 003 - ReactJS بالعربية - Basics - JSX
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 16
+            [title] => 004 - ReactJS بالعربية - Basics - Local setup (MPA)
+            [status] => active
+        )
+
+    [4] => Array
+        (
+            [id] => 17
+            [title] => 005 - ReactJs بالعربية - Basics - create-react-app (SPA Setup)
+            [status] => active
+        )
+
+    [5] => Array
+        (
+            [id] => 18
+            [title] => 006 - ReactJs بالعربية - Basics - Component basics
+            [status] => active
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [title] => 007 ReactJs بالعربية - Basics - Props
+            [status] => active
+        )
+
+    [7] => Array
+        (
+            [id] => 20
+            [title] => 008 - ReactJS بالعربية - Basics - State
+            [status] => active
+        )
+
+    [8] => Array
+        (
+            [id] => 21
+            [title] => 009 - ReactsJs  بالعربية - Basics - events & updating the state
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 22
+            [title] => 010 - ReactJS بالعربية - Basics - onChange event
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 23
+            [title] => 011 - ReactJS بالعربية - Basics -  Lists & Loops
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 24
+            [title] => 012 - ReactJS بالعربية - Basics - conditions
+            [status] => active
+        )
+
+    [12] => Array
+        (
+            [id] => 25
+            [title] => 013 - ReactJS بالعربية - Basics - lifeCycle hooks
+            [status] => active
+        )
+
+    [13] => Array
+        (
+            [id] => 26
+            [title] => 014 - ReactJS بالعربية - Basics - ملاحظات هامة
+            [status] => active
+        )
+
+    [14] => Array
+        (
+            [id] => 27
+            [title] => 015 ReactJS بالعربية - Conditions & Loop - conditions before template
+            [status] => active
+        )
+
+    [15] => Array
+        (
+            [id] => 28
+            [title] => 016 - ReactJs بالعربية - Conditions & Loop - print array of objects
+            [status] => active
+        )
+
+    [16] => Array
+        (
+            [id] => 29
+            [title] => 017 - ReactJS بالعربية - Conditions & Loop - Better performance with components
+            [status] => active
+        )
+
+    [17] => Array
+        (
+            [id] => 30
+            [title] => 018 ReactJS بالعربية - Todolist app with react بناء تطبيق
+            [status] => active
+        )
+
+    [18] => Array
+        (
+            [id] => 31
+            [title] => 019 - ReactJS بالعربية - Forms - Controlled components
+            [status] => active
+        )
+
+    [19] => Array
+        (
+            [id] => 32
+            [title] => 020 - ReactJS بالعربية - Forms - Textarea
+            [status] => active
+        )
+
+    [20] => Array
+        (
+            [id] => 33
+            [title] => 021 - ReactJS بالعربية - Forms - Select
+            [status] => active
+        )
+
+    [21] => Array
+        (
+            [id] => 34
+            [title] => 022 - ReacJS بالعربية - Forms - Checkbox
+            [status] => active
+        )
+
+    [22] => Array
+        (
+            [id] => 35
+            [title] => 023 - ReactJS بالعربية - Forms - Radio
+            [status] => active
+        )
+
+    [23] => Array
+        (
+            [id] => 36
+            [title] => 024 - ReactJS بالعربية - Forms - Handling Multiple Inputs
+            [status] => active
+        )
+
+    [24] => Array
+        (
+            [id] => 37
+            [title] => 025 - ReactJS بالعربية - Forms - Fromik تعرف على أهمية
+            [status] => active
+        )
+
+    [25] => Array
+        (
+            [id] => 38
+            [title] => 026 - ReactJS بالعربية - Formik - First form
+            [status] => active
+        )
+
+    [26] => Array
+        (
+            [id] => 39
+            [title] => 027 - ReactJS بالعربية - Formik - Field type
+            [status] => active
+        )
+
+    [27] => Array
+        (
+            [id] => 40
+            [title] => 028 - ReactJS بالعربية - Fromik - Validation  & ErrorMessage Component
+            [status] => active
+        )
+
+    [28] => Array
+        (
+            [id] => 41
+            [title] => 029 - ReactJS بالعربية - Formik - Nested Objects
+            [status] => active
+        )
+
+    [29] => Array
+        (
+            [id] => 42
+            [title] => 030 - ReactJS بالعربية - Formik - Array of strings
+            [status] => active
+        )
+
+    [30] => Array
+        (
+            [id] => 43
+            [title] => 031 - ReactJS بالعربية - Formik - FieldArray + Array of Objects
+            [status] => active
+        )
+
+    [31] => Array
+        (
+            [id] => 44
+            [title] => 032 - ReactJS بالعربية - Styling - add css files
+            [status] => active
+        )
+
+    [32] => Array
+        (
+            [id] => 45
+            [title] => 033 - ReactJS بالعربية - Styling - Dynamic class name
+            [status] => active
+        )
+
+    [33] => Array
+        (
+            [id] => 46
+            [title] => 034 - ReactJS بالعربية - Styling - set styles dynamically
+            [status] => active
+        )
+
+    [34] => Array
+        (
+            [id] => 47
+            [title] => 035 - ReactJS بالعربية - Styling - using JS to set classes dynamically
+            [status] => active
+        )
+
+    [35] => Array
+        (
+            [id] => 48
+            [title] => 036 - ReactJS بالعربية - Styling - classnames package
+            [status] => active
+        )
+
+    [36] => Array
+        (
+            [id] => 49
+            [title] => 037 - ReactJS بالعربية - Http Requests - GET Request to fetch data from api
+            [status] => active
+        )
+
+    [37] => Array
+        (
+            [id] => 50
+            [title] => 038 - ReactJS بالعربية - Http Ajax Requests - View User
+            [status] => active
+        )
+
+    [38] => Array
+        (
+            [id] => 51
+            [title] => 039 - ReactJS بالعربية - Http Ajax Requests - حذف مستخدم
+            [status] => active
+        )
+
+    [39] => Array
+        (
+            [id] => 52
+            [title] => 040 - ReactJS بالعربية - Http Ajax Requests - Create UsersForm Component
+            [status] => active
+        )
+
+    [40] => Array
+        (
+            [id] => 53
+            [title] => 041 - ReactJS بالعربية - Http Ajax Requests - Edit User
+            [status] => active
+        )
+
+    [41] => Array
+        (
+            [id] => 54
+            [title] => 042 - ReactJS بالعربية - Http Ajax Requests - Add User
+            [status] => active
+        )
+
+    [42] => Array
+        (
+            [id] => 55
+            [title] => 043 - ReactJS بالعربية - React Router - Basics
+            [status] => active
+        )
+
+    [43] => Array
+        (
+            [id] => 56
+            [title] => 044 - ReactJS بالعربية - React Router - URL Parameters
+            [status] => active
+        )
+
+    [44] => Array
+        (
+            [id] => 57
+            [title] => 045 - ReactJS بالعربية - Routing - Redirect
+            [status] => active
+        )
+
+    [45] => Array
+        (
+            [id] => 58
+            [title] => 046 - ReactJS بالعربية - React Router - Router Switch + Add User Page
+            [status] => active
+        )
+
+    [46] => Array
+        (
+            [id] => 59
+            [title] => 047 - ReactJS بالعربية - React Router - NavLink
+            [status] => active
+        )
+
+    [47] => Array
+        (
+            [id] => 60
+            [title] => 048 - ReactJS بالعربية - React Router - No Match 404
+            [status] => active
+        )
+
+    [48] => Array
+        (
+            [id] => 61
+            [title] => 049 - ReactJS بالعربية - React Router - Preventing Transitions
+            [status] => active
+        )
+
+    [49] => Array
+        (
+            [id] => 62
+            [title] => 050 - ReactJS بالعربية - React Router - withRouter HOC
+            [status] => active
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 13
+            [title] => 001 - ReactJS بالعربية - Basics - Intro مقدمة الدورة
+            [status] => active
+        )
+
+    [1] => Array
+        (
+            [id] => 14
+            [title] => 002 - ReactJS بالعربية - Basics - Hello world
+            [status] => active
+        )
+
+    [2] => Array
+        (
+            [id] => 15
+            [title] => 003 - ReactJS بالعربية - Basics - JSX
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 16
+            [title] => 004 - ReactJS بالعربية - Basics - Local setup (MPA)
+            [status] => active
+        )
+
+    [4] => Array
+        (
+            [id] => 17
+            [title] => 005 - ReactJs بالعربية - Basics - create-react-app (SPA Setup)
+            [status] => active
+        )
+
+    [5] => Array
+        (
+            [id] => 18
+            [title] => 006 - ReactJs بالعربية - Basics - Component basics
+            [status] => active
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [title] => 007 ReactJs بالعربية - Basics - Props
+            [status] => active
+        )
+
+    [7] => Array
+        (
+            [id] => 20
+            [title] => 008 - ReactJS بالعربية - Basics - State
+            [status] => active
+        )
+
+    [8] => Array
+        (
+            [id] => 21
+            [title] => 009 - ReactsJs  بالعربية - Basics - events & updating the state
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 22
+            [title] => 010 - ReactJS بالعربية - Basics - onChange event
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 23
+            [title] => 011 - ReactJS بالعربية - Basics -  Lists & Loops
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 24
+            [title] => 012 - ReactJS بالعربية - Basics - conditions
+            [status] => active
+        )
+
+    [12] => Array
+        (
+            [id] => 25
+            [title] => 013 - ReactJS بالعربية - Basics - lifeCycle hooks
+            [status] => active
+        )
+
+    [13] => Array
+        (
+            [id] => 26
+            [title] => 014 - ReactJS بالعربية - Basics - ملاحظات هامة
+            [status] => active
+        )
+
+    [14] => Array
+        (
+            [id] => 27
+            [title] => 015 ReactJS بالعربية - Conditions & Loop - conditions before template
+            [status] => active
+        )
+
+    [15] => Array
+        (
+            [id] => 28
+            [title] => 016 - ReactJs بالعربية - Conditions & Loop - print array of objects
+            [status] => active
+        )
+
+    [16] => Array
+        (
+            [id] => 29
+            [title] => 017 - ReactJS بالعربية - Conditions & Loop - Better performance with components
+            [status] => active
+        )
+
+    [17] => Array
+        (
+            [id] => 30
+            [title] => 018 ReactJS بالعربية - Todolist app with react بناء تطبيق
+            [status] => active
+        )
+
+    [18] => Array
+        (
+            [id] => 31
+            [title] => 019 - ReactJS بالعربية - Forms - Controlled components
+            [status] => active
+        )
+
+    [19] => Array
+        (
+            [id] => 32
+            [title] => 020 - ReactJS بالعربية - Forms - Textarea
+            [status] => active
+        )
+
+    [20] => Array
+        (
+            [id] => 33
+            [title] => 021 - ReactJS بالعربية - Forms - Select
+            [status] => active
+        )
+
+    [21] => Array
+        (
+            [id] => 34
+            [title] => 022 - ReacJS بالعربية - Forms - Checkbox
+            [status] => active
+        )
+
+    [22] => Array
+        (
+            [id] => 35
+            [title] => 023 - ReactJS بالعربية - Forms - Radio
+            [status] => active
+        )
+
+    [23] => Array
+        (
+            [id] => 36
+            [title] => 024 - ReactJS بالعربية - Forms - Handling Multiple Inputs
+            [status] => active
+        )
+
+    [24] => Array
+        (
+            [id] => 37
+            [title] => 025 - ReactJS بالعربية - Forms - Fromik تعرف على أهمية
+            [status] => active
+        )
+
+    [25] => Array
+        (
+            [id] => 38
+            [title] => 026 - ReactJS بالعربية - Formik - First form
+            [status] => active
+        )
+
+    [26] => Array
+        (
+            [id] => 39
+            [title] => 027 - ReactJS بالعربية - Formik - Field type
+            [status] => active
+        )
+
+    [27] => Array
+        (
+            [id] => 40
+            [title] => 028 - ReactJS بالعربية - Fromik - Validation  & ErrorMessage Component
+            [status] => active
+        )
+
+    [28] => Array
+        (
+            [id] => 41
+            [title] => 029 - ReactJS بالعربية - Formik - Nested Objects
+            [status] => active
+        )
+
+    [29] => Array
+        (
+            [id] => 42
+            [title] => 030 - ReactJS بالعربية - Formik - Array of strings
+            [status] => active
+        )
+
+    [30] => Array
+        (
+            [id] => 43
+            [title] => 031 - ReactJS بالعربية - Formik - FieldArray + Array of Objects
+            [status] => active
+        )
+
+    [31] => Array
+        (
+            [id] => 44
+            [title] => 032 - ReactJS بالعربية - Styling - add css files
+            [status] => active
+        )
+
+    [32] => Array
+        (
+            [id] => 45
+            [title] => 033 - ReactJS بالعربية - Styling - Dynamic class name
+            [status] => active
+        )
+
+    [33] => Array
+        (
+            [id] => 46
+            [title] => 034 - ReactJS بالعربية - Styling - set styles dynamically
+            [status] => active
+        )
+
+    [34] => Array
+        (
+            [id] => 47
+            [title] => 035 - ReactJS بالعربية - Styling - using JS to set classes dynamically
+            [status] => active
+        )
+
+    [35] => Array
+        (
+            [id] => 48
+            [title] => 036 - ReactJS بالعربية - Styling - classnames package
+            [status] => active
+        )
+
+    [36] => Array
+        (
+            [id] => 49
+            [title] => 037 - ReactJS بالعربية - Http Requests - GET Request to fetch data from api
+            [status] => active
+        )
+
+    [37] => Array
+        (
+            [id] => 50
+            [title] => 038 - ReactJS بالعربية - Http Ajax Requests - View User
+            [status] => active
+        )
+
+    [38] => Array
+        (
+            [id] => 51
+            [title] => 039 - ReactJS بالعربية - Http Ajax Requests - حذف مستخدم
+            [status] => active
+        )
+
+    [39] => Array
+        (
+            [id] => 52
+            [title] => 040 - ReactJS بالعربية - Http Ajax Requests - Create UsersForm Component
+            [status] => active
+        )
+
+    [40] => Array
+        (
+            [id] => 53
+            [title] => 041 - ReactJS بالعربية - Http Ajax Requests - Edit User
+            [status] => active
+        )
+
+    [41] => Array
+        (
+            [id] => 54
+            [title] => 042 - ReactJS بالعربية - Http Ajax Requests - Add User
+            [status] => active
+        )
+
+    [42] => Array
+        (
+            [id] => 55
+            [title] => 043 - ReactJS بالعربية - React Router - Basics
+            [status] => active
+        )
+
+    [43] => Array
+        (
+            [id] => 56
+            [title] => 044 - ReactJS بالعربية - React Router - URL Parameters
+            [status] => active
+        )
+
+    [44] => Array
+        (
+            [id] => 57
+            [title] => 045 - ReactJS بالعربية - Routing - Redirect
+            [status] => active
+        )
+
+    [45] => Array
+        (
+            [id] => 58
+            [title] => 046 - ReactJS بالعربية - React Router - Router Switch + Add User Page
+            [status] => active
+        )
+
+    [46] => Array
+        (
+            [id] => 59
+            [title] => 047 - ReactJS بالعربية - React Router - NavLink
+            [status] => active
+        )
+
+    [47] => Array
+        (
+            [id] => 60
+            [title] => 048 - ReactJS بالعربية - React Router - No Match 404
+            [status] => active
+        )
+
+    [48] => Array
+        (
+            [id] => 61
+            [title] => 049 - ReactJS بالعربية - React Router - Preventing Transitions
+            [status] => active
+        )
+
+    [49] => Array
+        (
+            [id] => 62
+            [title] => 050 - ReactJS بالعربية - React Router - withRouter HOC
+            [status] => active
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 15
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 2
+)
+
+Course ID: 2
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 13
+            [title] => 001 - ReactJS بالعربية - Basics - Intro مقدمة الدورة
+            [status] => active
+        )
+
+    [1] => Array
+        (
+            [id] => 14
+            [title] => 002 - ReactJS بالعربية - Basics - Hello world
+            [status] => active
+        )
+
+    [2] => Array
+        (
+            [id] => 15
+            [title] => 003 - ReactJS بالعربية - Basics - JSX
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 16
+            [title] => 004 - ReactJS بالعربية - Basics - Local setup (MPA)
+            [status] => active
+        )
+
+    [4] => Array
+        (
+            [id] => 17
+            [title] => 005 - ReactJs بالعربية - Basics - create-react-app (SPA Setup)
+            [status] => active
+        )
+
+    [5] => Array
+        (
+            [id] => 18
+            [title] => 006 - ReactJs بالعربية - Basics - Component basics
+            [status] => active
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [title] => 007 ReactJs بالعربية - Basics - Props
+            [status] => active
+        )
+
+    [7] => Array
+        (
+            [id] => 20
+            [title] => 008 - ReactJS بالعربية - Basics - State
+            [status] => active
+        )
+
+    [8] => Array
+        (
+            [id] => 21
+            [title] => 009 - ReactsJs  بالعربية - Basics - events & updating the state
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 22
+            [title] => 010 - ReactJS بالعربية - Basics - onChange event
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 23
+            [title] => 011 - ReactJS بالعربية - Basics -  Lists & Loops
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 24
+            [title] => 012 - ReactJS بالعربية - Basics - conditions
+            [status] => active
+        )
+
+    [12] => Array
+        (
+            [id] => 25
+            [title] => 013 - ReactJS بالعربية - Basics - lifeCycle hooks
+            [status] => active
+        )
+
+    [13] => Array
+        (
+            [id] => 26
+            [title] => 014 - ReactJS بالعربية - Basics - ملاحظات هامة
+            [status] => active
+        )
+
+    [14] => Array
+        (
+            [id] => 27
+            [title] => 015 ReactJS بالعربية - Conditions & Loop - conditions before template
+            [status] => active
+        )
+
+    [15] => Array
+        (
+            [id] => 28
+            [title] => 016 - ReactJs بالعربية - Conditions & Loop - print array of objects
+            [status] => active
+        )
+
+    [16] => Array
+        (
+            [id] => 29
+            [title] => 017 - ReactJS بالعربية - Conditions & Loop - Better performance with components
+            [status] => active
+        )
+
+    [17] => Array
+        (
+            [id] => 30
+            [title] => 018 ReactJS بالعربية - Todolist app with react بناء تطبيق
+            [status] => active
+        )
+
+    [18] => Array
+        (
+            [id] => 31
+            [title] => 019 - ReactJS بالعربية - Forms - Controlled components
+            [status] => active
+        )
+
+    [19] => Array
+        (
+            [id] => 32
+            [title] => 020 - ReactJS بالعربية - Forms - Textarea
+            [status] => active
+        )
+
+    [20] => Array
+        (
+            [id] => 33
+            [title] => 021 - ReactJS بالعربية - Forms - Select
+            [status] => active
+        )
+
+    [21] => Array
+        (
+            [id] => 34
+            [title] => 022 - ReacJS بالعربية - Forms - Checkbox
+            [status] => active
+        )
+
+    [22] => Array
+        (
+            [id] => 35
+            [title] => 023 - ReactJS بالعربية - Forms - Radio
+            [status] => active
+        )
+
+    [23] => Array
+        (
+            [id] => 36
+            [title] => 024 - ReactJS بالعربية - Forms - Handling Multiple Inputs
+            [status] => active
+        )
+
+    [24] => Array
+        (
+            [id] => 37
+            [title] => 025 - ReactJS بالعربية - Forms - Fromik تعرف على أهمية
+            [status] => active
+        )
+
+    [25] => Array
+        (
+            [id] => 38
+            [title] => 026 - ReactJS بالعربية - Formik - First form
+            [status] => active
+        )
+
+    [26] => Array
+        (
+            [id] => 39
+            [title] => 027 - ReactJS بالعربية - Formik - Field type
+            [status] => active
+        )
+
+    [27] => Array
+        (
+            [id] => 40
+            [title] => 028 - ReactJS بالعربية - Fromik - Validation  & ErrorMessage Component
+            [status] => active
+        )
+
+    [28] => Array
+        (
+            [id] => 41
+            [title] => 029 - ReactJS بالعربية - Formik - Nested Objects
+            [status] => active
+        )
+
+    [29] => Array
+        (
+            [id] => 42
+            [title] => 030 - ReactJS بالعربية - Formik - Array of strings
+            [status] => active
+        )
+
+    [30] => Array
+        (
+            [id] => 43
+            [title] => 031 - ReactJS بالعربية - Formik - FieldArray + Array of Objects
+            [status] => active
+        )
+
+    [31] => Array
+        (
+            [id] => 44
+            [title] => 032 - ReactJS بالعربية - Styling - add css files
+            [status] => active
+        )
+
+    [32] => Array
+        (
+            [id] => 45
+            [title] => 033 - ReactJS بالعربية - Styling - Dynamic class name
+            [status] => active
+        )
+
+    [33] => Array
+        (
+            [id] => 46
+            [title] => 034 - ReactJS بالعربية - Styling - set styles dynamically
+            [status] => active
+        )
+
+    [34] => Array
+        (
+            [id] => 47
+            [title] => 035 - ReactJS بالعربية - Styling - using JS to set classes dynamically
+            [status] => active
+        )
+
+    [35] => Array
+        (
+            [id] => 48
+            [title] => 036 - ReactJS بالعربية - Styling - classnames package
+            [status] => active
+        )
+
+    [36] => Array
+        (
+            [id] => 49
+            [title] => 037 - ReactJS بالعربية - Http Requests - GET Request to fetch data from api
+            [status] => active
+        )
+
+    [37] => Array
+        (
+            [id] => 50
+            [title] => 038 - ReactJS بالعربية - Http Ajax Requests - View User
+            [status] => active
+        )
+
+    [38] => Array
+        (
+            [id] => 51
+            [title] => 039 - ReactJS بالعربية - Http Ajax Requests - حذف مستخدم
+            [status] => active
+        )
+
+    [39] => Array
+        (
+            [id] => 52
+            [title] => 040 - ReactJS بالعربية - Http Ajax Requests - Create UsersForm Component
+            [status] => active
+        )
+
+    [40] => Array
+        (
+            [id] => 53
+            [title] => 041 - ReactJS بالعربية - Http Ajax Requests - Edit User
+            [status] => active
+        )
+
+    [41] => Array
+        (
+            [id] => 54
+            [title] => 042 - ReactJS بالعربية - Http Ajax Requests - Add User
+            [status] => active
+        )
+
+    [42] => Array
+        (
+            [id] => 55
+            [title] => 043 - ReactJS بالعربية - React Router - Basics
+            [status] => active
+        )
+
+    [43] => Array
+        (
+            [id] => 56
+            [title] => 044 - ReactJS بالعربية - React Router - URL Parameters
+            [status] => active
+        )
+
+    [44] => Array
+        (
+            [id] => 57
+            [title] => 045 - ReactJS بالعربية - Routing - Redirect
+            [status] => active
+        )
+
+    [45] => Array
+        (
+            [id] => 58
+            [title] => 046 - ReactJS بالعربية - React Router - Router Switch + Add User Page
+            [status] => active
+        )
+
+    [46] => Array
+        (
+            [id] => 59
+            [title] => 047 - ReactJS بالعربية - React Router - NavLink
+            [status] => active
+        )
+
+    [47] => Array
+        (
+            [id] => 60
+            [title] => 048 - ReactJS بالعربية - React Router - No Match 404
+            [status] => active
+        )
+
+    [48] => Array
+        (
+            [id] => 61
+            [title] => 049 - ReactJS بالعربية - React Router - Preventing Transitions
+            [status] => active
+        )
+
+    [49] => Array
+        (
+            [id] => 62
+            [title] => 050 - ReactJS بالعربية - React Router - withRouter HOC
+            [status] => active
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 13
+            [title] => 001 - ReactJS بالعربية - Basics - Intro مقدمة الدورة
+            [status] => active
+        )
+
+    [1] => Array
+        (
+            [id] => 14
+            [title] => 002 - ReactJS بالعربية - Basics - Hello world
+            [status] => active
+        )
+
+    [2] => Array
+        (
+            [id] => 15
+            [title] => 003 - ReactJS بالعربية - Basics - JSX
+            [status] => completed
+        )
+
+    [3] => Array
+        (
+            [id] => 16
+            [title] => 004 - ReactJS بالعربية - Basics - Local setup (MPA)
+            [status] => active
+        )
+
+    [4] => Array
+        (
+            [id] => 17
+            [title] => 005 - ReactJs بالعربية - Basics - create-react-app (SPA Setup)
+            [status] => active
+        )
+
+    [5] => Array
+        (
+            [id] => 18
+            [title] => 006 - ReactJs بالعربية - Basics - Component basics
+            [status] => active
+        )
+
+    [6] => Array
+        (
+            [id] => 19
+            [title] => 007 ReactJs بالعربية - Basics - Props
+            [status] => active
+        )
+
+    [7] => Array
+        (
+            [id] => 20
+            [title] => 008 - ReactJS بالعربية - Basics - State
+            [status] => active
+        )
+
+    [8] => Array
+        (
+            [id] => 21
+            [title] => 009 - ReactsJs  بالعربية - Basics - events & updating the state
+            [status] => active
+        )
+
+    [9] => Array
+        (
+            [id] => 22
+            [title] => 010 - ReactJS بالعربية - Basics - onChange event
+            [status] => active
+        )
+
+    [10] => Array
+        (
+            [id] => 23
+            [title] => 011 - ReactJS بالعربية - Basics -  Lists & Loops
+            [status] => active
+        )
+
+    [11] => Array
+        (
+            [id] => 24
+            [title] => 012 - ReactJS بالعربية - Basics - conditions
+            [status] => active
+        )
+
+    [12] => Array
+        (
+            [id] => 25
+            [title] => 013 - ReactJS بالعربية - Basics - lifeCycle hooks
+            [status] => active
+        )
+
+    [13] => Array
+        (
+            [id] => 26
+            [title] => 014 - ReactJS بالعربية - Basics - ملاحظات هامة
+            [status] => active
+        )
+
+    [14] => Array
+        (
+            [id] => 27
+            [title] => 015 ReactJS بالعربية - Conditions & Loop - conditions before template
+            [status] => active
+        )
+
+    [15] => Array
+        (
+            [id] => 28
+            [title] => 016 - ReactJs بالعربية - Conditions & Loop - print array of objects
+            [status] => active
+        )
+
+    [16] => Array
+        (
+            [id] => 29
+            [title] => 017 - ReactJS بالعربية - Conditions & Loop - Better performance with components
+            [status] => active
+        )
+
+    [17] => Array
+        (
+            [id] => 30
+            [title] => 018 ReactJS بالعربية - Todolist app with react بناء تطبيق
+            [status] => active
+        )
+
+    [18] => Array
+        (
+            [id] => 31
+            [title] => 019 - ReactJS بالعربية - Forms - Controlled components
+            [status] => active
+        )
+
+    [19] => Array
+        (
+            [id] => 32
+            [title] => 020 - ReactJS بالعربية - Forms - Textarea
+            [status] => active
+        )
+
+    [20] => Array
+        (
+            [id] => 33
+            [title] => 021 - ReactJS بالعربية - Forms - Select
+            [status] => active
+        )
+
+    [21] => Array
+        (
+            [id] => 34
+            [title] => 022 - ReacJS بالعربية - Forms - Checkbox
+            [status] => active
+        )
+
+    [22] => Array
+        (
+            [id] => 35
+            [title] => 023 - ReactJS بالعربية - Forms - Radio
+            [status] => active
+        )
+
+    [23] => Array
+        (
+            [id] => 36
+            [title] => 024 - ReactJS بالعربية - Forms - Handling Multiple Inputs
+            [status] => active
+        )
+
+    [24] => Array
+        (
+            [id] => 37
+            [title] => 025 - ReactJS بالعربية - Forms - Fromik تعرف على أهمية
+            [status] => active
+        )
+
+    [25] => Array
+        (
+            [id] => 38
+            [title] => 026 - ReactJS بالعربية - Formik - First form
+            [status] => active
+        )
+
+    [26] => Array
+        (
+            [id] => 39
+            [title] => 027 - ReactJS بالعربية - Formik - Field type
+            [status] => active
+        )
+
+    [27] => Array
+        (
+            [id] => 40
+            [title] => 028 - ReactJS بالعربية - Fromik - Validation  & ErrorMessage Component
+            [status] => active
+        )
+
+    [28] => Array
+        (
+            [id] => 41
+            [title] => 029 - ReactJS بالعربية - Formik - Nested Objects
+            [status] => active
+        )
+
+    [29] => Array
+        (
+            [id] => 42
+            [title] => 030 - ReactJS بالعربية - Formik - Array of strings
+            [status] => active
+        )
+
+    [30] => Array
+        (
+            [id] => 43
+            [title] => 031 - ReactJS بالعربية - Formik - FieldArray + Array of Objects
+            [status] => active
+        )
+
+    [31] => Array
+        (
+            [id] => 44
+            [title] => 032 - ReactJS بالعربية - Styling - add css files
+            [status] => active
+        )
+
+    [32] => Array
+        (
+            [id] => 45
+            [title] => 033 - ReactJS بالعربية - Styling - Dynamic class name
+            [status] => active
+        )
+
+    [33] => Array
+        (
+            [id] => 46
+            [title] => 034 - ReactJS بالعربية - Styling - set styles dynamically
+            [status] => active
+        )
+
+    [34] => Array
+        (
+            [id] => 47
+            [title] => 035 - ReactJS بالعربية - Styling - using JS to set classes dynamically
+            [status] => active
+        )
+
+    [35] => Array
+        (
+            [id] => 48
+            [title] => 036 - ReactJS بالعربية - Styling - classnames package
+            [status] => active
+        )
+
+    [36] => Array
+        (
+            [id] => 49
+            [title] => 037 - ReactJS بالعربية - Http Requests - GET Request to fetch data from api
+            [status] => active
+        )
+
+    [37] => Array
+        (
+            [id] => 50
+            [title] => 038 - ReactJS بالعربية - Http Ajax Requests - View User
+            [status] => active
+        )
+
+    [38] => Array
+        (
+            [id] => 51
+            [title] => 039 - ReactJS بالعربية - Http Ajax Requests - حذف مستخدم
+            [status] => active
+        )
+
+    [39] => Array
+        (
+            [id] => 52
+            [title] => 040 - ReactJS بالعربية - Http Ajax Requests - Create UsersForm Component
+            [status] => active
+        )
+
+    [40] => Array
+        (
+            [id] => 53
+            [title] => 041 - ReactJS بالعربية - Http Ajax Requests - Edit User
+            [status] => active
+        )
+
+    [41] => Array
+        (
+            [id] => 54
+            [title] => 042 - ReactJS بالعربية - Http Ajax Requests - Add User
+            [status] => active
+        )
+
+    [42] => Array
+        (
+            [id] => 55
+            [title] => 043 - ReactJS بالعربية - React Router - Basics
+            [status] => active
+        )
+
+    [43] => Array
+        (
+            [id] => 56
+            [title] => 044 - ReactJS بالعربية - React Router - URL Parameters
+            [status] => active
+        )
+
+    [44] => Array
+        (
+            [id] => 57
+            [title] => 045 - ReactJS بالعربية - Routing - Redirect
+            [status] => active
+        )
+
+    [45] => Array
+        (
+            [id] => 58
+            [title] => 046 - ReactJS بالعربية - React Router - Router Switch + Add User Page
+            [status] => active
+        )
+
+    [46] => Array
+        (
+            [id] => 59
+            [title] => 047 - ReactJS بالعربية - React Router - NavLink
+            [status] => active
+        )
+
+    [47] => Array
+        (
+            [id] => 60
+            [title] => 048 - ReactJS بالعربية - React Router - No Match 404
+            [status] => active
+        )
+
+    [48] => Array
+        (
+            [id] => 61
+            [title] => 049 - ReactJS بالعربية - React Router - Preventing Transitions
+            [status] => active
+        )
+
+    [49] => Array
+        (
+            [id] => 62
+            [title] => 050 - ReactJS بالعربية - React Router - withRouter HOC
+            [status] => active
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 26
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 26
+)
+
