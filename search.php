@@ -185,6 +185,34 @@ $statuses = getStatuses();
         *::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+        .lesson-card .mt-2 button,
+        .lesson-card .mt-2 a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+        }
+
+        .lesson-card .mt-2 i {
+            font-size: 1.2rem;
+        }
+
+        .modal-dialog {
+            max-width: 800px;
+        }
+
+        .modal-content {
+            border-radius: 0.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        iframe.embed-responsive-item {
+            width: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -363,13 +391,15 @@ function displayResults(results) {
                 <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
             </div>
             <div class="mt-2 flex justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded lesson-details-btn" data-lesson='${JSON.stringify(lesson)}'>
-                    تفاصيل الدرس
+                <button class="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded lesson-details-btn" data-lesson='${JSON.stringify(lesson)}'>
+                    <i class="fas fa-info-circle"></i>
                 </button>
-                <a href="${lesson.url}" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    <i class="fab fa-youtube mr-2"></i>يوتيوب
+                <a href="${lesson.url}" target="_blank" class="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-center mx-2">
+                    <i class="fab fa-youtube"></i>
                 </a>
-                <a href="show.php?lesson_id=${lesson.id}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">مشاهدة الدرس</a>
+                <a href="show.php?lesson_id=${lesson.id}" class="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                    <i class="fas fa-play-circle"></i>
+                </a>
             </div>
         `);
         resultsContainer.append(card);
@@ -598,6 +628,13 @@ function displayResults(results) {
             
             $('#lessonModal').modal('show');
         }
+
+        $('#lessonModal').on('hide.bs.modal', function () {
+            const iframe = $(this).find('iframe');
+            if (iframe.length > 0) {
+                iframe[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            }
+        });
     });
     </script>
 
