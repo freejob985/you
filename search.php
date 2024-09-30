@@ -1,18 +1,10 @@
-<!-- ===========================================================
-اسم الملف: search.php
-=========================================================== -->
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-// header('Content-Type: application/json');
 
 require_once 'search/search_operations.php';
-
 $languages = getLanguages();
-$courses = getCourses();
-$sections = getSections();
 $statuses = getStatuses();
-// print_r($courses);
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -20,20 +12,20 @@ $statuses = getStatuses();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wiki - صفحة البحث</title>
-    
-    <!-- روابط Bootstrap و Material Design و Tailwind CSS -->
+
+    <!-- روابط CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+
     <!-- رابط Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    
+
     <!-- روابط الخطوط العربية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
-    
+
     <!-- الأنماط المخصصة -->
     <style>
         body {
@@ -57,7 +49,7 @@ $statuses = getStatuses();
             width: 100%;
             z-index: 1000;
         }
-        /* أنماط جديدة للقائمة في الهيدر */
+        /* أنماط للقائمة في الهيدر */
         .header-nav {
             display: flex;
             align-items: center;
@@ -124,7 +116,7 @@ $statuses = getStatuses();
             padding: 1rem;
             margin-bottom: 1rem;
             background-color: #fff;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
         }
         .lesson-card h3 {
             font-size: 1.25rem;
@@ -171,35 +163,32 @@ $statuses = getStatuses();
         }
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* تغيير إلى 4 أعمدة */
+            grid-template-columns: repeat(4, 1fr); /* 4 أعمدة */
             gap: 1rem;
         }
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
+        /* أنماط للسكروول */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+        *::-webkit-scrollbar {
+            width: 8px;
+        }
+        *::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        *::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        *::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- إضافة الهيدر مع القائمة الجديدة -->
+    <!-- الهيدر -->
     <header class="bg-blue-500 text-white py-4">
         <div class="container mx-auto px-4 flex items-center justify-between">
             <div class="flex items-center">
@@ -217,7 +206,7 @@ $statuses = getStatuses();
 
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-4xl font-bold mb-8 text-center changa-font">My Wiki</h1>
-        
+
         <div class="bg-white shadow-lg rounded-lg p-6">
             <form id="searchForm" class="mb-6">
                 <div class="flex flex-wrap -mx-3 mb-4">
@@ -231,14 +220,14 @@ $statuses = getStatuses();
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- زر إظهار/إخفاء الفلاتر -->
                 <div class="flex justify-end">
-                    <button class="toggle-filters-btn" aria-label="إظهار/إخفاء الفلاتر">
+                    <button type="button" class="toggle-filters-btn" aria-label="إظهار/إخفاء الفلاتر">
                         <i class="fas fa-filter"></i>
                     </button>
                 </div>
-                
+
                 <!-- قسم الفلاتر -->
                 <div class="filters-section">
                     <div class="filters-grid">
@@ -252,29 +241,19 @@ $statuses = getStatuses();
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        
+
                         <!-- فلاتر الكورس -->
-                        <div>
+                        <div id="coursesFilter">
                             <h5 class="mb-2 font-semibold">الكورس</h5>
-                            <?php foreach ($courses as $course): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="course_<?php echo $course['id']; ?>" name="courses[]" value="<?php echo $course['id']; ?>">
-                                    <label for="course_<?php echo $course['id']; ?>"><?php echo htmlspecialchars($course['title']); ?></label>
-                                </div>
-                            <?php endforeach; ?>
+                            <!-- سيتم تحديث الكورسات ديناميكياً بناءً على اختيار اللغة -->
                         </div>
-                        
+
                         <!-- فلاتر القسم -->
-                        <div>
+                        <div id="sectionsFilter">
                             <h5 class="mb-2 font-semibold">القسم</h5>
-                            <?php foreach ($sections as $section): ?>
-                                <div class="md-checkbox">
-                                    <input type="checkbox" id="section_<?php echo $section['id']; ?>" name="sections[]" value="<?php echo $section['id']; ?>">
-                                    <label for="section_<?php echo $section['id']; ?>"><?php echo htmlspecialchars($section['name']); ?></label>
-                                </div>
-                            <?php endforeach; ?>
+                            <!-- سيتم تحديث الأقسام ديناميكياً بناءً على اختيار اللغة -->
                         </div>
-                        
+
                         <!-- فلاتر الحالة -->
                         <div>
                             <h5 class="mb-2 font-semibold">الحالة</h5>
@@ -286,15 +265,15 @@ $statuses = getStatuses();
                             <?php endforeach; ?>
                         </div>
                     </div>
-                    <!-- إضافة هذا الكود في نهاية قسم الفلاتر -->
+                    <!-- زر مسح الفلاتر -->
                     <div class="flex justify-center mt-4">
-                        <button id="clearFilters" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <button id="clearFilters" type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
                             <i class="fas fa-eraser mr-2"></i>
                             <span>مسح الفلاتر</span>
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-center mt-6">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         بحث
@@ -303,11 +282,11 @@ $statuses = getStatuses();
             </form>
 
             <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Search results will be displayed here -->
+                <!-- سيتم عرض نتائج البحث هنا -->
             </div>
 
             <div id="pagination" class="mt-8 flex justify-center">
-                <!-- Pagination buttons will be displayed here -->
+                <!-- سيتم عرض أزرار التنقل بين الصفحات هنا -->
             </div>
         </div>
     </div>
@@ -419,10 +398,9 @@ $statuses = getStatuses();
         function performSearch(page = 1) {
             const searchQuery = $('#search').val();
             const filters = getSelectedFilters();
-            
+
             $.ajax({
-                url: 'search/search_operations.php',
-                method: 'POST',
+                url: 'search/search_operations.php',                method: 'POST',
                 data: {
                     search: searchQuery,
                     page: page,
@@ -484,11 +462,11 @@ $statuses = getStatuses();
         });
 
         // تحديث البحث عند تغيير أي فلتر
-        $('.filters-section input[type="checkbox"]').change(function() {
+        $('.filters-section').on('change', 'input[type="checkbox"]', function() {
             performSearch();
         });
 
-        // إضافة هذا الكود داخل $(document).ready(function() { ... });
+        // زر مسح الفلاتر
         $('#clearFilters').click(function() {
             $('.filters-section input[type="checkbox"]').prop('checked', false);
             performSearch();
@@ -500,8 +478,7 @@ $statuses = getStatuses();
             }).get();
 
             $.ajax({
-                url: 'search/search_operations.php',
-                method: 'POST',
+                url: 'search/search_operations.php',                method: 'POST',
                 data: {
                     action: 'get_courses_and_sections',
                     languages: selectedLanguages
@@ -509,13 +486,13 @@ $statuses = getStatuses();
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        updateFilterOptions('#coursesFilter', response.courses);
-                        updateFilterOptions('#sectionsFilter', response.sections);
-                        
+                        updateFilterOptions('#coursesFilter', 'courses[]', response.courses, 'title', 'الكورس');
+                        updateFilterOptions('#sectionsFilter', 'sections[]', response.sections, 'name', 'القسم');
+
                         // إعادة تعيين التحديدات السابقة
                         $('input[name="courses[]"]:checked').prop('checked', false);
                         $('input[name="sections[]"]:checked').prop('checked', false);
-                        
+
                         performSearch();
                     } else {
                         console.error('Error:', response.error);
@@ -527,21 +504,23 @@ $statuses = getStatuses();
             });
         }
 
-        function updateFilterOptions(filterId, options) {
-            const filterContainer = $(filterId);
-            filterContainer.empty();
-            
+        function updateFilterOptions(containerSelector, inputName, options, labelField, heading) {
+            const container = $(containerSelector);
+            container.empty();
+
+            container.append(`<h5 class="mb-2 font-semibold">${heading}</h5>`);
+
             if (options.length === 0) {
-                filterContainer.append('<p>لا توجد خيارات متاحة</p>');
+                container.append('<p>لا توجد خيارات متاحة</p>');
             } else {
                 options.forEach(function(option) {
                     const checkboxHtml = `
                         <div class="md-checkbox">
-                            <input type="checkbox" id="${filterId.slice(1)}_${option.id}" name="${filterId.slice(1)}[]" value="${option.id}">
-                            <label for="${filterId.slice(1)}_${option.id}">${option.title || option.name}</label>
+                            <input type="checkbox" id="${inputName}_${option.id}" name="${inputName}" value="${option.id}">
+                            <label for="${inputName}_${option.id}">${option[labelField]}</label>
                         </div>
                     `;
-                    filterContainer.append(checkboxHtml);
+                    container.append(checkboxHtml);
                 });
             }
         }
@@ -550,10 +529,7 @@ $statuses = getStatuses();
         $('input[name="languages[]"]').change(function() {
             updateCoursesAndSections();
         });
-    });
 
-    // إضافة هذا الكود في نهاية الملف، قبل إغلاق وسم </body>
-    $(document).ready(function() {
         // تنعيم الاسكرول
         $('a[href*="#"]:not([href="#"])').click(function() {
             if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {

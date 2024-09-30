@@ -1,28 +1,27 @@
 <?php
-
 ini_set('log_errors', 1);
 ini_set('error_log', 'D:\server\htdocs\you\search\custom_error.log');
 // error_log("بدء تنفيذ السكريبت");
 
-// Establish database connection
+// إنشاء اتصال بقاعدة البيانات
 try {
-        $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
+    $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    error_log("Database connection successful");
+    error_log("تم الاتصال بقاعدة البيانات بنجاح");
 } catch(PDOException $e) {
-    error_log("Database connection failed: " . $e->getMessage());
-    die("Error connecting to the database. Please try again later.");
+    error_log("فشل الاتصال بقاعدة البيانات: " . $e->getMessage());
+    die("حدث خطأ أثناء الاتصال بقاعدة البيانات. يرجى المحاولة لاحقاً.");
 }
 
-// بعد إنشاء الاتصال، قم بإضافة هذا الكود للتحقق من وجود البيانات
+// التحقق من وجود البيانات في الجداول
 $tables = ['tags', 'courses', 'sections', 'lessons'];
 foreach ($tables as $table) {
     try {
         $stmt = $db->query("SELECT COUNT(*) FROM $table");
         $count = $stmt->fetchColumn();
-        error_log("Number of rows in $table: $count");
+        error_log("عدد الصفوف في الجدول $table: $count");
     } catch(PDOException $e) {
-        error_log("Failed to count rows in $table: " . $e->getMessage());
+        error_log("فشل في عد الصفوف في الجدول $table: " . $e->getMessage());
     }
 }
 
@@ -31,36 +30,10 @@ function getLanguages() {
     try {
         $stmt = $db->query('SELECT * FROM tags');
         $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        error_log("Fetched " . count($languages) . " languages.");
+        error_log("تم جلب " . count($languages) . " لغة.");
         return $languages;
     } catch(PDOException $e) {
-        error_log("Error fetching languages: " . $e->getMessage());
-        return [];
-    }
-}
-
-function getCourses() {
-    global $db;
-    try {
-        $stmt = $db->query('SELECT id, title FROM courses');
-        $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        error_log("Fetched " . count($courses) . " courses.");
-        return $courses;
-    } catch(PDOException $e) {
-        error_log("Error fetching courses: " . $e->getMessage());
-        return [];
-    }
-}
-
-function getSections() {
-    global $db;
-    try {
-        $stmt = $db->query('SELECT id, name FROM sections');
-        $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        error_log("Fetched " . count($sections) . " sections.");
-        return $sections;
-    } catch(PDOException $e) {
-        error_log("Error fetching sections: " . $e->getMessage());
+        error_log("خطأ أثناء جلب اللغات: " . $e->getMessage());
         return [];
     }
 }
@@ -144,7 +117,7 @@ function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
             }
         }
 
-        // Count total results
+        // حساب إجمالي النتائج
         $countQuery = 'SELECT COUNT(*) FROM lessons l
                        LEFT JOIN courses c ON l.course_id = c.id
                        LEFT JOIN tags t ON l.language_id = t.id
@@ -219,7 +192,7 @@ function searchLessons($search, $page = 1, $perPage = 48, $filters = []) {
         $params[':offset'] = $offset;
 
         $stmt = $db->prepare($query);
-        
+
         // Bind parameters
         foreach ($params as $key => $value) {
             if (strpos($key, 'perPage') !== false || strpos($key, 'offset') !== false) {
@@ -256,7 +229,7 @@ function get_courses_and_sections($languages) {
 
         if (!empty($languages)) {
             $placeholders = implode(',', array_fill(0, count($languages), '?'));
-            
+
             // Fetch courses
             $courseQuery = "SELECT DISTINCT c.id, c.title FROM courses c WHERE c.language_id IN ($placeholders)";
             $courseStmt = $db->prepare($courseQuery);
@@ -285,43 +258,16 @@ function get_courses_and_sections($languages) {
     }
 }
 
-// في بداية الملف، بعد التحقق من طريقة الطلب POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] === 'get_courses_and_sections') {
-        $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
-        echo json_encode(get_courses_and_sections($languages));
-        exit;
-    }
-    
-    // ... (باقي الكود)
-}
-
-// Example usage of the functions
-// Uncomment the lines below for testing purposes
-/*
-$languages = getLanguages();
-$courses = getCourses();
-$sections = getSections();
-
-print_r($languages);
-print_r($courses);
-print_r($sections);
-*/
-
+// التعامل مع طلبات POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
 
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'get_courses_and_sections':
-                // تأكد من أن اللغات تأتي كمصفوفة
-                $languages = isset($_POST['languages']) && is_array($_POST['languages']) 
-                             ? array_map('intval', $_POST['languages']) 
-                             : [];
+                $languages = isset($_POST['languages']) && is_array($_POST['languages']) ? $_POST['languages'] : [];
                 echo json_encode(get_courses_and_sections($languages));
                 exit;
-
-            // يمكنك إضافة حالات أخرى هنا...
 
             default:
                 echo json_encode(['error' => 'Invalid action.']);
