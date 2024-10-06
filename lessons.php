@@ -5,11 +5,31 @@ require_once 'lessons/php.php';
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <?php
-// تضمين ملف header.php
+// تضمين ملف api_functions.php
 require_once 'lessons/header.php';
 ?>
 <body>
     <div class="container mt-5">
+        <h1 class="text-center mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
+        
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">إحصائيات الكورس</h5>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $completionPercentage; ?>%;" aria-valuenow="<?php echo $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo $completionPercentage; ?>% مكتمل (<?php echo $completedLessons; ?> دروس)
+                            </div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: <?php echo 100 - $completionPercentage; ?>%;" aria-valuenow="<?php echo 100 - $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo 100 - $completionPercentage; ?>% غير مكتمل (<?php echo $totalLessons - $completedLessons; ?> دروس)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="row">
             <?php foreach ($currentLessons as $lesson): ?>
                 <div class="col-md-6 col-lg-4 mb-4">
@@ -32,24 +52,24 @@ require_once 'lessons/header.php';
                                 </span>
                             </p>
                             <div class="btn-group d-flex flex-wrap" role="group">
-                                <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
-                                    <i class="fas fa-eye"></i> عرض الدرس
-                                </a>
-                                <button class="btn <?php echo ($lesson['views'] > 0) ? 'btn-success' : 'btn-primary'; ?> btn-sm watch-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
-                                    <i class="fas <?php echo ($lesson['views'] > 0) ? 'fa-check' : 'fa-eye'; ?>"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
-                                </button>
-                                <button class="btn btn-secondary btn-sm assign-section-button mb-2" data-bs-toggle="modal" data-bs-target="#assignSectionModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-                                    <i class="fas fa-layer-group"></i> تعيين القسم
-                                </button>
-                                <button class="btn btn-info btn-sm set-status-button mb-2" data-bs-toggle="modal" data-bs-target="#setStatusModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-                                    <i class="fas fa-flag"></i> تحديد الحالة
-                                </button>
+<a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
+    <i class="fas fa-eye"></i> عرض الدرس
+</a>
+                          <button class="btn <?php echo ($lesson['views'] > 0) ? 'btn-success' : 'btn-primary'; ?> btn-sm watch-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
+    <i class="fas <?php echo ($lesson['views'] > 0) ? 'fa-check' : 'fa-eye'; ?>"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
+</button>
+                             <button class="btn btn-secondary btn-sm assign-section-button mb-2" data-bs-toggle="modal" data-bs-target="#assignSectionModal" data-lesson-id="<?php echo $lesson['id']; ?>">
+    <i class="fas fa-layer-group"></i> تعيين القسم
+</button>
+                           <button class="btn btn-info btn-sm set-status-button mb-2" data-bs-toggle="modal" data-bs-target="#setStatusModal" data-lesson-id="<?php echo $lesson['id']; ?>">
+    <i class="fas fa-flag"></i> تحديد الحالة
+</button>
                                 <button class="btn btn-danger btn-sm delete-lesson-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>">
                                     <i class="fas fa-trash"></i> حذف
                                 </button>
                                 <button class="btn btn-info btn-sm edit-tags-button mb-2" data-bs-toggle="modal" data-bs-target="#editTagsModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-                                    <i class="fas fa-tags"></i> تحرير الأقسام
-                                </button>
+    <i class="fas fa-tags"></i> تحرير الأقسام
+</button>
                             </div>
                             <div class="form-check form-switch mt-2">
                                 <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
@@ -74,6 +94,20 @@ require_once 'lessons/header.php';
                 <?php endfor; ?>
             </ul>
         </nav>
+        
+        <div class="mt-4">
+            <h4>نسبة إكمال الكورس</h4>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                     role="progressbar" 
+                     style="width: <?php echo $completionPercentage; ?>%;" 
+                     aria-valuenow="<?php echo $completionPercentage; ?>" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                    <?php echo $completionPercentage; ?>%
+                </div>
+            </div>
+        </div>
         
         <div class="text-center mt-4">
             <a href="courses.php" class="btn btn-primary">
