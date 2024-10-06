@@ -169,4 +169,18 @@ $currentPage = max(1, min($currentPage, $totalPages));
 $startIndex = ($currentPage - 1) * $lessonsPerPage;
 $currentLessons = array_slice($lessons, $startIndex, $lessonsPerPage);
 
+// Get total number of courses
+$stmt = $db->query('SELECT COUNT(*) FROM courses');
+$totalCourses = $stmt->fetchColumn();
+
+// Get overall completion percentage
+$stmt = $db->query('SELECT COUNT(*) as total, SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as completed FROM lessons');
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$totalLessons = $result['total'];
+$completedLessons = $result['completed'];
+$overallCompletionPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+
+// Calculate remaining lessons
+$remainingLessons = $totalLessons - $completedLessons;
+
 ?>

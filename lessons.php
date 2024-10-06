@@ -5,10 +5,35 @@ require_once 'lessons/php.php';
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <?php
-// تضمين ملف api_functions.php
+// تضمين ملف header.php
 require_once 'lessons/header.php';
 ?>
 <body>
+    <!-- الهيدر الثابت -->
+    <header class="fixed-header">
+        <div class="container">
+            <h1>نظام إدارة الدروس</h1>
+            <div class="course-info">
+                <div class="info-item">
+                    <i class="fas fa-book"></i>
+                    <span>عدد الكورسات: <?php echo $totalCourses; ?></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>نسبة الإكمال: <?php echo $overallCompletionPercentage; ?>%</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>الدروس المتبقية: <?php echo $remainingLessons; ?></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-list-ol"></i>
+                    <span>إجمالي الدروس: <?php echo $totalLessons; ?></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container mt-5">
         <h1 class="text-center mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
         
@@ -190,12 +215,31 @@ require_once 'lessons/header.php';
   </div>
 </div>
 
+    <!-- الفوتر الثابت -->
+    <footer class="fixed-footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="http://localhost/home/" class="footer-link"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="http://localhost/blackboard/" class="footer-link"><i class="fas fa-chalkboard"></i> السبورة</a>
+                <a href="http://localhost/task-ai/" class="footer-link"><i class="fas fa-tasks"></i> المهام</a>
+                <a href="http://localhost/info-code/bt.php" class="footer-link"><i class="fas fa-code"></i> بنك الأكواد</a>
+                <a href="http://localhost/administration/public/" class="footer-link"><i class="fas fa-folder"></i> الملفات</a>
+                <a href="http://localhost/Columns/" class="footer-link"><i class="fas fa-columns"></i> الأعمدة</a>
+                <a href="http://localhost/ask/" class="footer-link"><i class="fas fa-question-circle"></i> الأسئلة</a>
+                <a href="http://localhost/phpmyadminx/" class="footer-link"><i class="fas fa-database"></i> إدارة قواعد البيانات</a>
+                <a href="http://localhost/pr.php" class="footer-link"><i class="fas fa-bug"></i> اصطياد الأخطاء</a>
+                <a href="http://localhost/Timmy/" class="footer-link"><i class="fas fa-clock"></i> تيمي</a>
+                <a href="http://localhost/copy/" class="footer-link"><i class="fas fa-clipboard"></i> حافظة الملاحظات</a>
+                <a href="http://localhost/Taskme/" class="footer-link"><i class="fas fa-calendar-check"></i> المهام اليومية</a>
+                <a href="http://subdomain.localhost/tasks" class="footer-link"><i class="fas fa-project-diagram"></i> CRM</a>
+            </div>
+        </div>
+    </footer>
+
 <?php
-// تضمين ملف api_functions.php
+// تضمين ملف footer.php
 require_once 'lessons/footer.php';
 ?>
-
-
 
 </body>
 </html>
