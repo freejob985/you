@@ -1,12 +1,6 @@
 <?php
 // تضمين ملف api_functions.php
 require_once 'lessons/php.php';
-
-// Calculate completion percentage for the current course
-$courseCompletionPercentage = calculateCourseCompletionPercentage($db, $courseId);
-
-// Calculate overall completion percentage for all courses
-$overallCompletionPercentage = calculateOverallCompletionPercentage($db);
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -18,31 +12,17 @@ require_once 'lessons/header.php';
     <div class="container mt-5">
         <h1 class="text-center mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
         
-        <!-- Course Progress Bar -->
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">تقدم الكورس</h5>
+                        <h5 class="card-title">إحصائيات الكورس</h5>
                         <div class="progress" style="height: 30px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $courseCompletionPercentage; ?>%;" aria-valuenow="<?php echo $courseCompletionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
-                                <?php echo $courseCompletionPercentage; ?>% مكتمل
+                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $completionPercentage; ?>%;" aria-valuenow="<?php echo $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo $completionPercentage; ?>% مكتمل (<?php echo $completedLessons; ?> دروس)
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Overall Progress Bar -->
-        <div class="row">
-            <div class="col-12 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">التقدم الإجمالي لجميع الكورسات</h5>
-                        <div class="progress" style="height: 30px;">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: <?php echo $overallCompletionPercentage; ?>%;" aria-valuenow="<?php echo $overallCompletionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
-                                <?php echo $overallCompletionPercentage; ?>% مكتمل
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: <?php echo 100 - $completionPercentage; ?>%;" aria-valuenow="<?php echo 100 - $completionPercentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?php echo 100 - $completionPercentage; ?>% غير مكتمل (<?php echo $totalLessons - $completedLessons; ?> دروس)
                             </div>
                         </div>
                     </div>

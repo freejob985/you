@@ -155,34 +155,6 @@ function getCompletionPercentage($db) {
     }
 }
 
-// Function to calculate completion percentage for a single course
-function calculateCourseCompletionPercentage($db, $courseId) {
-    $stmtTotal = $db->prepare('SELECT COUNT(*) FROM lessons WHERE course_id = :course_id');
-    $stmtTotal->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-    $stmtTotal->execute();
-    $totalLessons = $stmtTotal->fetchColumn();
-
-    $stmtCompleted = $db->prepare('SELECT COUNT(*) FROM lessons WHERE course_id = :course_id AND status = "completed"');
-    $stmtCompleted->bindValue(':course_id', $courseId, PDO::PARAM_INT);
-    $stmtCompleted->execute();
-    $completedLessons = $stmtCompleted->fetchColumn();
-
-    return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
-}
-
-// Function to calculate overall completion percentage for all courses
-function calculateOverallCompletionPercentage($db) {
-    $stmtTotal = $db->prepare('SELECT COUNT(*) FROM lessons');
-    $stmtTotal->execute();
-    $totalLessons = $stmtTotal->fetchColumn();
-
-    $stmtCompleted = $db->prepare('SELECT COUNT(*) FROM lessons WHERE status = "completed"');
-    $stmtCompleted->execute();
-    $completedLessons = $stmtCompleted->fetchColumn();
-
-    return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
-}
-
 // تحديد عدد الدروس لكل صفحة
 $lessonsPerPage = 12;
 
