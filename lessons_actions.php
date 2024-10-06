@@ -38,6 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'update_section_tags':
             update_section_tags($db);
             break;
+        case 'update_progress':
+            updateProgress($db);
+            break;
         default:
             echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف.']);
             break;
@@ -279,6 +282,34 @@ function update_section_tags($db) {
         echo json_encode(['success' => true, 'message' => 'تم تحديث أقسام الدرس بنجاح.']);
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء تحديث أقسام الدرس: ' . $e->getMessage()]);
+    }
+}
+
+/**
+ * Updates the progress bars for a course and overall completion
+ *
+ * @param PDO $db Database connection
+ * @return void
+ */
+function updateProgress($db) {
+    $courseId = $_POST['course_id'] ?? null;
+
+    if (!$courseId || !is_numeric($courseId)) {
+        echo json_encode(['success' => false, 'message' => 'معرف الكورس غير صالح.']);
+        exit;
+    }
+
+    try {
+        $courseCompletionPercentage = calculateCourseCompletionPercentage($db, $courseId);
+        $overallCompletionPercentage = calculateOverallCompletionPercentage($db);
+
+        echo json_encode([
+            'success' => true,
+            'courseCompletion' => $courseCompletionPercentage,
+            'overallCompletion' => $overallCompletionPercentage
+        ]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء تحديث التقدم: ' . $e->getMessage()]);
     }
 }
 ?>

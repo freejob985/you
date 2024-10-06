@@ -366,5 +366,70 @@
         $('.mark-complete-checkbox, .watch-button').on('change click', function() {
             updateProgressBar();
         });
+
+        // Function to update progress bars
+        function updateProgressBars() {
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'update_progress',
+                    course_id: <?php echo $courseId; ?>
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update course progress bar
+                        $('.progress-bar.bg-success').css('width', response.courseCompletion + '%')
+                            .attr('aria-valuenow', response.courseCompletion)
+                            .text(response.courseCompletion + '% مكتمل');
+
+                        // Update overall progress bar
+                        $('.progress-bar.bg-info').css('width', response.overallCompletion + '%')
+                            .attr('aria-valuenow', response.overallCompletion)
+                            .text(response.overallCompletion + '% مكتمل');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        }
+
+        // Update progress bars when marking a lesson as complete/incomplete
+        $('.mark-complete-checkbox').change(function() {
+            // ... (existing code remains unchanged)
+
+            $.ajax({
+                // ... (existing AJAX call remains unchanged)
+                success: function(response) {
+                    if (response.success) {
+                        // ... (existing success handling remains unchanged)
+
+                        // Update progress bars
+                        updateProgressBars();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+
+        // Update progress bars when toggling watch status
+        $('.watch-button').click(function() {
+            // ... (existing code remains unchanged)
+
+            $.ajax({
+                // ... (existing AJAX call remains unchanged)
+                success: function(response) {
+                    if (response.success) {
+                        // ... (existing success handling remains unchanged)
+
+                        // Update progress bars
+                        updateProgressBars();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
     });
     </script>

@@ -59,7 +59,7 @@ $db->exec('CREATE TABLE IF NOT EXISTS lessons (
     course_id INTEGER,
     duration INTEGER,
     section_id INTEGER,
-    status TEXT DEFAULT "active",
+    status TEXT,
     thumbnail TEXT,
     views INTEGER DEFAULT 0,
     language_id INTEGER,
