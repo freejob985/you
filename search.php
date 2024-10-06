@@ -209,10 +209,31 @@ $statuses = getStatuses();
             padding: 1.5rem;
         }
 
-        iframe.embed-responsive-item {
-            width: 100%;
-            border: none;
+       iframe.embed-responsive-item {
+    width: 100%;
+    height: 360px;
+}
+
+        .grayscale {
+            filter: grayscale(100%);
         }
+
+        .status-badge.bg-black {
+            background-color: black !important;
+            color: white !important;
+        }
+
+.modal-header {
+    direction: ltr;
+    background: #aa66cc;
+}
+h5#lessonModalLabel {
+    color: white;
+    font-size: x-large;
+}
+iframe.embed-responsive-item {
+    width: 100%;
+}
     </style>
 </head>
 <body class="bg-gray-100">
@@ -369,48 +390,49 @@ $statuses = getStatuses();
             return statusLabels[status] || 'غير محدد';
         }
 
-function displayResults(results) {
-    const resultsContainer = $('#searchResults');
-    resultsContainer.empty();
+        function displayResults(results) {
+            const resultsContainer = $('#searchResults');
+            resultsContainer.empty();
 
-    if (results.length === 0) {
-        resultsContainer.html('<p class="text-center">لا توجد نتائج</p>');
-        return;
-    }
+            if (results.length === 0) {
+                resultsContainer.html('<p class="text-center">لا توجد نتائج</p>');
+                return;
+            }
 
-    results.forEach(lesson => {
-        const card = $('<div>').addClass('lesson-card');
-        card.html(`
-            <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail w-full h-48 object-cover mb-4">
-            <h3>${lesson.title}</h3>
-            <p>الكورس: ${lesson.course_title}</p>
-            <p>اللغة: ${lesson.language_name}</p>
-            <p>القسم: ${lesson.section_name}</p>
-            <div class="lesson-info flex items-center justify-between mt-2">
-                <p>المدة: ${formatDuration(lesson.duration)}</p>
-                <span class="status-badge ${getStatusBadgeClass(lesson.status)}">${getStatusLabel(lesson.status)}</span>
-            </div>
-            <div class="mt-2 flex justify-between">
-                <button class="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded lesson-details-btn" data-lesson='${JSON.stringify(lesson)}'>
-                    <i class="fas fa-info-circle"></i>
-                </button>
-                <a href="${lesson.url}" target="_blank" class="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-center mx-2">
-                    <i class="fab fa-youtube"></i>
-                </a>
-                <a href="show.php?lesson_id=${lesson.id}" class="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
-                    <i class="fas fa-play-circle"></i>
-                </a>
-            </div>
-        `);
-        resultsContainer.append(card);
-    });
+            results.forEach(lesson => {
+                const isCompleted = lesson.status === 'completed';
+                const card = $('<div>').addClass('lesson-card');
+                card.html(`
+                    <img src="${lesson.thumbnail}" alt="${lesson.title}" class="thumbnail w-full h-48 object-cover mb-4 ${isCompleted ? 'grayscale' : ''}">
+                    <h3>${lesson.title}</h3>
+                    <p>الكورس: ${lesson.course_title}</p>
+                    <p>اللغة: ${lesson.language_name}</p>
+                    <p>القسم: ${lesson.section_name}</p>
+                    <div class="lesson-info flex items-center justify-between mt-2">
+                        <p>المدة: ${formatDuration(lesson.duration)}</p>
+                        <span class="status-badge ${getStatusBadgeClass(lesson.status)} ${isCompleted ? 'bg-black text-white' : ''}">${getStatusLabel(lesson.status)}</span>
+                    </div>
+                    <div class="mt-2 flex justify-between">
+                        <button class="flex-1 ${isCompleted ? 'bg-black' : 'bg-blue-500 hover:bg-blue-700'} text-white font-bold py-2 px-4 rounded lesson-details-btn" data-lesson='${JSON.stringify(lesson)}'>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <a href="${lesson.url}" target="_blank" class="flex-1 ${isCompleted ? 'bg-black' : 'bg-red-500 hover:bg-red-700'} text-white font-bold py-2 px-4 rounded text-center mx-2">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="show.php?lesson_id=${lesson.id}" class="flex-1 ${isCompleted ? 'bg-black' : 'bg-green-500 hover:bg-green-700'} text-white font-bold py-2 px-4 rounded text-center">
+                            <i class="fas fa-play-circle"></i>
+                        </a>
+                    </div>
+                `);
+                resultsContainer.append(card);
+            });
 
-    // إضافة مستمع الحدث لأزرار تفاصيل الدرس
-    $('.lesson-details-btn').on('click', function() {
-        const lessonData = JSON.parse($(this).attr('data-lesson'));
-        showLessonDetails(lessonData);
-    });
-}
+            // إضافة مستمع الحدث لأزرار تفاصيل الدرس
+            $('.lesson-details-btn').on('click', function() {
+                const lessonData = JSON.parse($(this).attr('data-lesson'));
+                showLessonDetails(lessonData);
+            });
+        }
 
         function formatDuration(seconds) {
             const hours = Math.floor(seconds / 3600);
