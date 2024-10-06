@@ -28,7 +28,7 @@
             font-family: 'Cairo', sans-serif;
             background-color: #f8f9fa;
             padding-top: 80px; /* إضافة مساحة للهيدر الثابت */
-            padding-bottom: 80px; /* إضافة مساحة للفوتر الثابت */
+            padding-bottom: 60px; /* تعديل المساحة للفوتر الثابت */
         }
         /* الأنماط السابقة */
         
@@ -69,20 +69,23 @@
             right: 0;
             background-color: #2c3e50;
             color: white;
-            padding: 15px 0;
+            padding: 10px 0;
             z-index: 1000;
         }
         .footer-links {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         .footer-link {
             color: white;
-            margin: 0 10px;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: color 0.3s ease;
+            padding: 5px 10px;
         }
         .footer-link:hover {
             color: #3498db;

@@ -55,7 +55,7 @@ require_once 'lessons/header.php';
             </div>
         </div>
         
-        <div class="row">
+        <div class="row lessons-container">
             <?php foreach ($currentLessons as $lesson): ?>
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 <?php echo ($lesson['status'] === 'completed') ? 'completed-card' : ''; ?>">
@@ -76,33 +76,44 @@ require_once 'lessons/header.php';
                                     <?php echo getStatusLabel($lesson['status']); ?>
                                 </span>
                             </p>
+                            <!-- إضافة عرض الأقسام هنا -->
+                            <?php if (!empty($lesson['section_tags'])): ?>
+                                <p class="card-text">
+                                    <strong>الأقسام:</strong>
+                                    <span class="section-tags">
+                                        <?php 
+                                        $tags = explode(',', $lesson['section_tags']);
+                                        foreach ($tags as $tag): 
+                                        ?>
+                                            <span class="badge bg-info me-1"><?php echo htmlspecialchars(trim($tag)); ?></span>
+                                        <?php endforeach; ?>
+                                    </span>
+                                </p>
+                            <?php endif; ?>
                             <div class="btn-group d-flex flex-wrap" role="group">
-<a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
-    <i class="fas fa-eye"></i> عرض الدرس
-</a>
-                          <button class="btn <?php echo ($lesson['views'] > 0) ? 'btn-success' : 'btn-primary'; ?> btn-sm watch-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
-    <i class="fas <?php echo ($lesson['views'] > 0) ? 'fa-check' : 'fa-eye'; ?>"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
-</button>
-                             <button class="btn btn-secondary btn-sm assign-section-button mb-2" data-bs-toggle="modal" data-bs-target="#assignSectionModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-    <i class="fas fa-layer-group"></i> تعيين القسم
-</button>
-                           <button class="btn btn-info btn-sm set-status-button mb-2" data-bs-toggle="modal" data-bs-target="#setStatusModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-    <i class="fas fa-flag"></i> تحديد الحالة
-</button>
+                                <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
+                                    <i class="fas fa-eye"></i> عرض الدرس
+                                </a>
+                                <button class="btn <?php echo ($lesson['views'] > 0) ? 'btn-success' : 'btn-primary'; ?> btn-sm watch-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>" data-views="<?php echo $lesson['views']; ?>">
+                                    <i class="fas <?php echo ($lesson['views'] > 0) ? 'fa-check' : 'fa-eye'; ?>"></i> <?php echo ($lesson['views'] > 0) ? 'تم المشاهدة' : 'مشاهدة'; ?>
+                                </button>
+                                <button class="btn btn-secondary btn-sm assign-section-button mb-2" data-bs-toggle="modal" data-bs-target="#assignSectionModal" data-lesson-id="<?php echo $lesson['id']; ?>">
+                                    <i class="fas fa-layer-group"></i> تعيين القسم
+                                </button>
+                                <button class="btn btn-info btn-sm set-status-button mb-2" data-bs-toggle="modal" data-bs-target="#setStatusModal" data-lesson-id="<?php echo $lesson['id']; ?>">
+                                    <i class="fas fa-flag"></i> تحديد الحالة
+                                </button>
                                 <button class="btn btn-danger btn-sm delete-lesson-button mb-2" data-lesson-id="<?php echo $lesson['id']; ?>">
                                     <i class="fas fa-trash"></i> حذف
                                 </button>
                                 <button class="btn btn-info btn-sm edit-tags-button mb-2" data-bs-toggle="modal" data-bs-target="#editTagsModal" data-lesson-id="<?php echo $lesson['id']; ?>">
-    <i class="fas fa-tags"></i> تحرير الأقسام
-</button>
+                                    <i class="fas fa-tags"></i> تحرير الأقسام
+                                </button>
                             </div>
                             <div class="form-check form-switch mt-2">
                                 <input class="form-check-input mark-complete-checkbox" type="checkbox" data-lesson-id="<?php echo $lesson['id']; ?>" <?php echo ($lesson['status'] === 'completed') ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="flexSwitchCheckDefault">تم الإكمال</label>
                             </div>
-                            <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" class="btn btn-primary btn-sm mb-2">
-                                <i class="fas fa-eye"></i> عرض الدرس
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -120,20 +131,6 @@ require_once 'lessons/header.php';
             </ul>
         </nav>
         
-        <div class="mt-4">
-            <h4>نسبة إكمال الكورس</h4>
-            <div class="progress" style="height: 25px;">
-                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
-                     role="progressbar" 
-                     style="width: <?php echo $completionPercentage; ?>%;" 
-                     aria-valuenow="<?php echo $completionPercentage; ?>" 
-                     aria-valuemin="0" 
-                     aria-valuemax="100">
-                    <?php echo $completionPercentage; ?>%
-                </div>
-            </div>
-        </div>
-        
         <div class="text-center mt-4">
             <a href="courses.php" class="btn btn-primary">
                 <i class="fas fa-arrow-left me-2"></i>العودة إلى قائمة الكورسات
@@ -142,78 +139,76 @@ require_once 'lessons/header.php';
     </div>
 
     <!-- مودال لتحديد القسم -->
-<!-- مودال لتحديد القسم -->
-<div class="modal fade" id="assignSectionModal" tabindex="-1" aria-labelledby="assignSectionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="assignSectionModalLabel">تعيين القسم للدرس</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <select id="sectionSelect" class="form-select">
-          <?php foreach ($sections as $section): ?>
-            <option value="<?php echo $section['id']; ?>"><?php echo htmlspecialchars($section['name']); ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-        <button type="button" class="btn btn-primary" id="confirmAssignSection">تأكيد</button>
-      </div>
+    <div class="modal fade" id="assignSectionModal" tabindex="-1" aria-labelledby="assignSectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignSectionModalLabel">تعيين القسم للدرس</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select id="sectionSelect" class="form-select">
+                        <?php foreach ($sections as $section): ?>
+                            <option value="<?php echo $section['id']; ?>"><?php echo htmlspecialchars($section['name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="confirmAssignSection">تأكيد</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
     <!-- مودال لتحديد الحالة -->
-<!-- مودال لتحديد الحالة -->
-<div class="modal fade" id="setStatusModal" tabindex="-1" aria-labelledby="setStatusModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="setStatusModalLabel">تحديد حالة الدرس</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <select id="statusSelect" class="form-select" multiple>
-          <option value="watch">مشاهدة</option>
-          <option value="problem">مشكلة</option>
-          <option value="discussion">نقاش</option>
-          <option value="search">بحث</option>
-          <option value="retry">إعادة</option>
-          <option value="retry_again">إعادة ثانية</option>
-          <option value="review">مراجعة</option>
-          <option value="completed">مكتمل</option>
-          <option value="excluded">مستبعد</option>
-          <option value="project">مشروع تطبيقي</option>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-        <button type="button" class="btn btn-primary" id="confirmSetStatus">تأكيد</button>
-      </div>
+    <div class="modal fade" id="setStatusModal" tabindex="-1" aria-labelledby="setStatusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="setStatusModalLabel">تحديد حالة الدرس</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select id="statusSelect" class="form-select" multiple>
+                        <option value="watch">مشاهدة</option>
+                        <option value="problem">مشكلة</option>
+                        <option value="discussion">نقاش</option>
+                        <option value="search">بحث</option>
+                        <option value="retry">إعادة</option>
+                        <option value="retry_again">إعادة ثانية</option>
+                        <option value="review">مراجعة</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="excluded">مستبعد</option>
+                        <option value="project">مشروع تطبيقي</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="confirmSetStatus">تأكيد</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- مودال تحرير الأقسام -->
-<div class="modal fade" id="editTagsModal" tabindex="-1" aria-labelledby="editTagsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editTagsModalLabel">تحرير أقسام الدرس</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <input id="lessonTags" type="text" placeholder="أدخل الأقسام هنا">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-        <button type="button" class="btn btn-primary" id="confirmEditTags">تأكيد</button>
-      </div>
+    <!-- مودال تحرير الأقسام -->
+    <div class="modal fade" id="editTagsModal" tabindex="-1" aria-labelledby="editTagsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTagsModalLabel">تحرير أقسام الدرس</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input id="lessonTags" type="text" placeholder="أدخل الأقسام هنا">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="confirmEditTags">تأكيد</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
     <!-- الفوتر الثابت -->
     <footer class="fixed-footer">
