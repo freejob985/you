@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    
  <script>
-    // تهيئة Tagify
+    // Initialize Tagify
     var sectionsInput = document.querySelector('input[name=sectionsTags]');
     new Tagify(sectionsInput);
 
@@ -18,68 +18,61 @@
     new Tagify(languageInput);
     var courseTagsInput = new Tagify(document.getElementById('courseTags'));
 
-
-// حوالي السطر 20
-document.getElementById('courseForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const courseLink = document.getElementById('courseLink').value;
-    const courseLanguage = document.getElementById('courseLanguage').value;
-    
-    if (courseLink && courseLanguage) {
-        Swal.fire({
-            title: 'هل أنت متأكد؟',
-            text: 'هل تريد إضافة هذا الكورس؟',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'نعم، أضف الكورس',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // إظهار SVG المتحرك
-                document.getElementById('loadingContainer').style.display = 'block';
-                
-                // إرسال البيانات إلى الخادم
-                fetch('', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        'courseLink': courseLink,
-                        'courseLanguage': courseLanguage
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // إخفاء SVG المتحرك
-                    document.getElementById('loadingContainer').style.display = 'none';
+    // Course form submission
+    document.getElementById('courseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const courseLink = document.getElementById('courseLink').value;
+        const courseLanguage = document.getElementById('courseLanguage').value;
+        
+        if (courseLink && courseLanguage) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'هل تريد إضافة هذا الكورس؟',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، أضف الكورس',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading animation
+                    document.getElementById('loadingContainer').style.display = 'block';
                     
-                    if (data.success) {
-                        Swal.fire('تم!', data.message, 'success');
-                        // إعادة تعيين النموذج
-                        document.getElementById('courseForm').reset();
-                    } else {
-                        Swal.fire('خطأ!', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // إخفاء SVG المتحرك
-                    document.getElementById('loadingContainer').style.display = 'none';
-                    Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس.', 'error');
-                });
-            }
-        });
-    } else {
-        Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
-    }
-});
+                    // Send data to server
+                    $.ajax({
+                        url: '',
+                        method: 'POST',
+                        data: {
+                            courseLink: courseLink,
+                            courseLanguage: courseLanguage
+                        },
+                        success: function(response) {
+                            // Hide loading animation
+                            document.getElementById('loadingContainer').style.display = 'none';
+                            
+                            if (response.success) {
+                                Swal.fire('تم!', response.message, 'success');
+                                // Reset the form
+                                document.getElementById('courseForm').reset();
+                            } else {
+                                Swal.fire('خطأ!', response.message, 'error');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            // Hide loading animation
+                            document.getElementById('loadingContainer').style.display = 'none';
+                            Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس.', 'error');
+                        }
+                    });
+                }
+            });
+        } else {
+            Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
+        }
+    });
 
-
-
-
-
+    // Delete all data
     document.getElementById('deleteAllData').addEventListener('click', function() {
         Swal.fire({
             title: 'هل أنت متأكد؟',
@@ -90,174 +83,148 @@ document.getElementById('courseForm').addEventListener('submit', function(e) {
             cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch('', {
+                $.ajax({
+                    url: '',
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                    data: {
+                        action: 'delete_all'
                     },
-                    body: new URLSearchParams({
-                        'action': 'delete_all'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('تم!', data.message, 'success');
-                      } else {
-        Swal.fire('خطأ!', data.message, 'error');
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-    Swal.fire('خطأ!', 'حدث خطأ أثناء حذف البيانات.', 'error');
-});
-}
-});
-});
-
-// إضافة أقسام للغة
-document.getElementById('addSectionsBtn').addEventListener('click', function() {
-$('#addSectionsModal').modal('show');
-});
-
-// حوالي السطر 90
-document.getElementById('addSectionsForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const languageId = document.getElementById('languageSelect').value;
-    const sectionsTags = document.getElementById('sectionsTags').value;
-
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            'action': 'add_sections',
-            'languageId': languageId,
-            'sectionsTags': sectionsTags
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire('تم!', data.message, 'success');
-            $('#addSectionsModal').modal('hide');
-            this.reset();
-        } else {
-            Swal.fire('خطأ!', data.message, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الأقسام.', 'error');
-    });
-});
-
-// إضافة لغة جديدة
-document.getElementById('addLanguageBtn').addEventListener('click', function() {
-$('#addLanguageModal').modal('show');
-});
-
-document.getElementById('addLanguageForm').addEventListener('submit', function(e) {
-e.preventDefault();
-const languages = document.getElementById('languageTags').value;
-
-fetch('', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-        'action': 'add_language',
-        'languages': languages
-    })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        Swal.fire('تم!', data.message, 'success');
-        $('#addLanguageModal').modal('hide');
-        this.reset();
-        // تحديث قائمة اللغات
-        updateLanguageList();
-    } else {
-        Swal.fire('خطأ!', data.message, 'error');
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-    Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
-});
-});
-function addLanguage() {
-    const languageTags = document.getElementById('languageTags').value;
-    
-    if (languageTags) {
-        fetch('', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                'action': 'add_language',
-                'languageTags': languageTags
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire('تم!', data.message, 'success');
-                $('#addLanguageModal').modal('hide');
-                document.getElementById('languageTags').value = '';
-                
-                // تحديث قائمة اللغات
-                updateLanguageList();
-            } else {
-                Swal.fire('خطأ!', data.message, 'error');
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('تم!', response.message, 'success');
+                        } else {
+                            Swal.fire('خطأ!', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        Swal.fire('خطأ!', 'حدث خطأ أثناء حذف البيانات.', 'error');
+                    }
+                });
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
         });
-    } else {
-        Swal.fire('خطأ!', 'يرجى إدخال اسم اللغة.', 'error');
-    }
-}
-// تحديث دالة تحديث قائمة اللغات
-function updateLanguageList() {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            'action': 'get_languages'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const languageSelect = document.getElementById('courseLanguage');
-            const languageSelectModal = document.getElementById('languageSelect');
-            languageSelect.innerHTML = '<option value="">اختر اللغة</option>';
-            languageSelectModal.innerHTML = '';
-            data.languages.forEach(language => {
-                languageSelect.innerHTML += `<option value="${language.id}">${language.name}</option>`;
-                languageSelectModal.innerHTML += `<option value="${language.id}">${language.name}</option>`;
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('خطأ!', 'حدث خطأ أثناء تحديث قائمة اللغات.', 'error');
     });
-}
 
-// ربط الدالة بنموذج إضافة اللغة
-document.getElementById('addLanguageForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    addLanguage();
-});
+    // Add sections to language
+    document.getElementById('addSectionsBtn').addEventListener('click', function() {
+        $('#addSectionsModal').modal('show');
+    });
 
+    document.getElementById('addSectionsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const languageId = document.getElementById('languageSelect').value;
+        const sectionsTags = document.getElementById('sectionsTags').value;
+
+        $.ajax({
+            url: '',
+            method: 'POST',
+            data: {
+                action: 'add_sections',
+                languageId: languageId,
+                sectionsTags: sectionsTags
+            },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire('تم!', response.message, 'success');
+                    $('#addSectionsModal').modal('hide');
+                    document.getElementById('addSectionsForm').reset();
+                    // Update language select options
+                    updateLanguageSelect();
+                } else {
+                    Swal.fire('خطأ!', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الأقسام.', 'error');
+            }
+        });
+    });
+
+    // Add new language
+    document.getElementById('addLanguageBtn').addEventListener('click', function() {
+        $('#addLanguageModal').modal('show');
+    });
+
+    document.getElementById('addLanguageForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const languages = document.getElementById('languageTags').value;
+
+        $.ajax({
+            url: '',
+            method: 'POST',
+            data: {
+                action: 'add_language',
+                languageTags: languages
+            },
+            success: function(response) {
+                // تحويل الاستجابة إلى كائن JSON إذا لم تكن كذلك بالفعل
+                if (typeof response === 'string') {
+                    try {
+                        response = JSON.parse(response);
+                    } catch (e) {
+                        console.error('Error parsing JSON:', e);
+                        Swal.fire('خطأ!', 'حدث خطأ أثناء معالجة الاستجابة.', 'error');
+                        return;
+                    }
+                }
+
+                if (response.success) {
+                    Swal.fire({
+                        title: 'تم!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'حسنًا'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#addLanguageModal').modal('hide');
+                            document.getElementById('addLanguageForm').reset();
+                            // Update language select options
+                            updateLanguageSelect();
+                        }
+                    });
+                } else {
+                    Swal.fire('تنبيه!', response.message, 'warning');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة اللغة.', 'error');
+            }
+        });
+    });
+
+    // Update language select options
+    function updateLanguageSelect() {
+        $.ajax({
+            url: '',
+            method: 'POST',
+            data: {
+                action: 'get_languages'
+            },
+            success: function(response) {
+                if (response.success) {
+                    const courseLanguageSelect = document.getElementById('courseLanguage');
+                    const languageSelect = document.getElementById('languageSelect');
+                    
+                    // Clear existing options
+                    courseLanguageSelect.innerHTML = '<option value="">اختر اللغة</option>';
+                    languageSelect.innerHTML = '';
+                    
+                    // Add new options
+                    response.languages.forEach(function(language) {
+                        courseLanguageSelect.innerHTML += `<option value="${language.id}">${language.name}</option>`;
+                        languageSelect.innerHTML += `<option value="${language.id}">${language.name}</option>`;
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء تحديث قائمة اللغات.', 'error');
+            }
+        });
+    }
+
+    // Call updateLanguageSelect on page load
+    updateLanguageSelect();
 </script>

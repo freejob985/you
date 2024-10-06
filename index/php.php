@@ -198,18 +198,41 @@ case 'add_sections':
                 
                 try {
                     $db->beginTransaction();
+                    $addedLanguages = [];
+                    $existingLanguages = [];
                     
                     foreach ($languageTags as $language) {
                         $languageName = trim($language['value']);
                         if (!empty($languageName)) {
-                            $stmt = $db->prepare('INSERT INTO tags (name) VALUES (:name)');
+                            // التحقق من وجود اللغة
+                            $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
                             $stmt->bindValue(':name', $languageName, PDO::PARAM_STR);
                             $stmt->execute();
+                            $existingLanguage = $stmt->fetch(PDO::FETCH_ASSOC);
+                            
+                            if (!$existingLanguage) {
+                                // إضافة اللغة الجديدة
+                                $stmt = $db->prepare('INSERT INTO tags (name) VALUES (:name)');
+                                $stmt->bindValue(':name', $languageName, PDO::PARAM_STR);
+                                $stmt->execute();
+                                $addedLanguages[] = $languageName;
+                            } else {
+                                $existingLanguages[] = $languageName;
+                            }
                         }
                     }
                     
                     $db->commit();
-                    echo json_encode(['success' => true, 'message' => 'تمت إضافة اللغات بنجاح!']);
+                    
+                    $message = '';
+                    if (!empty($addedLanguages)) {
+                        $message .= 'تمت إضافة اللغات التالية بنجاح: ' . implode(', ', $addedLanguages) . '. ';
+                    }
+                    if (!empty($existingLanguages)) {
+                        $message .= 'اللغات التالية موجودة بالفعل: ' . implode(', ', $existingLanguages) . '.';
+                    }
+                    
+                    echo json_encode(['success' => true, 'message' => $message]);
                 } catch (Exception $e) {
                     $db->rollBack();
                     echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة اللغات: ' . $e->getMessage()]);
