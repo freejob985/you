@@ -7,8 +7,21 @@ try {
     die("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
 }
 
-// استعلام لجلب جميع الكورسات
-$stmt = $db->query('SELECT * FROM courses ORDER BY id DESC');
+// استعلام لجلب جميع الكورسات مع عدد الدروس المكتملة
+$stmt = $db->query('
+    SELECT 
+        c.*, 
+        COUNT(l.id) as completed_lessons,
+        (SELECT COUNT(*) FROM lessons WHERE course_id = c.id) as total_lessons
+    FROM 
+        courses c
+    LEFT JOIN 
+        lessons l ON c.id = l.course_id AND l.status = "completed"
+    GROUP BY 
+        c.id
+    ORDER BY 
+        c.id DESC
+');
 $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // دالة مساعدة لتنسيق الوقت
@@ -20,6 +33,23 @@ function formatDuration($seconds) {
            (($minutes < 10 && $hours > 0) ? "0" : "") . $minutes . ":" . 
            ($secs < 10 ? "0" : "") . $secs;
 }
+
+// استعلام لجلب إحصائيات الكورسات
+$statsQuery = $db->query('
+    SELECT 
+        COUNT(DISTINCT c.id) as total_courses,
+        COUNT(DISTINCT l.id) as total_lessons,
+        SUM(c.lessons_count) as total_planned_lessons,
+        SUM(c.duration) as total_duration,
+        SUM(CASE WHEN l.status = "completed" THEN 1 ELSE 0 END) as completed_lessons
+    FROM courses c
+    LEFT JOIN lessons l ON c.id = l.course_id
+');
+$stats = $statsQuery->fetch(PDO::FETCH_ASSOC);
+
+// حساب نسبة الإكمال الإجمالية
+$overallCompletionRate = ($stats['completed_lessons'] / $stats['total_lessons']) * 100;
+$remainingLessons = $stats['total_lessons'] - $stats['completed_lessons'];
 
 // معالجة طلب AJAX لحذف الكورس
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_course') {
@@ -91,6 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         body {
             font-family: 'Cairo', sans-serif;
             background-color: #f8f9fa;
+            padding-top: 60px; /* لإضافة مساحة للهيدر الثابت */
+            padding-bottom: 60px; /* لإضافة مساحة للفوتر الثابت */
         }
         .card {
             transition: transform 0.3s;
@@ -98,13 +130,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         .card:hover {
             transform: translateY(-5px);
         }
+        .header {
+            background: linear-gradient(45deg, #007bff, #6610f2);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer a:hover {
+            color: #007bff;
+        }
+        .progress {
+            height: 20px;
+        }
+        .progress-bar {
+            line-height: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- الهيدر الثابت -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>إجمالي الكورسات: <?php echo $stats['total_courses']; ?></h4>
+                </div>
+                <div class="col-md-3">
+                    <h4>إجمالي الدروس: <?php echo $stats['total_lessons']; ?></h4>
+                </div>
+                <div class="col-md-3">
+                    <h4>نسبة الإكمال: <?php echo number_format($overallCompletionRate, 2); ?>%</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4>الدروس المتبقية: <?php echo $remainingLessons; ?></h4>
+                </div>
+            </div>
+            <!-- إضافة شريط التقدم الإجمالي -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: <?php echo $overallCompletionRate; ?>%;" aria-valuenow="<?php echo $overallCompletionRate; ?>" aria-valuemin="0" aria-valuemax="100">
+                            <?php echo number_format($overallCompletionRate, 2); ?>%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container mt-5">
         <h1 class="text-center mb-4">قائمة الكورسات</h1>
         <div class="row">
             <?php foreach ($courses as $course): ?>
+                <?php 
+                    $courseCompletionRate = ($course['completed_lessons'] / $course['total_lessons']) * 100;
+                ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
                         <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($course['title']); ?>">
@@ -114,6 +213,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <i class="fas fa-book-open me-2"></i> عدد الدروس: <?php echo $course['lessons_count']; ?><br>
                                 <i class="fas fa-clock me-2"></i> المدة الإجمالية: <?php echo formatDuration($course['duration']); ?>
                             </p>
+                            <!-- إضافة شريط التقدم للكورس -->
+                            <div class="progress mb-3">
+                                <div class="progress-bar" role="progressbar" style="width: <?php echo $courseCompletionRate; ?>%;" aria-valuenow="<?php echo $courseCompletionRate; ?>" aria-valuemin="0" aria-valuemax="100">
+                                    <?php echo number_format($courseCompletionRate, 2); ?>%
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
                             <button class="btn btn-danger btn-sm delete-course" data-course-id="<?php echo $course['id']; ?>">
@@ -133,6 +238,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </a>
         </div>
     </div>
+
+    <!-- الفوتر الثابت -->
+    <footer class="footer">
+        <div class="container text-center">
+            <a href="http://localhost/home/"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="http://localhost/blackboard/"><i class="fas fa-chalkboard"></i> السبورة</a>
+            <a href="http://localhost/task-ai/"><i class="fas fa-tasks"></i> المهام</a>
+            <a href="http://localhost/info-code/bt.php"><i class="fas fa-code"></i> بنك الأكواد</a>
+            <a href="http://localhost/administration/public/"><i class="fas fa-folder"></i> الملفات</a>
+            <a href="http://localhost/Columns/"><i class="fas fa-columns"></i> الاعمدة</a>
+            <a href="http://localhost/ask/"><i class="fas fa-question-circle"></i> الاسئلة</a>
+            <a href="http://localhost/phpmyadminx/"><i class="fas fa-database"></i> ادارة قواعد البيانات</a>
+            <a href="http://localhost/pr.php"><i class="fas fa-bug"></i> اصطياد الاخطاء</a>
+            <a href="http://localhost/Timmy/"><i class="fas fa-robot"></i> تيمي</a>
+            <a href="http://localhost/copy/"><i class="fas fa-clipboard"></i> حافظة الملاحظات</a>
+            <a href="http://localhost/Taskme/"><i class="fas fa-calendar-check"></i> المهام اليومية</a>
+            <a href="http://subdomain.localhost/tasks"><i class="fas fa-project-diagram"></i> CRM</a>
+        </div>
+    </footer>
 
     <script>
     $(document).ready(function() {
