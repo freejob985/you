@@ -17,7 +17,13 @@ $lessonStats = $stmt->fetch(PDO::FETCH_ASSOC);
 $totalLessons = $lessonStats['total_lessons'];
 $completedLessons = $lessonStats['completed_lessons'];
 
-// دالة مساعدة لحساب النسبة المئوية
+/**
+ * دالة مساعدة لحساب النسبة المئوية
+ * 
+ * @param int $completed عدد العناصر المكتملة
+ * @param int $total العدد الإجمالي للعناصر
+ * @return int النسبة المئوية مقربة إلى أقرب عدد صحيح
+ */
 function calculatePercentage($completed, $total) {
     return $total > 0 ? round(($completed / $total) * 100) : 0;
 }
@@ -25,7 +31,12 @@ function calculatePercentage($completed, $total) {
 // حساب النسبة المئوية الإجمالية
 $overallPercentage = calculatePercentage($completedLessons, $totalLessons);
 
-// دالة مساعدة لتنسيق الوقت
+/**
+ * دالة مساعدة لتنسيق الوقت
+ * 
+ * @param int $seconds عدد الثواني
+ * @return string الوقت منسقًا (ساعات:دقائق:ثواني)
+ */
 function formatDuration($seconds) {
     $hours = floor($seconds / 3600);
     $minutes = floor(($seconds % 3600) / 60);
@@ -65,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -122,17 +134,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             line-height: 20px;
         }
         
-        /* أنماط محدثة للتذييل الثابت */
+        /* أنماط محدثة للتذييل */
         .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #f8f9fa;
-            color: black;
-            text-align: center;
-            padding: 10px 0;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
         .footer .container {
             display: flex;
@@ -143,35 +151,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             color: #ffffff;
             text-decoration: none;
             font-weight: bold;
-            padding: 5px 10px;
+            padding: 10px 15px;
             margin: 5px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            flex-grow: 1;
-            text-align: center;
+            border-radius: 25px;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.1);
         }
         .footer a:hover {
-            opacity: 0.8;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        /* ألوان مميزة للأزرار في الفوتر */
-        .footer a:nth-child(1) { background-color: #007bff; }
-        .footer a:nth-child(2) { background-color: #28a745; }
-        .footer a:nth-child(3) { background-color: #dc3545; }
-        .footer a:nth-child(4) { background-color: #ffc107; }
-        .footer a:nth-child(5) { background-color: #17a2b8; }
-        .footer a:nth-child(6) { background-color: #6610f2; }
-        .footer a:nth-child(7) { background-color: #fd7e14; }
-        .footer a:nth-child(8) { background-color: #20c997; }
-        .footer a:nth-child(9) { background-color: #e83e8c; }
-        .footer a:nth-child(10) { background-color: #6f42c1; }
-        .footer a:nth-child(11) { background-color: #795548; }
-        .footer a:nth-child(12) { background-color: #343a40; }
-        .footer a:nth-child(13) { background-color: #f8f9fa; color: #000; }
-        
         /* تعديل للمحتوى الرئيسي لإضافة هامش سفلي */
-        .container {
-            margin-bottom: 80px;
+        .main-content {
+            min-height: calc(100vh - 300px);
         }
 
         /* تنعيم الاسكرول */
@@ -179,27 +173,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             scroll-behavior: smooth;
         }
 
-.footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: #f8f9fa;
-    color: black;
-    text-align: center;
-    padding: 27px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-.footer a:nth-child(13) {
-    background-color: #007bff;
-    color: #ffffff;
-}
+        /* أنماط الهيدر */
+        .courses-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 50px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .courses-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .courses-header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .stat-item {
+            text-align: center;
+            margin: 0 20px;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">قائمة الكورسات</h1>
-        
+    <!-- الهيدر -->
+    <header class="courses-header">
+        <div class="container text-center">
+            <h1>قائمة الكورسات</h1>
+            <p>استكشف مجموعتنا الواسعة من الكورسات التعليمية عالية الجودة</p>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-number"><?php echo count($courses); ?></div>
+                    <div class="stat-label">إجمالي الكورسات</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><?php echo $totalLessons; ?></div>
+                    <div class="stat-label">إجمالي الدروس</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number"><?php echo $overallPercentage; ?>%</div>
+                    <div class="stat-label">نسبة الإكمال</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
         <!-- إضافة شريط التقدم الإجمالي -->
         <div class="progress mb-4">
             <div class="progress-bar" role="progressbar" style="width: <?php echo $overallPercentage; ?>%;" 
@@ -256,9 +292,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     <!-- التذييل المحدث -->
     <footer class="footer">
-    <div class="container-fluid">
+        <div class="container">
             <a href="http://localhost/home/"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="http://localhost/blackboard/"><i class="fas fa-chalkboard"></i> السبورة</a>
             <a href="http://localhost/task-ai/"><i class="fas fa-tasks"></i> المهام</a>
             <a href="http://localhost/info-code/bt.php"><i class="fas fa-code"></i> بنك الأكواد</a>
             <a href="http://localhost/administration/public/"><i class="fas fa-folder"></i> الملفات</a>
