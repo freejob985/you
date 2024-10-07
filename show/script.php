@@ -52,7 +52,7 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
 }
     // دالة لإضافة تعليق
     function addComment(commentId, comment, date) {
-        const profileImage = 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724';
+        const profileImage = 'https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=fIm0Nwlrgv0Q7kNvgGFLynt&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=ASCqegk3pc-tq9ltJpTyXnH&oh=00_AYCitUEnER18EVOGKoI2ZgBnYZA45dA7iKjvzif06hReHA&oe=67094A7A';
         $('#comments').prepend(`
             <div class="comment-card" data-comment-id="${commentId}">
                 <img src="${profileImage}" alt="Profile" class="comment-image">
