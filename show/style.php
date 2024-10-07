@@ -179,6 +179,17 @@
     /* تكبير فريم اليوتيوب */
     .embed-responsive-item {
         height: 600px !important;
+        width: 100% !important;
+    }
+    /* أنماط جديدة لـ TinyMCE */
+    .tox-tinymce {
+        font-size: 16px !important;
+    }
+    .tox .tox-edit-area__iframe {
+        direction: ltr !important;
+    }
+    .tox-tinymce-aux {
+        z-index: 10000;
     }
 * {
     scrollbar-width: thin;
