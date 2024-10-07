@@ -10,26 +10,45 @@ $(document).ready(function() {
         "timeOut": "3000"
     };
 
-    // تهيئة محرر النصوص المتقدم
+    // تهيئة محرر النصوص المتقدم TinyMCE
     tinymce.init({
         selector: '#comment',
         height: 300,
         menubar: false,
         directionality: 'rtl',
-        language: 'ar',
+        language: 'en',
         plugins: [
             'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
             'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
-            'table', 'emoticons', 'help'
+            'table', 'emoticons', 'template', 'help', 'codesample'
         ],
         toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
             'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-            'forecolor backcolor emoticons | help',
+            'forecolor backcolor emoticons | help | codesample',
         menu: {
             favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
         },
         menubar: 'favs file edit view insert format tools table help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:25px; direction: rtl; text-align: right; }',
+        codesample_languages: [
+            { text: 'HTML/XML', value: 'markup' },
+            { text: 'JavaScript', value: 'javascript' },
+            { text: 'CSS', value: 'css' },
+            { text: 'PHP', value: 'php' },
+            { text: 'Ruby', value: 'ruby' },
+            { text: 'Python', value: 'python' },
+            { text: 'Java', value: 'java' },
+            { text: 'C', value: 'c' },
+            { text: 'C#', value: 'csharp' },
+            { text: 'C++', value: 'cpp' }
+        ],
+        setup: function (editor) {
+            editor.on('init', function () {
+                editor.getBody().style.direction = 'rtl';
+                editor.getBody().style.textAlign = 'right';
+                editor.getBody().style.fontSize = '25px';
+            });
+        }
     });
 
     // دالة لإضافة عناصر لقائمة التشغيل
