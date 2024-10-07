@@ -93,5 +93,12 @@
         .footer-link i {
             margin-right: 5px;
         }
+span.lesson-title.completed {
+    color: white;
+    text-decoration: line-through;
+}
+span.lesson-title {
+    color: white;
+}
     </style>
 </head>
