@@ -17,73 +17,39 @@ $(document).ready(function() {
         menubar: false,
         directionality: 'rtl',
         language: 'ar',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:25px }',
         plugins: [
             'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
             'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
-            'table', 'emoticons', 'template', 'help', 'codesample'
+            'table', 'emoticons', 'help'
         ],
         toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
             'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-            'forecolor backcolor emoticons | help | codesample',
-        codesample_languages: [
-            {text: 'HTML/XML', value: 'markup'},
-            {text: 'JavaScript', value: 'javascript'},
-            {text: 'CSS', value: 'css'},
-            {text: 'PHP', value: 'php'},
-            {text: 'Ruby', value: 'ruby'},
-            {text: 'Python', value: 'python'},
-            {text: 'Java', value: 'java'},
-            {text: 'C', value: 'c'},
-            {text: 'C#', value: 'csharp'},
-            {text: 'C++', value: 'cpp'}
-        ]
-    });
-
-    // حفظ حالة الشريط الجانبي في التخزين المحلي
-    function saveSidebarState(isOpen) {
-        localStorage.setItem('sidebarOpen', isOpen);
-    }
-
-    // استرجاع حالة الشريط الجانبي من التخزين المحلي
-    function getSidebarState() {
-        return localStorage.getItem('sidebarOpen') === 'true';
-    }
-
-    // تطبيق حالة الشريط الجانبي عند تحميل الصفحة
-    if (getSidebarState()) {
-        $('.sidebar').addClass('open');
-        $('.sidebar-toggle').addClass('open');
-        $('body').addClass('sidebar-open');
-    }
-
-    // تحديث حدث النقر على زر تبديل الشريط الجانبي
-    $('#sidebarToggle').click(function() {
-        $('.sidebar').toggleClass('open');
-        $('.sidebar-toggle').toggleClass('open');
-        $('body').toggleClass('sidebar-open');
-        saveSidebarState($('.sidebar').hasClass('open'));
+            'forecolor backcolor emoticons | help',
+        menu: {
+            favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+        },
+        menubar: 'favs file edit view insert format tools table help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     });
 
     // دالة لإضافة عناصر لقائمة التشغيل
-    function addPlaylistItem(title, lessonId, isActive, isCompleted) {
-        const activeClass = isActive ? 'active' : '';
-        const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
-        const checkedAttribute = isCompleted ? 'checked' : '';
-        const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
-        
-        $('#playlist').append(`
-            <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
-                <div class="form-check">
-                    <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
-                    <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
-                        ${title}
-                    </label>
-                </div>
-            </li>
-        `);
-    }
-
+function addPlaylistItem(title, lessonId, isActive, isCompleted) {
+    const activeClass = isActive ? 'active' : '';
+    const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
+    const checkedAttribute = isCompleted ? 'checked' : '';
+    const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
+    
+    $('#playlist').append(`
+        <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
+            <div class="form-check">
+                <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
+                    ${title}
+                </label>
+            </div>
+        </li>
+    `);
+}
     // دالة لإضافة تعليق
     function addComment(commentId, comment, date) {
         const profileImage = 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724';
@@ -436,22 +402,26 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down');
     });
 
-    // تفعيل الشريط الجانبي
-    $('#sidebarToggle').click(function() {
+    // تفعيل زر تبديل الشريط الجانبي
+    $('#sidebarToggle').click(function(e) {
+        e.stopPropagation(); // منع انتشار الحدث
         $('.sidebar').toggleClass('open');
-        $('.sidebar-toggle').toggleClass('open');
+        $('#sidebarToggle').toggleClass('open');
         $('body').toggleClass('sidebar-open');
     });
 
     // إغلاق الشريط الجانبي عند النقر خارجه
     $(document).click(function(event) {
-        if (!$(event.target).closest('.sidebar, .sidebar-toggle').length) {
-            if ($('.sidebar').hasClass('open')) {
-                $('.sidebar').removeClass('open');
-                $('.sidebar-toggle').removeClass('open');
-                $('body').removeClass('sidebar-open');
-            }
+        if (!$(event.target).closest('.sidebar, #sidebarToggle').length) {
+            $('.sidebar').removeClass('open');
+            $('#sidebarToggle').removeClass('open');
+            $('body').removeClass('sidebar-open');
         }
+    });
+
+    // منع إغلاق الشريط الجانبي عند النقر داخله
+    $('.sidebar').click(function(event) {
+        event.stopPropagation();
     });
 
     // تحديث الإحصائيات

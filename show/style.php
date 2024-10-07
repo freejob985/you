@@ -29,7 +29,6 @@
     body {
         font-family: 'Cairo', sans-serif;
         transition: margin-right 0.3s ease-in-out;
-        scroll-behavior: smooth;
     }
     pre code {
         direction: ltr;
@@ -46,22 +45,22 @@
     .sidebar {
         position: fixed;
         top: 0;
-        right: -400px;
+        right: -400px; /* تغيير من left إلى right */
         width: 400px;
         height: 100%;
         background-color: #fff;
-        transition: right 0.3s ease-in-out;
+        transition: right 0.3s ease-in-out; /* تغيير من left إلى right */
         z-index: 1000;
         overflow-y: auto;
         box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     }
     .sidebar.open {
-        right: 0;
+        right: 0; /* تغيير من left إلى right */
     }
-    .sidebar-toggle {
+    #sidebarToggle {
         position: fixed;
         top: 10px;
-        right: 10px;
+        right: 10px; /* تغيير من left إلى right */
         z-index: 1001;
         width: 40px;
         height: 40px;
@@ -72,10 +71,10 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        transition: right 0.3s ease-in-out;
+        transition: right 0.3s ease-in-out; /* تغيير من left إلى right */
     }
-    .sidebar-toggle.open {
-        right: 410px;
+    #sidebarToggle.open {
+        right: 410px; /* تغيير من left إلى right */
     }
     .comment-card {
         border: 1px solid #e2e8f0;
@@ -98,8 +97,6 @@
         object-fit: cover;
         border-radius: 50%;
         margin-left: 16px;
-        /* تغيير صورة التعليق */
-        content: url('https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=fIm0Nwlrgv0Q7kNvgGFLynt&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=ASCqegk3pc-tq9ltJpTyXnH&oh=00_AYCitUEnER18EVOGKoI2ZgBnYZA45dA7iKjvzif06hReHA&oe=67094A7A');
     }
     .comment-content {
         flex-grow: 1;
@@ -122,6 +119,9 @@
         text-align: center;
     }
     /* تنعيم الاسكرول */
+    html {
+        scroll-behavior: smooth;
+    }
     body, textarea, .tox-edit-area__iframe {
         scrollbar-width: thin;
         scrollbar-color: #888 #f1f1f1;
@@ -141,7 +141,8 @@
     }
     /* إزاحة الصفحة عند فتح الشريط الجانبي */
     body.sidebar-open {
-        margin-right: 400px;
+        margin-right: 400px; /* إضافة هامش للجسم عند فتح الشريط الجانبي */
+        transition: margin-right 0.3s ease-in-out;
     }
     /* تنسيق زر حذف ونسخ الكود */
     .code-block .delete-code, .code-block .copy-code {
@@ -178,41 +179,19 @@
     #playlistStatistics p {
         margin-bottom: 10px;
     }
-    /* تكبير فريم اليوتيوب */
-    .embed-responsive-item {
-        height: 700px !important; /* تم زيادة الارتفاع من 600px إلى 700px */
-        width: 100% !important;
+    body.sidebar-open {
+        margin-right: 400px; /* إضافة هامش للجسم عند فتح الشريط الجانبي */
+        transition: margin-right 0.3s ease-in-out;
     }
-    /* أنماط جديدة لـ TinyMCE */
-    .tox-tinymce {
-        font-size: 25px !important; /* تم زيادة حجم الخط من 16px إلى 25px */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 100%;
+        }
+        #sidebarToggle.open {
+            right: calc(100% - 50px);
+        }
+        body.sidebar-open {
+            margin-right: 0;
+        }
     }
-    .tox .tox-edit-area__iframe {
-        direction: rtl !important; /* تم تغيير الاتجاه من ltr إلى rtl */
-    }
-    .tox-tinymce-aux {
-        z-index: 10000;
-    }
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 </style>
