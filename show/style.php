@@ -98,6 +98,8 @@
         object-fit: cover;
         border-radius: 50%;
         margin-left: 16px;
+        /* تغيير صورة التعليق */
+        content: url('https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=fIm0Nwlrgv0Q7kNvgGFLynt&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=ASCqegk3pc-tq9ltJpTyXnH&oh=00_AYCitUEnER18EVOGKoI2ZgBnYZA45dA7iKjvzif06hReHA&oe=67094A7A');
     }
     .comment-content {
         flex-grow: 1;
@@ -178,15 +180,15 @@
     }
     /* تكبير فريم اليوتيوب */
     .embed-responsive-item {
-        height: 600px !important;
+        height: 700px !important; /* تم زيادة الارتفاع من 600px إلى 700px */
         width: 100% !important;
     }
     /* أنماط جديدة لـ TinyMCE */
     .tox-tinymce {
-        font-size: 16px !important;
+        font-size: 25px !important; /* تم زيادة حجم الخط من 16px إلى 25px */
     }
     .tox .tox-edit-area__iframe {
-        direction: ltr !important;
+        direction: rtl !important; /* تم تغيير الاتجاه من ltr إلى rtl */
     }
     .tox-tinymce-aux {
         z-index: 10000;

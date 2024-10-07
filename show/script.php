@@ -15,9 +15,9 @@ $(document).ready(function() {
         selector: '#comment',
         height: 300,
         menubar: false,
-        directionality: 'ltr',
-        language: 'en',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        directionality: 'rtl',
+        language: 'ar',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:25px }',
         plugins: [
             'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
             'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
@@ -40,24 +40,50 @@ $(document).ready(function() {
         ]
     });
 
+    // حفظ حالة الشريط الجانبي في التخزين المحلي
+    function saveSidebarState(isOpen) {
+        localStorage.setItem('sidebarOpen', isOpen);
+    }
+
+    // استرجاع حالة الشريط الجانبي من التخزين المحلي
+    function getSidebarState() {
+        return localStorage.getItem('sidebarOpen') === 'true';
+    }
+
+    // تطبيق حالة الشريط الجانبي عند تحميل الصفحة
+    if (getSidebarState()) {
+        $('.sidebar').addClass('open');
+        $('.sidebar-toggle').addClass('open');
+        $('body').addClass('sidebar-open');
+    }
+
+    // تحديث حدث النقر على زر تبديل الشريط الجانبي
+    $('#sidebarToggle').click(function() {
+        $('.sidebar').toggleClass('open');
+        $('.sidebar-toggle').toggleClass('open');
+        $('body').toggleClass('sidebar-open');
+        saveSidebarState($('.sidebar').hasClass('open'));
+    });
+
     // دالة لإضافة عناصر لقائمة التشغيل
-function addPlaylistItem(title, lessonId, isActive, isCompleted) {
-    const activeClass = isActive ? 'active' : '';
-    const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
-    const checkedAttribute = isCompleted ? 'checked' : '';
-    const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
-    
-    $('#playlist').append(`
-        <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
-            <div class="form-check">
-                <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
-                <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
-                    ${title}
-                </label>
-            </div>
-        </li>
-    `);
-}
+    function addPlaylistItem(title, lessonId, isActive, isCompleted) {
+        const activeClass = isActive ? 'active' : '';
+        const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
+        const checkedAttribute = isCompleted ? 'checked' : '';
+        const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
+        
+        $('#playlist').append(`
+            <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
+                <div class="form-check">
+                    <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                    <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
+                        ${title}
+                    </label>
+                </div>
+            </li>
+        `);
+    }
+
     // دالة لإضافة تعليق
     function addComment(commentId, comment, date) {
         const profileImage = 'https://static.wikia.nocookie.net/harrypotter/images/c/ce/Harry_Potter_DHF1.jpg/revision/latest/thumbnail/width/360/height/360?cb=20140603201724';
