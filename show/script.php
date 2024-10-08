@@ -508,28 +508,41 @@ $('#playlist').on('change', '.mark-complete', function(e) {
 
     // Function to populate status modal
     function populateStatusModal() {
-        const statuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed', 'excluded', 'project'];
-        let html = `
-            <div class="status-module-header p-3 mb-3" style="background: linear-gradient(45deg, #4a90e2, #63b3ed);">
-                <h2 class="text-center text-white">تغيير حالة الدرس</h2>
-            </div>
-            <div class="status-options-container p-3">
-        `;
-        statuses.forEach(status => {
-            html += `
-                <div class="status-option d-flex align-items-center p-2 mb-2" data-status="${status}">
-                    <div class="status-color me-3" style="background-color: ${getStatusColor(status)}; width: 30px; height: 30px; border-radius: 50%;"></div>
-                    <span class="status-label">${getStatusLabel(status)}</span>
-                </div>
-            `;
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'GET',
+            data: { 
+                action: 'get_statuses',
+                language_id: $('#lessonLanguage').text()
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    let html = `
+                        <h2 class="text-center mb-4">تغيير حالة الدرس</h2>
+                        <div class="status-options-container">
+                    `;
+                    response.statuses.forEach(status => {
+                        html += `
+                            <div class="status-option" data-status="${status.name}">
+                                <div class="status-color" style="background-color: ${getStatusColor(status.name)};"></div>
+                                <span class="status-label">${status.label}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    $('#statusOptions').html(html);
+                    $('#statusModal').show();
+                } else {
+                    toastr.error('حدث خطأ أثناء جلب الحالات');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
         });
-        html += `
-            </div>
-            <div class="status-module-footer p-3 mt-3" style="background: linear-gradient(45deg, #63b3ed, #4a90e2);">
-                <p class="text-center text-white">اختر الحالة الجديدة للدرس</p>
-            </div>
-        `;
-        $('#statusOptions').html(html);
     }
 
     // Event listener for change status button
@@ -591,5 +604,130 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     });
 
+    // إضافة مستمع الحدث لزر المشاهدة
+    $('#watchLesson').click(function() {
+        const lessonId = $(this).data('lesson-id');
+        const $watchButton = $(this);
+        const $watchText = $('#watchText');
+        const $watchIcon = $watchButton.find('i');
+        const currentState = $watchText.text() === 'مشاهدة' ? 0 : 1;
+        const newState = 1 - currentState;
+
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { 
+                action: 'toggle_lesson_view', 
+                lesson_id: lessonId,
+                new_state: newState
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    if (newState === 1) {
+                        $watchText.text('تمت المشاهدة');
+                        $watchButton.removeClass('btn-info').addClass('btn-success');
+                        $watchIcon.removeClass('fa-eye').addClass('fa-check');
+                    } else {
+                        $watchText.text('مشاهدة');
+                        $watchButton.removeClass('btn-success').addClass('btn-info');
+                        $watchIcon.removeClass('fa-check').addClass('fa-eye');
+                    }
+                    toastr.success('تم تحديث حالة المشاهدة بنجاح');
+                } else {
+                    toastr.error('حدث خطأ أثناء تحديث حالة المشاهدة');
+                }
+            },
+            error: function() {
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    });
+
+    // إضافة مستمع الحدث لزر تغيير القسم
+    $('#changeSection').click(function() {
+        const lessonId = $(this).data('lesson-id');
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'GET',
+            data: { 
+                action: 'get_sections',
+                language_id: $('#lessonLanguage').text()
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    let html = '<h2 class="text-center mb-4">تغيير قسم الدرس</h2>';
+                    response.sections.forEach(section => {
+                        html += `
+                            <div class="section-option" data-section-id="${section.id}">
+                                <span class="section-label">${section.name}</span>
+                            </div>
+                        `;
+                    });
+                    html += '<button id="updateSection" class="btn btn-primary mt-3">تحديث القسم</button>';
+                    $('#sectionOptions').html(html);
+                    $('#sectionModal').show();
+
+                    $('.section-option').click(function() {
+                        $('.section-option').removeClass('selected');
+                        $(this).addClass('selected');
+                    });
+
+                    $('#updateSection').click(function() {
+                        const newSectionId = $('.section-option.selected').data('section-id');
+                        if (!newSectionId) {
+                            toastr.warning('الرجاء اختيار قسم');
+                            return;
+                        }
+                        $.ajax({
+                            url: 'show/ajax_handler.php',
+                            method: 'POST',
+                            data: { 
+                                action: 'update_lesson_section',
+                                lesson_id: lessonId,
+                                section_id: newSectionId
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#lessonSection').text(response.section_name);
+                                    toastr.success('تم تحديث قسم الدرس بنجاح');
+                                    $('#sectionModal').hide();
+                                } else {
+                                    toastr.error('حدث خطأ أثناء تحديث قسم الدرس');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('AJAX Error:', textStatus, errorThrown);
+                                console.log('Response Text:', jqXHR.responseText);
+                                toastr.error('حدث خطأ في الاتصال بالخادم');
+                            }
+                        });
+                    });
+                } else {
+                    toastr.error('حدث خطأ أثناء جلب الأقسام');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    });
+
+    // إضافة مستمعي أحداث لإغلاق الموديولات
+    $('.close').click(function() {
+        $('.modal').hide();
+    });
+
+    $(window).click(function(event) {
+        if ($(event.target).hasClass('modal')) {
+            $('.modal').hide();
+        }
+    });
+
+    // ... (باقي الكود يبقى كما هو)
 });
 </script>

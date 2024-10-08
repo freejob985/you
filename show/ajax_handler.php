@@ -83,6 +83,18 @@ try {
                         echo json_encode(['success' => false, 'error' => 'Failed to update lesson status']);
                     }
                     break;
+                case 'get_statuses':
+                    $languageId = isset($_GET['language_id']) ? intval($_GET['language_id']) : 0;
+                    $statuses = getStatusesByLanguage($languageId);
+                    ob_end_clean();
+                    echo json_encode(['success' => true, 'statuses' => $statuses]);
+                    break;
+                case 'get_sections':
+                    $languageId = isset($_GET['language_id']) ? intval($_GET['language_id']) : 0;
+                    $sections = getSectionsByLanguage($languageId);
+                    ob_end_clean();
+                    echo json_encode(['success' => true, 'sections' => $sections]);
+                    break;
                 default:
                     ob_end_clean();
                     echo json_encode(['error' => 'Invalid action']);
@@ -149,6 +161,13 @@ try {
                         ob_end_clean();
                         echo json_encode(['success' => false, 'error' => 'فشل تحديث حالة الدرس']);
                     }
+                    break;
+                case 'toggle_lesson_view':
+                    $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
+                    $newState = isset($_POST['new_state']) ? intval($_POST['new_state']) : 0;
+                    $result = toggleLessonView($lessonId, $newState);
+                    ob_end_clean();
+                    echo json_encode(['success' => $result]);
                     break;
                 default:
                     ob_end_clean();

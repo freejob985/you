@@ -225,6 +225,7 @@
         padding: 5px;
         border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.3s;
     }
 
     .status-option:hover {
@@ -243,6 +244,7 @@
         float: right;
         font-size: 28px;
         font-weight: bold;
+        cursor: pointer;
     }
 
     .close:hover,
@@ -252,4 +254,84 @@
         cursor: pointer;
     }
 
+    /* تنسيق الموديول */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .status-option, .section-option {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .status-option:hover, .section-option:hover {
+        background-color: #f0f0f0;
+    }
+
+    .status-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .status-label, .section-label {
+        font-size: 16px;
+    }
+
+    #updateSection {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #updateSection:hover {
+        background-color: #0056b3;
+    }
 </style>
