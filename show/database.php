@@ -256,7 +256,17 @@ function getStatusesByLanguage($languageId) {
         $stmt = $db->prepare("SELECT * FROM tags WHERE language_id = :language_id");
         $stmt->bindParam(':language_id', $languageId, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $statuses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // تحويل الحالات إلى الصيغة المطلوبة
+        $formattedStatuses = array_map(function($status) {
+            return [
+                'name' => $status['name'],
+                'label' => getStatusLabel($status['name'])
+            ];
+        }, $statuses);
+        
+        return $formattedStatuses;
     } catch (Exception $e) {
         file_put_contents('debug.log', "getStatusesByLanguage error: " . $e->getMessage() . "\n", FILE_APPEND);
         return [];

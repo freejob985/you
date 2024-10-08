@@ -548,7 +548,6 @@ $('#playlist').on('change', '.mark-complete', function(e) {
     // Event listener for change status button
     $('#changeStatus').click(function() {
         populateStatusModal();
-        $('#statusModal').show();
     });
 
     // Event listener for closing the modal
