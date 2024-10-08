@@ -493,15 +493,15 @@ $('#playlist').on('change', '.mark-complete', function(e) {
     function getStatusColor(status) {
         switch (status) {
             case 'completed': return '#28a745';
-            case 'watch':
-            case 'review': return '#007bff';
-            case 'problem':
-            case 'retry':
-            case 'retry_again': return '#ffc107';
-            case 'discussion':
-            case 'search': return '#17a2b8';
-            case 'excluded': return '#dc3545';
-            case 'project': return '#6c757d';
+            case 'watch': return '#007bff';
+            case 'problem': return '#dc3545';
+            case 'discussion': return '#17a2b8';
+            case 'search': return '#ffc107';
+            case 'retry': return '#6c757d';
+            case 'retry_again': return '#343a40';
+            case 'review': return '#20c997';
+            case 'excluded': return '#6610f2';
+            case 'project': return '#e83e8c';
             default: return '#6c757d';
         }
     }
@@ -509,15 +509,26 @@ $('#playlist').on('change', '.mark-complete', function(e) {
     // Function to populate status modal
     function populateStatusModal() {
         const statuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed', 'excluded', 'project'];
-        let html = '';
+        let html = `
+            <div class="status-module-header p-3 mb-3" style="background: linear-gradient(45deg, #4a90e2, #63b3ed);">
+                <h2 class="text-center text-white">تغيير حالة الدرس</h2>
+            </div>
+            <div class="status-options-container p-3">
+        `;
         statuses.forEach(status => {
             html += `
-                <div class="status-option" data-status="${status}">
-                    <div class="status-color" style="background-color: ${getStatusColor(status)}"></div>
-                    <span>${getStatusLabel(status)}</span>
+                <div class="status-option d-flex align-items-center p-2 mb-2" data-status="${status}">
+                    <div class="status-color me-3" style="background-color: ${getStatusColor(status)}; width: 30px; height: 30px; border-radius: 50%;"></div>
+                    <span class="status-label">${getStatusLabel(status)}</span>
                 </div>
             `;
         });
+        html += `
+            </div>
+            <div class="status-module-footer p-3 mt-3" style="background: linear-gradient(45deg, #63b3ed, #4a90e2);">
+                <p class="text-center text-white">اختر الحالة الجديدة للدرس</p>
+            </div>
+        `;
         $('#statusOptions').html(html);
     }
 

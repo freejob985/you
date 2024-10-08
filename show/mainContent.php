@@ -44,7 +44,6 @@ if ($lesson) {
 <div id="statusModal" class="status-modal">
     <div class="status-modal-content">
         <span class="close">&times;</span>
-        <h2>تغيير حالة الدرس</h2>
         <div id="statusOptions">
             <!-- Status options will be dynamically added here -->
         </div>
