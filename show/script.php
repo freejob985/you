@@ -453,5 +453,132 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         `);
     }
 
+    // Add these new functions and event listeners
+
+    // Function to get status badge class
+    function getStatusBadgeClass(status) {
+        switch (status) {
+            case 'completed': return 'bg-success';
+            case 'watch':
+            case 'review': return 'bg-primary';
+            case 'problem':
+            case 'retry':
+            case 'retry_again': return 'bg-warning';
+            case 'discussion':
+            case 'search': return 'bg-info';
+            case 'excluded': return 'bg-danger';
+            case 'project': return 'bg-secondary';
+            default: return 'bg-secondary';
+        }
+    }
+
+    // Function to get status label
+    function getStatusLabel(status) {
+        switch (status) {
+            case 'completed': return 'مكتمل';
+            case 'watch': return 'مشاهدة';
+            case 'problem': return 'مشكلة';
+            case 'discussion': return 'نقاش';
+            case 'search': return 'بحث';
+            case 'retry': return 'إعادة';
+            case 'retry_again': return 'إعادة ثانية';
+            case 'review': return 'مراجعة';
+            case 'excluded': return 'مستبعد';
+            case 'project': return 'مشروع تطبيقي';
+            default: return 'غير محدد';
+        }
+    }
+
+    // Function to get status color
+    function getStatusColor(status) {
+        switch (status) {
+            case 'completed': return '#28a745';
+            case 'watch':
+            case 'review': return '#007bff';
+            case 'problem':
+            case 'retry':
+            case 'retry_again': return '#ffc107';
+            case 'discussion':
+            case 'search': return '#17a2b8';
+            case 'excluded': return '#dc3545';
+            case 'project': return '#6c757d';
+            default: return '#6c757d';
+        }
+    }
+
+    // Function to populate status modal
+    function populateStatusModal() {
+        const statuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed', 'excluded', 'project'];
+        let html = '';
+        statuses.forEach(status => {
+            html += `
+                <div class="status-option" data-status="${status}">
+                    <div class="status-color" style="background-color: ${getStatusColor(status)}"></div>
+                    <span>${getStatusLabel(status)}</span>
+                </div>
+            `;
+        });
+        $('#statusOptions').html(html);
+    }
+
+    // Event listener for change status button
+    $('#changeStatus').click(function() {
+        populateStatusModal();
+        $('#statusModal').show();
+    });
+
+    // Event listener for closing the modal
+    $('.close').click(function() {
+        $('#statusModal').hide();
+    });
+
+    // Event listener for selecting a status
+    $('#statusOptions').on('click', '.status-option', function() {
+        const newStatus = $(this).data('status');
+        const lessonId = $('#changeStatus').data('lesson-id');
+        const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
+
+        // Send AJAX request to update lesson status
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { 
+                action: 'change_lesson_status', 
+                lesson_id: lessonId, 
+                status: newStatus,
+                course_id: courseId
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Update the status display in the UI
+                    $('#lessonTags').text(getStatusLabel(newStatus));
+                    $('#lessonTags').removeClass().addClass(`badge ${getStatusBadgeClass(newStatus)}`);
+                    
+                    // Update statistics
+                    updateStatistics(response.statistics);
+                    
+                    toastr.success('تم تحديث حالة الدرس بنجاح');
+                } else {
+                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
+                }
+                $('#statusModal').hide();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
+                $('#statusModal').hide();
+            }
+        });
+    });
+
+    // Close the modal when clicking outside of it
+    $(window).click(function(event) {
+        if (event.target == $('#statusModal')[0]) {
+            $('#statusModal').hide();
+        }
+    });
+
 });
 </script>

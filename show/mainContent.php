@@ -36,5 +36,21 @@ if ($lesson) {
         <button class="btn btn-primary me-2" id="editLesson" data-lesson-id="<?php echo $lessonId; ?>">تعديل</button>
         <button class="btn btn-secondary me-2" id="changeStatus" data-lesson-id="<?php echo $lessonId; ?>">تغيير الحالة</button>
         <button class="btn btn-info" id="watchLesson" data-lesson-id="<?php echo $lessonId; ?>">مشاهدة</button>
+        <button class="btn btn-info" id="changeStatus" data-lesson-id="<?php echo $lessonId; ?>">تغيير الحالة</button>
     </div>
 </div>
+
+<!-- Add this modal at the end of the file -->
+<div id="statusModal" class="status-modal">
+    <div class="status-modal-content">
+        <span class="close">&times;</span>
+        <h2>تغيير حالة الدرس</h2>
+        <div id="statusOptions">
+            <!-- Status options will be dynamically added here -->
+        </div>
+    </div>
+</div>
+
+<?php
+// ... (keep all existing code) ...
+?>

@@ -64,17 +64,23 @@ try {
                     $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
                     $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
                     $courseId = isset($_POST['course_id']) ? intval($_POST['course_id']) : 0;
+                    
+                    // Validate the new status
+                    $validStatuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed', 'excluded', 'project'];
+                    if (!in_array($newStatus, $validStatuses)) {
+                        echo json_encode(['success' => false, 'error' => 'Invalid status']);
+                        exit;
+                    }
+                    
                     $result = updateLessonStatus($lessonId, $newStatus);
                     if ($result) {
                         $statistics = getCourseStatistics($courseId);
-                        ob_end_clean();
                         echo json_encode([
                             'success' => true, 
                             'statistics' => $statistics
                         ]);
                     } else {
-                        ob_end_clean();
-                        echo json_encode(['success' => false, 'error' => 'فشل تحديث حالة الدرس']);
+                        echo json_encode(['success' => false, 'error' => 'Failed to update lesson status']);
                     }
                     break;
                 default:
