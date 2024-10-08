@@ -83,6 +83,13 @@ try {
                         echo json_encode(['success' => false, 'error' => 'Failed to update lesson status']);
                     }
                     break;
+                // New case for toggling lesson view status
+                case 'toggle_lesson_view':
+                    $lessonId = isset($_GET['lesson_id']) ? intval($_GET['lesson_id']) : 0;
+                    $result = toggleLessonViewStatus($lessonId);
+                    ob_end_clean();
+                    echo json_encode($result);
+                    break;
                 default:
                     ob_end_clean();
                     echo json_encode(['error' => 'Invalid action']);

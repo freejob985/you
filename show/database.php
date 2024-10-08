@@ -1,4 +1,17 @@
 <?php
+/**
+ * Database connection and utility functions
+ * 
+ * This file contains functions for database operations and utility functions
+ * used throughout the application.
+ */
+
+/**
+ * Establishes a connection to the SQLite database
+ *
+ * @return PDO Database connection object
+ * @throws Exception If connection fails
+ */
 function connectDB() {
     try {
         $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
@@ -9,6 +22,11 @@ function connectDB() {
     }
 }
 
+/**
+ * Debug function to dump variables and exit
+ *
+ * @param mixed ...$variables Variables to dump
+ */
 function dd(...$variables) {
     $debugTrace = debug_backtrace();
     $file = $debugTrace[0]['file'];
@@ -30,6 +48,12 @@ function dd(...$variables) {
     exit();
 }
 
+/**
+ * Extracts YouTube video ID from a URL
+ *
+ * @param string $url YouTube video URL
+ * @return string Video ID
+ */
 function getYoutubeVideoId($url) {
     $video_id = '';
     $parsed_url = parse_url($url);
@@ -47,6 +71,12 @@ function getYoutubeVideoId($url) {
     return $video_id;
 }
 
+/**
+ * Retrieves lesson details by ID
+ *
+ * @param int $lessonId Lesson ID
+ * @return array|false Lesson details or false if not found
+ */
 function getLessonDetails($lessonId) {
     $db = connectDB();
     $stmt = $db->prepare("SELECT * FROM lessons WHERE id = :lesson_id");
@@ -55,6 +85,12 @@ function getLessonDetails($lessonId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+/**
+ * Retrieves course details by ID
+ *
+ * @param int $courseId Course ID
+ * @return array|false Course details or false if not found
+ */
 function getCourseDetails($courseId) {
     $db = connectDB();
     $stmt = $db->prepare("SELECT * FROM courses WHERE id = :id");
@@ -63,10 +99,16 @@ function getCourseDetails($courseId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+/**
+ * Retrieves playlist items for a course
+ *
+ * @param int $courseId Course ID
+ * @return array|false Playlist items or false on error
+ */
 function getPlaylistItems($courseId) {
     try {
         $db = connectDB();
-        $stmt = $db->prepare("SELECT id, title, status FROM lessons WHERE course_id = :course_id ORDER BY id");
+        $stmt = $db->prepare("SELECT id, title, status, views FROM lessons WHERE course_id = :course_id ORDER BY id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -78,6 +120,13 @@ function getPlaylistItems($courseId) {
     }
 }
 
+/**
+ * Adds a new comment to a lesson
+ *
+ * @param int $lessonId Lesson ID
+ * @param string $comment Comment content
+ * @return int|false New comment ID or false on error
+ */
 function addComment($lessonId, $comment) {
     try {
         $db = connectDB();
@@ -93,6 +142,12 @@ function addComment($lessonId, $comment) {
     }
 }
 
+/**
+ * Retrieves comments for a lesson
+ *
+ * @param int $lessonId Lesson ID
+ * @return array Comments
+ */
 function getComments($lessonId) {
     try {
         $db = connectDB();
@@ -106,6 +161,12 @@ function getComments($lessonId) {
     }
 }
 
+/**
+ * Deletes a comment
+ *
+ * @param int $commentId Comment ID
+ * @return bool True on success, false on failure
+ */
 function deleteComment($commentId) {
     try {
         $db = connectDB();
