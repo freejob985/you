@@ -86,7 +86,7 @@ $(document).ready(function() {
      * @param {string} date - The date of the comment
      */
     function addComment(commentId, comment, date) {
-        const profileImage = 'path/to/default/profile/image.jpg'; // Replace with actual image path
+        const profileImage = 'https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=FNTIXa2wDe0Q7kNvgFfRYW5&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=AkV-4oPU4iZUpIerixkP1G6&oh=00_AYCawrcRwb1qzgcZNtHJu66cDM5T4byg62Vf8KyUGH186A&oe=670BB53A';
         $('#comments').prepend(`
             <div class="comment-card" data-comment-id="${commentId}">
                 <img src="${profileImage}" alt="Profile" class="comment-image">
@@ -112,6 +112,7 @@ $(document).ready(function() {
             <div class="code-block mb-4" data-code-id="${codeId}">
                 <h4 class="text-lg font-semibold mb-2 text-white">${language}</h4>
                 <pre><code class="language-${language}" id="${codeElementId}">${code}</code></pre>
+                <button class="btn btn-danger btn-sm delete-code mt-2"><i class="fas fa-trash-alt"></i> حذف الكود</button>
                 <button class="btn btn-primary btn-sm copy-code mt-2"><i class="fas fa-copy"></i> نسخ الكود</button>
             </div>
         `);
@@ -667,6 +668,39 @@ $(document).ready(function() {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 toastr.error('حدث خطأ أثناء تحديث التصنيفات');
+            }
+        });
+    });
+
+    // Watch lesson button event handler
+    $('#watchLesson').click(function() {
+        const lessonId = $(this).data('lesson-id');
+        const currentViews = parseInt($(this).data('views'));
+        
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { action: 'toggle_view_status', lesson_id: lessonId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    const newViews = response.new_views;
+                    $('#watchLesson').data('views', newViews);
+                    if (newViews > currentViews) {
+                        $('#watchLesson').html('<i class="fas fa-check"></i> تمت المشاهدة');
+                        toastr.success('تم تحديث حالة المشاهدة');
+                    } else {
+                        $('#watchLesson').html('<i class="fas fa-eye"></i> مشاهدة');
+                        toastr.info('تم إلغاء حالة المشاهدة');
+                    }
+                } else {
+                    toastr.error('حدث خطأ أثناء تحديث حالة المشاهدة');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء تحديث حالة المشاهدة');
             }
         });
     });

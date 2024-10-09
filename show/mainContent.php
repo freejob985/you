@@ -67,17 +67,17 @@ function getStatusLabel($status) {
 // دالة للحصول على لون الحالة
 function getStatusColor($status) {
     switch ($status) {
-        case 'completed': return '#000000';
+        case 'completed': return '#FFFFFFFF';
         case 'watch':
-        case 'review': return '#007bff';
-        case 'problem':
+        case 'review': return '#FCFCFCFF';
+        case 'problem':return '#232020FF';
         case 'retry':
-        case 'retry_again': return '#ffc107';
+        case 'retry_again': return '#FFFFFFFF';
         case 'discussion':
-        case 'search': return '#17a2b8';
-        case 'excluded': return '#dc3545';
-        case 'project': return '#6c757d';
-        default: return '#7E0C0CFF';
+        case 'search': return '#FFFFFFFF';
+        case 'excluded': return '#FFFFFFFF';
+        case 'project': return '#FFFFFFFF';
+        default: return '#FFFFFFFF';
     }
 }
 
