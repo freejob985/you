@@ -65,7 +65,7 @@ $(document).ready(function() {
         const activeClass = isActive ? 'active' : '';
         const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
         const checkedAttribute = isCompleted ? 'checked' : '';
-        const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
+        const listItemStyle = isCompleted ? 'background: #b4ffcf;' : '';
 
         $('#playlist').append(`
             <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
@@ -91,7 +91,7 @@ $(document).ready(function() {
             <div class="comment-card" data-comment-id="${commentId}">
                 <img src="${profileImage}" alt="Profile" class="comment-image">
                 <div class="comment-content">
-                    <p class="comment-author">User Name</p>
+                    <p class="comment-author">HARRY POTTER</p>
                     <p class="comment-text">${comment}</p>
                     <small class="comment-date">${date}</small>
                 </div>
@@ -687,10 +687,14 @@ $(document).ready(function() {
                     const newViews = response.new_views;
                     $('#watchLesson').data('views', newViews);
                     if (newViews > currentViews) {
-                        $('#watchLesson').html('<i class="fas fa-check"></i> تمت المشاهدة');
+                        $('#watchLesson').html('<i class="fas fa-check"></i> تمت المشاهدة')
+                                          .removeClass('btn-light')
+                                          .addClass('btn-success text-white');
                         toastr.success('تم تحديث حالة المشاهدة');
                     } else {
-                        $('#watchLesson').html('<i class="fas fa-eye"></i> مشاهدة');
+                        $('#watchLesson').html('<i class="fas fa-eye"></i> مشاهدة')
+                                          .removeClass('btn-success text-white')
+                                          .addClass('btn-light');
                         toastr.info('تم إلغاء حالة المشاهدة');
                     }
                 } else {

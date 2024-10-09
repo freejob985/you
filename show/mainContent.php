@@ -129,16 +129,26 @@ if ($lesson) {
 </head>
 <body>
 
+<!-- أزرار العودة -->
+<div class="mb-4 mt-4">
+    <a href="courses.php" class="btn btn-primary me-2">
+        <i class="fas fa-arrow-left"></i> العودة إلى الكورسات
+    </a>
+    <a href="lessons.php?course_id=<?php echo $courseId; ?>" class="btn btn-secondary">
+        <i class="fas fa-list"></i> العودة إلى الدروس
+    </a>
+</div>
+
 <!-- Lesson Title -->
 <h1 class="text-3xl font-bold mb-4"><?php echo htmlspecialchars($lesson['title']); ?></h1>
 
 <!-- Video player -->
 <div class="embed-responsive embed-responsive-16by9 mb-4">
-    <iframe class="embed-responsive-item w-full h-96" src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video_id); ?>" allowfullscreen></iframe>
+    <iframe class="embed-responsive-item w-full h-[600px]" src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video_id); ?>" allowfullscreen></iframe>
 </div>
 
 <!-- Lesson Information Section -->
-<div class="bg-gradient-to-r from-blue-500 to-blue-300 text-white shadow-sm rounded p-4 mb-4 lesson-info-section">
+<div class="bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-sm rounded p-4 mb-4 lesson-info-section">
     <h3 class="text-xl font-bold mb-3">معلومات الدرس</h3>
     <p><strong>اللغة:</strong> <span id="lessonLanguage"><?php echo htmlspecialchars(getLanguageName($lesson['language_id'])); ?></span></p>
     <p><strong>الحالة:</strong> 

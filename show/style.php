@@ -95,55 +95,65 @@
 
     /* Comment card styling */
     .comment-card {
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 16px;
-        background-color: #fff;
+        border: none;
+        border-radius: 15px;
+        padding: 25px; /* زيادة التباعد الداخلي */
+        margin-bottom: 30px; /* زيادة التباعد بين الكروت */
+        background: linear-gradient(145deg, #ffffff, #f8f8f8);
+        box-shadow: 3px 3px 10px #d1d1d1, -3px -3px 10px #ffffff; /* تقليل الظل */
         position: relative;
         display: flex;
-        align-items: center;
+        flex-direction: column; /* تغيير اتجاه العرض إلى عمودي */
+        align-items: flex-start;
     }
 
     /* Delete comment button positioning */
     .comment-card .delete-comment {
         position: absolute;
-        top: 10px;
-        left: 10px;
+        bottom: 10px; /* تغيير الموضع إلى الأسفل */
+        left: 10px; /* تغيير الموضع إلى اليسار */
+        background-color: transparent;
+        border: none;
+        color: #dc3545;
+        font-size: 1.2rem;
     }
 
     /* Commenter profile image */
     .comment-image {
-        width: 64px;
-        height: 64px;
+        width: 60px;
+        height: 60px;
         object-fit: cover;
-        border-radius: 50%;
-        margin-left: 16px;
+        border-radius: 10px;
+        margin-bottom: 15px; /* إضافة هامش سفلي */
     }
 
     /* Comment content container */
     .comment-content {
-        flex-grow: 1;
-        margin-right: 16px;
+        width: 100%; /* جعل المحتوى يأخذ العرض الكامل */
     }
 
     /* Comment author styling */
     .comment-author {
         font-weight: bold;
-        color: #2d3748;
+        color: #333;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
     }
 
     /* Comment text styling */
     .comment-text {
-        color: #4a5568;
-        margin-top: 8px;
+        color: #555;
+        margin-top: 10px;
+        line-height: 1.6;
+        margin-bottom: 20px; /* إضافة هامش سفلي */
     }
 
     /* Comment date styling */
     .comment-date {
-        color: #718096;
-        font-size: 0.875rem;
-        margin-top: 8px;
+        color: #888;
+        font-size: 0.9rem;
+        display: block;
+        margin-top: auto; /* دفع التاريخ إلى الأسفل */
     }
 
     /* Center alignment for main heading */
@@ -335,4 +345,23 @@
     .embed-responsive iframe {
         border-radius: 8px;
     }
+
+.form-check-input:checked {
+    background-color: #0a8431;
+    border-color: #7eef55;
+}
+li.list-group-item.cursor-pointer.active {
+    background: white;
+    color: black;
+}
+.status-modal-content {
+    padding: 0px;
+}
+.close:hover, .close:focus {
+    color: #ffffff !i
+    text-decoration: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
 </style>
