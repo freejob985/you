@@ -406,7 +406,7 @@ function updateLessonTags($lessonId, $tags) {
  * @param string $status The status code.
  * @return string The label for the status.
  */
-function getStatusLabel($status) {
+function getStatusLabel_($status) {
     switch ($status) {
         case 'completed': return 'مكتمل';
         case 'watch': return 'مشاهدة';
