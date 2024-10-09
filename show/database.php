@@ -1,139 +1,116 @@
 <?php
 /**
- * Database connection and utility functions
- * 
- * This file contains functions for database operations and utility functions
- * used throughout the application.
+ * database.php
+ *
+ * This file contains functions for database interactions, including connecting to the database,
+ * retrieving lesson and course details, and updating lesson information.
+ *
+ * Dependencies:
+ * - PDO extension for SQLite
+ * - A SQLite database file located at '../db/courses.db'
+ *
+ * Note: Ensure that the database file exists and has the correct schema as per your application requirements.
  */
 
 /**
- * Establishes a connection to the SQLite database
+ * Establishes a connection to the SQLite database.
  *
- * @return PDO Database connection object
- * @throws Exception If connection fails
+ * @return PDO The PDO instance representing the database connection.
+ * @throws PDOException If the connection fails.
  */
 function connectDB() {
     try {
         $db = new PDO('sqlite:D:\server\htdocs\you\courses.db');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $db;
-    } catch(PDOException $e) {
-        throw new Exception("خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage());
+    } catch (PDOException $e) {
+        file_put_contents('debug.log', "Database connection error: " . $e->getMessage() . "\n", FILE_APPEND);
+        throw $e;
     }
 }
 
 /**
- * Debug function to dump variables and exit
+ * Retrieves lesson details by lesson ID.
  *
- * @param mixed ...$variables Variables to dump
- */
-function dd(...$variables) {
-    $debugTrace = debug_backtrace();
-    $file = $debugTrace[0]['file'];
-    $line = $debugTrace[0]['line'];
-
-    echo "<strong>Called in: $file on line $line</strong><br>";
-
-    $colors = ['red', 'green', 'blue', 'purple', 'cyan'];
-    $colorIndex = 0;
-
-    foreach ($variables as $variable) {
-        $currentColor = $colors[$colorIndex % count($colors)];
-        echo "<pre style='color: $currentColor'>";
-        var_dump($variable);
-        echo "</pre>";
-        $colorIndex++;
-    }
-
-    exit();
-}
-
-/**
- * Extracts YouTube video ID from a URL
- *
- * @param string $url YouTube video URL
- * @return string Video ID
- */
-function getYoutubeVideoId($url) {
-    $video_id = '';
-    $parsed_url = parse_url($url);
-    if (isset($parsed_url['query'])) {
-        parse_str($parsed_url['query'], $query_params);
-        if (isset($query_params['v'])) {
-            $video_id = $query_params['v'];
-        }
-    } elseif (isset($parsed_url['path'])) {
-        $path = explode('/', trim($parsed_url['path'], '/'));
-        if (count($path) > 0) {
-            $video_id = end($path);
-        }
-    }
-    return $video_id;
-}
-
-/**
- * Retrieves lesson details by ID
- *
- * @param int $lessonId Lesson ID
- * @return array|false Lesson details or false if not found
+ * @param int $lessonId The ID of the lesson.
+ * @return array|null An associative array containing lesson details, or null if not found.
  */
 function getLessonDetails($lessonId) {
-    $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM lessons WHERE id = :lesson_id");
-    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("SELECT * FROM lessons WHERE id = :lesson_id");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getLessonDetails error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return null;
+    }
 }
 
 /**
- * Retrieves course details by ID
+ * Retrieves course details by course ID.
  *
- * @param int $courseId Course ID
- * @return array|false Course details or false if not found
+ * @param int $courseId The ID of the course.
+ * @return array|null An associative array containing course details, or null if not found.
  */
 function getCourseDetails($courseId) {
-    $db = connectDB();
-    $stmt = $db->prepare("SELECT * FROM courses WHERE id = :id");
-    $stmt->bindParam(':id', $courseId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("SELECT * FROM courses WHERE id = :course_id");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getCourseDetails error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return null;
+    }
 }
 
 /**
- * Retrieves playlist items for a course
+ * Retrieves playlist items for a given course ID.
  *
- * @param int $courseId Course ID
- * @return array|false Playlist items or false on error
+ * @param int $courseId The ID of the course.
+ * @return array An array of playlist items.
  */
 function getPlaylistItems($courseId) {
     try {
         $db = connectDB();
-        $stmt = $db->prepare("SELECT id, title, status, views FROM lessons WHERE course_id = :course_id ORDER BY id");
+        $stmt = $db->prepare("SELECT id, title, status FROM lessons WHERE course_id = :course_id ORDER BY id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        file_put_contents('debug.log', "getPlaylistItems result: " . print_r($result, true) . "\n", FILE_APPEND);
-        return $result ? $result : [];
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         file_put_contents('debug.log', "getPlaylistItems error: " . $e->getMessage() . "\n", FILE_APPEND);
-        return false;
+        return [];
     }
 }
 
 /**
- * Adds a new comment to a lesson
+ * Extracts the YouTube video ID from a YouTube URL.
  *
- * @param int $lessonId Lesson ID
- * @param string $comment Comment content
- * @return int|false New comment ID or false on error
+ * @param string $url The YouTube URL.
+ * @return string|null The video ID, or null if not found.
+ */
+function getYoutubeVideoId($url) {
+    preg_match('/v=([^&]+)/', $url, $matches);
+    return isset($matches[1]) ? $matches[1] : null;
+}
+
+/**
+ * Adds a new comment to a lesson.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @param string $comment The content of the comment.
+ * @return int|false The ID of the new comment, or false on failure.
  */
 function addComment($lessonId, $comment) {
     try {
         $db = connectDB();
-        file_put_contents('debug.log', "addComment called with lessonId: $lessonId, comment: $comment\n", FILE_APPEND);
-        $stmt = $db->prepare("INSERT INTO comments (lesson_id, content) VALUES (:lesson_id, :content)");
+        $stmt = $db->prepare("INSERT INTO comments (lesson_id, content, created_at) VALUES (:lesson_id, :content, :created_at)");
         $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
         $stmt->bindParam(':content', $comment, PDO::PARAM_STR);
+        $stmt->bindParam(':created_at', date('Y-m-d H:i:s'), PDO::PARAM_STR);
         $stmt->execute();
         return $db->lastInsertId();
     } catch (Exception $e) {
@@ -143,10 +120,10 @@ function addComment($lessonId, $comment) {
 }
 
 /**
- * Retrieves comments for a lesson
+ * Retrieves comments for a given lesson ID.
  *
- * @param int $lessonId Lesson ID
- * @return array Comments
+ * @param int $lessonId The ID of the lesson.
+ * @return array An array of comments.
  */
 function getComments($lessonId) {
     try {
@@ -162,10 +139,10 @@ function getComments($lessonId) {
 }
 
 /**
- * Deletes a comment
+ * Deletes a comment by its ID.
  *
- * @param int $commentId Comment ID
- * @return bool True on success, false on failure
+ * @param int $commentId The ID of the comment.
+ * @return bool True on success, false on failure.
  */
 function deleteComment($commentId) {
     try {
@@ -179,12 +156,20 @@ function deleteComment($commentId) {
     }
 }
 
+/**
+ * Adds a new code snippet to a lesson.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @param string $language The programming language of the code.
+ * @param string $code The code content.
+ * @return int|false The ID of the new code snippet, or false on failure.
+ */
 function addCode($lessonId, $language, $code) {
     try {
         $db = connectDB();
         $stmt = $db->prepare("INSERT INTO codes (lesson_id, language, code) VALUES (:lesson_id, :language, :code)");
         $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
-        $stmt->bindParam(':language', $language, PDO::PARAM_STR);
+        $stmt->bindParam(':language', $language, PDO::PARAM_STR); // Added this line
         $stmt->bindParam(':code', $code, PDO::PARAM_STR);
         $stmt->execute();
         return $db->lastInsertId();
@@ -194,6 +179,12 @@ function addCode($lessonId, $language, $code) {
     }
 }
 
+/**
+ * Retrieves code snippets for a given lesson ID.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @return array An array of code snippets.
+ */
 function getCodes($lessonId) {
     try {
         $db = connectDB();
@@ -207,6 +198,12 @@ function getCodes($lessonId) {
     }
 }
 
+/**
+ * Deletes a code snippet by its ID.
+ *
+ * @param int $codeId The ID of the code snippet.
+ * @return bool True on success, false on failure.
+ */
 function deleteCode($codeId) {
     try {
         $db = connectDB();
@@ -219,7 +216,13 @@ function deleteCode($codeId) {
     }
 }
 
-// إضافة دالة لتحديث حالة الدرس
+/**
+ * Updates the status of a lesson.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @param string $status The new status of the lesson.
+ * @return bool True on success, false on failure.
+ */
 function updateLessonStatus($lessonId, $status) {
     try {
         $db = connectDB();
@@ -233,33 +236,38 @@ function updateLessonStatus($lessonId, $status) {
     }
 }
 
-// إضافة دالة للحصول على إحصائيات الدروس
+/**
+ * Retrieves statistics for a course.
+ *
+ * @param int $courseId The ID of the course.
+ * @return array An associative array containing course statistics.
+ */
 function getCourseStatistics($courseId) {
     try {
         $db = connectDB();
 
-        // إجمالي الدروس
+        // Total lessons
         $stmt = $db->prepare("SELECT COUNT(*) as total_lessons FROM lessons WHERE course_id = :course_id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $totalLessons = $stmt->fetch(PDO::FETCH_ASSOC)['total_lessons'];
 
-        // الدروس المكتملة
+        // Completed lessons
         $stmt = $db->prepare("SELECT COUNT(*) as completed_lessons FROM lessons WHERE course_id = :course_id AND status = 'completed'");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $completedLessons = $stmt->fetch(PDO::FETCH_ASSOC)['completed_lessons'];
 
-        // الدروس غير المكتملة
+        // Incomplete lessons
         $incompleteLessons = $totalLessons - $completedLessons;
 
-        // الحالات
+        // Statuses
         $stmt = $db->prepare("SELECT DISTINCT status FROM lessons WHERE course_id = :course_id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         $statuses = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-        // الأقسام
+        // Sections
         $stmt = $db->prepare("SELECT DISTINCT s.name FROM sections s JOIN lessons l ON s.id = l.section_id WHERE l.course_id = :course_id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
@@ -281,6 +289,136 @@ function getCourseStatistics($courseId) {
             'statuses' => [],
             'sections' => []
         ];
+    }
+}
+
+/**
+ * Toggles the view status of a lesson (e.g., watched or not watched).
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @return array An associative array containing the result of the operation.
+ */
+function toggleLessonViewStatus($lessonId) {
+    try {
+        $db = connectDB();
+
+        // Get current views
+        $stmt = $db->prepare("SELECT views FROM lessons WHERE id = :lesson_id");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        $currentViews = $stmt->fetchColumn();
+
+        // Toggle views between 0 and 1
+        $newViews = $currentViews == 0 ? 1 : 0;
+
+        // Update views
+        $stmt = $db->prepare("UPDATE lessons SET views = :views WHERE id = :lesson_id");
+        $stmt->bindParam(':views', $newViews, PDO::PARAM_INT);
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return [
+            'success' => true,
+            'new_views' => $newViews
+        ];
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "toggleLessonViewStatus error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return [
+            'success' => false,
+            'error' => $e->getMessage()
+        ];
+    }
+}
+
+/**
+ * Retrieves the name of a language by its ID.
+ *
+ * @param int $languageId The ID of the language.
+ * @return string The name of the language.
+ */
+function getLanguageName($languageId) {
+    $db = connectDB();
+    $stmt = $db->prepare("SELECT name FROM tags WHERE id = :language_id");
+    $stmt->bindParam(':language_id', $languageId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
+
+/**
+ * Retrieves the name of a section by its ID.
+ *
+ * @param int $sectionId The ID of the section.
+ * @return string The name of the section.
+ */
+function getSectionName($sectionId) {
+    $db = connectDB();
+    $stmt = $db->prepare("SELECT name FROM sections WHERE id = :section_id");
+    $stmt->bindParam(':section_id', $sectionId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
+
+/**
+ * Retrieves all sections.
+ *
+ * @return array An array of sections with their IDs and names.
+ */
+function getAllSections() {
+    $db = connectDB();
+    $stmt = $db->prepare("SELECT id, name FROM sections");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Updates the section of a lesson.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @param int $sectionId The ID of the new section.
+ * @return bool True on success, false on failure.
+ */
+function updateLessonSection($lessonId, $sectionId) {
+    $db = connectDB();
+    $stmt = $db->prepare("UPDATE lessons SET section_id = :section_id WHERE id = :lesson_id");
+    $stmt->bindParam(':section_id', $sectionId, PDO::PARAM_INT);
+    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+/**
+ * Updates the tags of a lesson.
+ *
+ * @param int $lessonId The ID of the lesson.
+ * @param string $tags The new tags for the lesson.
+ * @return bool True on success, false on failure.
+ */
+function updateLessonTags($lessonId, $tags) {
+    $db = connectDB();
+    $stmt = $db->prepare("UPDATE lessons SET section_tags = :section_tags WHERE id = :lesson_id");
+    $stmt->bindParam(':section_tags', $tags, PDO::PARAM_STR);
+    $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+/**
+ * Gets the label for a given status code.
+ *
+ * @param string $status The status code.
+ * @return string The label for the status.
+ */
+function getStatusLabel($status) {
+    switch ($status) {
+        case 'completed': return 'مكتمل';
+        case 'watch': return 'مشاهدة';
+        case 'problem': return 'مشكلة';
+        case 'discussion': return 'نقاش';
+        case 'search': return 'بحث';
+        case 'retry': return 'إعادة';
+        case 'retry_again': return 'إعادة مرة أخرى';
+        case 'review': return 'مراجعة';
+        case 'excluded': return 'مستبعد';
+        case 'project': return 'مشروع';
+        default: return 'غير محدد';
     }
 }
 ?>

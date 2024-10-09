@@ -56201,3 +56201,2673 @@ Request: Array
     [lesson_id] => 11
 )
 
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => discussion
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => discussion
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => discussion
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => discussion
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 11
+    [status] => review
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => review
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => review
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => review
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => review
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 11
+    [status] => retry
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => retry
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => retry
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => retry
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => retry
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 11
+    [status] => completed
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => completed
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 11
+    [status] => search
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 11
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 12
+)
+
+)
+
+Course ID: 1
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => completed
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 12
+    [status] => problem
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => get_playlist
+    [course_id] => 1
+)
+
+Course ID: 1
+Request: Array
+(
+    [action] => get_comments
+    [lesson_id] => 12
+)
+
+getPlaylistItems result: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => problem
+            [views] => 1
+        )
+
+)
+
+Playlist Items: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [title] => 1- Reactjs | welcome, welcome
+            [status] => discussion
+            [views] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 2
+            [title] => 2- Reactjs | Install
+            [status] => completed
+            [views] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [title] => 3- Reactjs | Structure Files
+            [status] => active
+            [views] => 0
+        )
+
+    [3] => Array
+        (
+            [id] => 4
+            [title] => 4- Reactjs | How To Working ?
+            [status] => completed
+            [views] => 0
+        )
+
+    [4] => Array
+        (
+            [id] => 5
+            [title] => 5-  Real DOM vs Virtual DOM
+            [status] => completed
+            [views] => 1
+        )
+
+    [5] => Array
+        (
+            [id] => 6
+            [title] => 6- Reactjs Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [6] => Array
+        (
+            [id] => 7
+            [title] => 7- Reactjs |  Vite vs CRA
+            [status] => completed
+            [views] => 0
+        )
+
+    [7] => Array
+        (
+            [id] => 8
+            [title] => 8-  State & Props in Class Components
+            [status] => completed
+            [views] => 0
+        )
+
+    [8] => Array
+        (
+            [id] => 9
+            [title] => 9- Reactjs | Practical State and Props in Class Components
+            [status] => active
+            [views] => 0
+        )
+
+    [9] => Array
+        (
+            [id] => 10
+            [title] => 10-  Reactjs | Function Component
+            [status] => active
+            [views] => 0
+        )
+
+    [10] => Array
+        (
+            [id] => 11
+            [title] => 11-Reactjs | Props In Function Components
+            [status] => search
+            [views] => 1
+        )
+
+    [11] => Array
+        (
+            [id] => 12
+            [title] => 15 -Reactjs | Practical Use State
+            [status] => problem
+            [views] => 1
+        )
+
+)
+
+Request: Array
+(
+    [action] => get_codes
+    [lesson_id] => 12
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 3
+    [status] => completed
+    [course_id] => 1
+)
+
+Request: Array
+(
+    [action] => change_lesson_status
+    [lesson_id] => 1
+    [status] => completed
+    [course_id] => 1
+)
+

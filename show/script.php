@@ -1,8 +1,11 @@
+<!-- Include this script at the end of your HTML body -->
 <script>
+// Wait for the document to be ready
 $(document).ready(function() {
+    // Get the lesson ID from PHP
     const lessonId = <?php echo $lessonId; ?>;
 
-    // إعدادات Toast
+    // Toast settings for notifications
     toastr.options = {
         "closeButton": true,
         "progressBar": true,
@@ -10,7 +13,7 @@ $(document).ready(function() {
         "timeOut": "3000"
     };
 
-    // تهيئة محرر النصوص المتقدم TinyMCE
+    // Initialize TinyMCE editor for the comment textarea
     tinymce.init({
         selector: '#comment',
         height: 300,
@@ -51,32 +54,44 @@ $(document).ready(function() {
         }
     });
 
-    // دالة لإضافة عناصر لقائمة التشغيل
-function addPlaylistItem(title, lessonId, isActive, isCompleted) {
-    const activeClass = isActive ? 'active' : '';
-    const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
-    const checkedAttribute = isCompleted ? 'checked' : '';
-    const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
-    
-    $('#playlist').append(`
-        <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
-            <div class="form-check">
-                <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
-                <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
-                    ${title}
-                </label>
-            </div>
-        </li>
-    `);
-}
-    // دالة لإضافة تعليق
+    /**
+     * Function to add a playlist item to the playlist
+     * @param {string} title - The title of the lesson
+     * @param {number} lessonId - The ID of the lesson
+     * @param {boolean} isActive - Whether the lesson is currently active
+     * @param {boolean} isCompleted - Whether the lesson is completed
+     */
+    function addPlaylistItem(title, lessonId, isActive, isCompleted) {
+        const activeClass = isActive ? 'active' : '';
+        const completedStyle = isCompleted ? 'text-decoration: line-through; font-weight: bold;' : '';
+        const checkedAttribute = isCompleted ? 'checked' : '';
+        const listItemStyle = isCompleted ? 'background: #aaccff;' : '';
+
+        $('#playlist').append(`
+            <li class="list-group-item cursor-pointer ${activeClass}" data-lesson-id="${lessonId}" style="${listItemStyle}">
+                <div class="form-check">
+                    <input class="form-check-input mark-complete" type="checkbox" id="lesson-${lessonId}" ${checkedAttribute}>
+                    <label class="form-check-label" for="lesson-${lessonId}" style="${completedStyle}">
+                        ${title}
+                    </label>
+                </div>
+            </li>
+        `);
+    }
+
+    /**
+     * Function to add a comment to the comments section
+     * @param {number} commentId - The ID of the comment
+     * @param {string} comment - The content of the comment
+     * @param {string} date - The date of the comment
+     */
     function addComment(commentId, comment, date) {
-        const profileImage = 'https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=fIm0Nwlrgv0Q7kNvgGFLynt&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=ASCqegk3pc-tq9ltJpTyXnH&oh=00_AYCitUEnER18EVOGKoI2ZgBnYZA45dA7iKjvzif06hReHA&oe=67094A7A';
+        const profileImage = 'path/to/default/profile/image.jpg'; // Replace with actual image path
         $('#comments').prepend(`
             <div class="comment-card" data-comment-id="${commentId}">
                 <img src="${profileImage}" alt="Profile" class="comment-image">
                 <div class="comment-content">
-                    <p class="comment-author">اسم المستخدم</p>
+                    <p class="comment-author">User Name</p>
                     <p class="comment-text">${comment}</p>
                     <small class="comment-date">${date}</small>
                 </div>
@@ -85,7 +100,12 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
         `);
     }
 
-    // دالة لإضافة كود برمجي
+    /**
+     * Function to add a code example to the code examples section
+     * @param {number} codeId - The ID of the code snippet
+     * @param {string} language - The programming language of the code
+     * @param {string} code - The code content
+     */
     function addCodeExample(codeId, language, code) {
         const codeElementId = 'code-' + codeId;
         $('#codeExamples').append(`
@@ -93,13 +113,15 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
                 <h4 class="text-lg font-semibold mb-2 text-white">${language}</h4>
                 <pre><code class="language-${language}" id="${codeElementId}">${code}</code></pre>
                 <button class="btn btn-primary btn-sm copy-code mt-2"><i class="fas fa-copy"></i> نسخ الكود</button>
-                <button class="btn btn-danger btn-sm delete-code mt-2"><i class="fas fa-trash-alt"></i></button>
             </div>
         `);
         hljs.highlightElement(document.getElementById(codeElementId));
     }
 
-    // تحديث الإحصائيات
+    /**
+     * Function to update the playlist statistics
+     * @param {object} statistics - The statistics object
+     */
     function updateStatistics(statistics) {
         $('#playlistStatistics').html(`
             <p><strong>الدروس المكتملة:</strong> ${statistics.completed_lessons}</p>
@@ -109,7 +131,7 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
         `);
     }
 
-    // جلب قائمة التشغيل
+    // Fetch playlist items via AJAX
     $.ajax({
         url: 'show/ajax_handler.php',
         method: 'GET',
@@ -121,7 +143,7 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
                 response.playlistItems.forEach(item => {
                     addPlaylistItem(item.title, item.id, item.id == lessonId, item.status === 'completed');
                 });
-                // تحديث الإحصائيات
+                // Update statistics
                 updateStatistics(response.statistics);
             } else {
                 console.log('No playlist items returned or error occurred');
@@ -135,79 +157,79 @@ function addPlaylistItem(title, lessonId, isActive, isCompleted) {
         }
     });
 
-    // التعامل مع النقر على عناصر قائمة التشغيل
+    // Handle click on playlist items
     $('#playlist').on('click', 'li', function(e) {
         if ($(e.target).is('.mark-complete')) return;
         const clickedLessonId = $(this).data('lesson-id');
         window.location.href = `show.php?lesson_id=${clickedLessonId}`;
     });
 
-    // تحديث حالة الدرس عند تغيير الشيك بوكس
-$('#playlist').on('change', '.mark-complete', function(e) {
-    e.stopPropagation();
-    const lessonId = $(this).closest('li').data('lesson-id');
-    const isCompleted = $(this).is(':checked');
-    const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
-    // إرسال طلب AJAX لتحديث حالة الدرس
-    $.ajax({
-        url: 'show/ajax_handler.php',
-        method: 'POST',
-        data: { 
-            action: 'change_lesson_status', 
-            lesson_id: lessonId, 
-            status: isCompleted ? 'completed' : 'active',
-            course_id: courseId
-        },
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response:', response);
-            if (response.success) {
-                const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
-                const label = listItem.find('.form-check-label');
-                if (isCompleted) {
-                    label.css({
-                        'text-decoration': 'line-through',
-                        'font-weight': 'bold'
-                    });
-                    listItem.css('background', '#aaccff');
+    // Update lesson status when checkbox is changed
+    $('#playlist').on('change', '.mark-complete', function(e) {
+        e.stopPropagation();
+        const lessonId = $(this).closest('li').data('lesson-id');
+        const isCompleted = $(this).is(':checked');
+        const courseId = <?php echo isset($courseId) ? $courseId : 0; ?>;
+        // Send AJAX request to update lesson status
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { 
+                action: 'change_lesson_status', 
+                lesson_id: lessonId, 
+                status: isCompleted ? 'completed' : 'active',
+                course_id: courseId
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log('Response:', response);
+                if (response.success) {
+                    const listItem = $(`#playlist li[data-lesson-id="${lessonId}"]`);
+                    const label = listItem.find('.form-check-label');
+                    if (isCompleted) {
+                        label.css({
+                            'text-decoration': 'line-through',
+                            'font-weight': 'bold'
+                        });
+                        listItem.css('background', '#aaccff');
+                    } else {
+                        label.css({
+                            'text-decoration': 'none',
+                            'font-weight': 'normal'
+                        });
+                        listItem.css('background', '');
+                    }
+                    toastr.success('تم تحديث حالة الدرس بنجاح');
+                    updateStatistics(response.statistics);
                 } else {
-                    label.css({
-                        'text-decoration': 'none',
-                        'font-weight': 'normal'
-                    });
-                    listItem.css('background', '');
+                    toastr.error('خطأ في تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
                 }
-                toastr.success('تم تحديث حالة الدرس بنجاح');
-                updateStatistics(response.statistics);
-            } else {
-                toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                console.log('Response Text:', jqXHR.responseText);
+                toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('AJAX Error:', textStatus, errorThrown);
-            console.log('Response Text:', jqXHR.responseText);
-            toastr.error('حدث خطأ أثناء تحديث حالة الدرس');
-        }
+        });
     });
-});
 
-
- $('#commentForm').submit(function(e) {
+    // Handle comment form submission
+    $('#commentForm').submit(function(e) {
         e.preventDefault();
         const comment = tinymce.get('comment').getContent();
 
-        // التحقق من صحة البيانات
+        // Validate input
         if (comment.trim() === '') {
             Swal.fire({
                 title: 'خطأ!',
                 text: 'يرجى كتابة تعليق قبل الإرسال.',
                 icon: 'error',
-                confirmButtonText: 'حسناً'
+                confirmButtonText: 'موافق'
             });
             return;
         }
 
-        // إرسال التعليق إلى الخادم
+        // Send comment to server
         $.ajax({
             url: 'show/ajax_handler.php',
             method: 'POST',
@@ -220,7 +242,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
                     toastr.success('تم إضافة التعليق بنجاح');
                     tinymce.get('comment').setContent('');
                 } else {
-                    toastr.error('حدث خطأ أثناء إضافة التعليق');
+                    toastr.error('خطأ في إضافة التعليق');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -231,24 +253,24 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         });
     });
 
-    // التعامل مع إرسال نموذج الكود
+    // Handle code form submission
     $('#codeForm').submit(function(e) {
         e.preventDefault();
         const language = $('#language').val();
         const code = $('#code').val();
 
-        // التحقق من صحة البيانات
+        // Validate input
         if (code.trim() === '') {
             Swal.fire({
                 title: 'خطأ!',
-                text: 'يرجى كتابة الكود قبل الإرسال.',
+                text: 'يرجى إدخال الكود قبل الإرسال.',
                 icon: 'error',
-                confirmButtonText: 'حسناً'
+                confirmButtonText: 'موافق'
             });
             return;
         }
 
-        // إرسال الكود إلى الخادم
+        // Send code to server
         $.ajax({
             url: 'show/ajax_handler.php',
             method: 'POST',
@@ -261,7 +283,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
                     toastr.success('تم إضافة الكود بنجاح');
                     $('#codeForm')[0].reset();
                 } else {
-                    toastr.error('حدث خطأ أثناء إضافة الكود');
+                    toastr.error('خطأ في إضافة الكود');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -272,7 +294,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         });
     });
 
-    // جلب التعليقات الحالية
+    // Fetch existing comments via AJAX
     $.ajax({
         url: 'show/ajax_handler.php',
         method: 'GET',
@@ -295,7 +317,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     });
 
-    // جلب الأكواد الحالية
+    // Fetch existing codes via AJAX
     $.ajax({
         url: 'show/ajax_handler.php',
         method: 'GET',
@@ -318,21 +340,21 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     });
 
-    // حذف التعليق
+    // Delete comment event handler
     $('#comments').on('click', '.delete-comment', function() {
         const commentCard = $(this).closest('.comment-card');
         const commentId = commentCard.data('comment-id');
 
         Swal.fire({
             title: 'هل أنت متأكد؟',
-            text: "سيتم حذف التعليق نهائياً!",
+            text: "سيتم حذف هذا التعليق نهائياً!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'نعم، احذفه',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
-                // إرسال طلب الحذف إلى الخادم
+                // Send delete request to server
                 $.ajax({
                     url: 'show/ajax_handler.php',
                     method: 'POST',
@@ -343,7 +365,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
                             commentCard.remove();
                             toastr.success('تم حذف التعليق بنجاح');
                         } else {
-                            toastr.error('حدث خطأ أثناء حذف التعليق');
+                            toastr.error('خطأ في حذف التعليق');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -356,21 +378,21 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         });
     });
 
-    // حذف الكود
+    // Delete code event handler
     $('#codeExamples').on('click', '.delete-code', function() {
         const codeBlock = $(this).closest('.code-block');
         const codeId = codeBlock.data('code-id');
 
         Swal.fire({
             title: 'هل أنت متأكد؟',
-            text: "سيتم حذف الكود نهائياً!",
+            text: "سيتم حذف هذا الكود نهائياً!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'نعم، احذفه',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
-                // إرسال طلب الحذف إلى الخادم
+                // Send delete request to server
                 $.ajax({
                     url: 'show/ajax_handler.php',
                     method: 'POST',
@@ -381,7 +403,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
                             codeBlock.remove();
                             toastr.success('تم حذف الكود بنجاح');
                         } else {
-                            toastr.error('حدث خطأ أثناء حذف الكود');
+                            toastr.error('خطأ في حذف الكود');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -394,7 +416,7 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         });
     });
 
-    // نسخ الكود
+    // Copy code event handler
     $('#codeExamples').on('click', '.copy-code', function() {
         const codeBlock = $(this).closest('.code-block');
         const codeId = codeBlock.data('code-id');
@@ -405,31 +427,31 @@ $('#playlist').on('change', '.mark-complete', function(e) {
             toastr.success('تم نسخ الكود إلى الحافظة');
         }).catch(err => {
             console.error('Could not copy text: ', err);
-            toastr.error('حدث خطأ أثناء نسخ الكود');
+            toastr.error('خطأ في نسخ الكود');
         });
     });
 
-    // تبديل عرض نموذج التعليق
+    // Toggle comment form display
     $('#toggleCommentForm').click(function() {
         $('#commentFormContainer').slideToggle();
         $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down');
     });
 
-    // تبديل عرض نموذج الكود
+    // Toggle code form display
     $('#toggleCodeForm').click(function() {
         $('#codeForm').slideToggle();
         $(this).find('i').toggleClass('fa-chevron-up fa-chevron-down');
     });
 
-    // تفعيل زر تبديل الشريط الجانبي
+    // Activate sidebar toggle
     $('#sidebarToggle').click(function(e) {
-        e.stopPropagation(); // منع انتشار الحدث
+        e.stopPropagation(); // Prevent event propagation
         $('.sidebar').toggleClass('open');
         $('#sidebarToggle').toggleClass('open');
         $('body').toggleClass('sidebar-open');
     });
 
-    // إغلاق الشريط الجانبي عند النقر خارجه
+    // Close sidebar when clicking outside
     $(document).click(function(event) {
         if (!$(event.target).closest('.sidebar, #sidebarToggle').length) {
             $('.sidebar').removeClass('open');
@@ -438,24 +460,16 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     });
 
-    // منع إغلاق الشريط الجانبي عند النقر داخله
+    // Prevent closing sidebar when clicking inside it
     $('.sidebar').click(function(event) {
         event.stopPropagation();
     });
 
-    // تحديث الإحصائيات
-    function updateStatistics(statistics) {
-        $('#playlistStatistics').html(`
-            <p><strong>الدروس المكتملة:</strong> ${statistics.completed_lessons}</p>
-            <p><strong>الدروس غير المكتملة:</strong> ${statistics.incomplete_lessons}</p>
-            <p><strong>الحالات:</strong> ${statistics.statuses.join(', ')}</p>
-            <p><strong>الأقسام:</strong> ${statistics.sections.join(', ')}</p>
-        `);
-    }
-
-    // Add these new functions and event listeners
-
-    // Function to get status badge class
+    /**
+     * Function to get the badge class for a status
+     * @param {string} status - The status of the lesson
+     * @returns {string} - The badge class
+     */
     function getStatusBadgeClass(status) {
         switch (status) {
             case 'completed': return 'bg-success';
@@ -472,7 +486,11 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     }
 
-    // Function to get status label
+    /**
+     * Function to get the status label
+     * @param {string} status - The status of the lesson
+     * @returns {string} - The label for the status
+     */
     function getStatusLabel(status) {
         switch (status) {
             case 'completed': return 'مكتمل';
@@ -481,15 +499,19 @@ $('#playlist').on('change', '.mark-complete', function(e) {
             case 'discussion': return 'نقاش';
             case 'search': return 'بحث';
             case 'retry': return 'إعادة';
-            case 'retry_again': return 'إعادة ثانية';
+            case 'retry_again': return 'إعادة مرة أخرى';
             case 'review': return 'مراجعة';
             case 'excluded': return 'مستبعد';
-            case 'project': return 'مشروع تطبيقي';
+            case 'project': return 'مشروع';
             default: return 'غير محدد';
         }
     }
 
-    // Function to get status color
+    /**
+     * Function to get the color for a status
+     * @param {string} status - The status of the lesson
+     * @returns {string} - The color code for the status
+     */
     function getStatusColor(status) {
         switch (status) {
             case 'completed': return '#28a745';
@@ -506,7 +528,9 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         }
     }
 
-    // Function to populate status modal
+    /**
+     * Function to populate the status modal with options
+     */
     function populateStatusModal() {
         const statuses = ['watch', 'problem', 'discussion', 'search', 'retry', 'retry_again', 'review', 'completed', 'excluded', 'project'];
         let html = `
@@ -557,15 +581,15 @@ $('#playlist').on('change', '.mark-complete', function(e) {
             success: function(response) {
                 if (response.success) {
                     // Update the status display in the UI
-                    $('#lessonTags').text(getStatusLabel(newStatus));
-                    $('#lessonTags').removeClass().addClass(`badge ${getStatusBadgeClass(newStatus)}`);
+                    $('#lessonStatus').text(getStatusLabel(newStatus));
+                    $('#lessonStatus').removeClass().addClass(`badge ${getStatusBadgeClass(newStatus)}`);
                     
                     // Update statistics
                     updateStatistics(response.statistics);
                     
                     toastr.success('تم تحديث حالة الدرس بنجاح');
                 } else {
-                    toastr.error('حدث خطأ أثناء تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
+                    toastr.error('فشل في تحديث حالة الدرس: ' + (response.error || 'خطأ غير معروف'));
                 }
                 $('#statusModal').hide();
             },
@@ -583,6 +607,68 @@ $('#playlist').on('change', '.mark-complete', function(e) {
         if (event.target == $('#statusModal')[0]) {
             $('#statusModal').hide();
         }
+    });
+
+    // Event listener for changing section
+    $('#changeSection').click(function() {
+        $('#sectionModal').modal('show');
+    });
+
+    // Handle section form submission
+    $('#sectionForm').submit(function(e) {
+        e.preventDefault();
+        const lessonId = $('#changeSection').data('lesson-id');
+        const sectionId = $('#sectionSelect').val();
+
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { action: 'update_section', lesson_id: lessonId, section_id: sectionId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#lessonSection').text(response.section_name);
+                    toastr.success('تم تحديث القسم بنجاح');
+                    $('#sectionModal').modal('hide');
+                } else {
+                    toastr.error('خطأ في تحديث القسم: ' + (response.error || 'خطأ غير معروف'));
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                toastr.error('حدث خطأ أثناء تحديث القسم');
+            }
+        });
+    });
+
+    // Event listener for changing tags
+    $('#changeTags').click(function() {
+        $('#tagModal').modal('show');
+    });
+
+    // Handle tag form submission
+    $('#tagForm').submit(function(e) {
+        e.preventDefault();
+        const lessonId = $('#changeTags').data('lesson-id');
+        const tags = $('#tagInput').val();
+
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'POST',
+            data: { action: 'update_tags', lesson_id: lessonId, section_tags: tags },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#lessonTags').text(tags);
+                    toastr.success('تم تحديث التصنيفات بنجاح');
+                    $('#tagModal').modal('hide');
+                } else {
+                    toastr.error('خطأ في تحديث التصنيفات: ' + (response.error || 'خطأ غير معروف'));
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                toastr.error('حدث خطأ أثناء تحديث التصنيفات');
+            }
+        });
     });
 
 });
