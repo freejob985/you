@@ -1,18 +1,15 @@
 <?php
 
-// دالة للحصول على معلومات قائمة التشغيل من YouTube API
+// Remove or comment out the following functions if they're already defined in index/php.php
+/*
 function getPlaylistItems($playlistId, $apiKey) {
-    $url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={$playlistId}&key={$apiKey}";
-    $response = file_get_contents($url);
-    return json_decode($response, true);
+    // ... (remove this function)
 }
 
-// دالة للحصول على تفاصيل الفيديو من YouTube API
 function getVideoDetails($videoId, $apiKey) {
-    $url = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id={$videoId}&key={$apiKey}";
-    $response = file_get_contents($url);
-    return json_decode($response, true);
+    // ... (remove this function)
 }
+*/
 
 // دالة لتحويل مدة الفيديو من صيغة ISO 8601 إلى صيغة قابلة للقراءة
 function formatDuration($duration) {
@@ -135,12 +132,6 @@ function isValidYoutubeUrl($url) {
     return preg_match($pattern, $url) === 1;
 }
 
-// دالة للحصول على جميع اللغات
-function getLanguages($db) {
-    $stmt = $db->query("SELECT * FROM tags ORDER BY name");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
 // دالة لإضافة لغة جديدة
 function addLanguage($db, $languageName) {
     $stmt = $db->prepare("INSERT INTO tags (name) VALUES (?)");
@@ -154,6 +145,20 @@ function addSectionsToLanguage($db, $languageId, $sectionNames) {
     foreach ($sectionNames as $sectionName) {
         $stmt->execute([$languageId, $sectionName]);
     }
+}
+
+// Add this new function at the end of the file
+function initializeLogging() {
+    // Set up error logging
+    ini_set('log_errors', 1);
+    ini_set('error_log', 'debug.log');
+    
+    // You can add more logging initialization here if needed
+    // For example, setting the error reporting level:
+    error_reporting(E_ALL);
+    
+    // Or starting a session if it's used in your application:
+    // session_start();
 }
 
 ?>

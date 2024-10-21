@@ -108,15 +108,28 @@ $db->exec('CREATE TABLE IF NOT EXISTS codes (
 $db->exec('DROP TABLE IF EXISTS languages');
 
 function getPlaylistItems($playlistId, $apiKey) {
-    $url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={$playlistId}&key={$apiKey}";
+    $allItems = [];
+    $nextPageToken = '';
     
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($ch);
-    curl_close($ch);
+    do {
+        $url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={$playlistId}&key={$apiKey}&pageToken={$nextPageToken}";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-    return json_decode($response, true);
+        $data = json_decode($response, true);
+        
+        if (isset($data['items'])) {
+            $allItems = array_merge($allItems, $data['items']);
+        }
+        
+        $nextPageToken = isset($data['nextPageToken']) ? $data['nextPageToken'] : '';
+    } while ($nextPageToken !== '');
+
+    return ['items' => $allItems];
 }
 
 function getVideoDetails($videoId, $apiKey) {
@@ -204,7 +217,7 @@ case 'add_sections':
                     foreach ($languageTags as $language) {
                         $languageName = trim($language['value']);
                         if (!empty($languageName)) {
-                            // التحقق من وجود اللغة
+                            // التحقق من وجو اللغة
                             $stmt = $db->prepare('SELECT id FROM tags WHERE name = :name');
                             $stmt->bindValue(':name', $languageName, PDO::PARAM_STR);
                             $stmt->execute();
@@ -293,7 +306,19 @@ case 'add_sections':
                     }
                 }
 
-                // إضافة الكورس إلى قاعدة البيانات
+                // قبل إضافة الكورس، تحقق من وجوده
+                $stmt = $db->prepare('SELECT id FROM courses WHERE title = :title AND language_id = :language_id');
+                $stmt->bindValue(':title', $playlistInfo['title'], PDO::PARAM_STR);
+                $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
+                $stmt->execute();
+                $existingCourse = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($existingCourse) {
+                    echo json_encode(['success' => false, 'message' => 'هذا الكورس موجود بالفعل!']);
+                    exit;
+                }
+
+                // إذا لم يكن الكورس موجودًا، قم بإضافته
                 $stmt = $db->prepare('INSERT INTO courses (title, lessons_count, duration, thumbnail, language_id) VALUES (:title, :lessons_count, :duration, :thumbnail, :language_id)');
                 $stmt->bindValue(':title', $playlistInfo['title'], PDO::PARAM_STR);
                 $stmt->bindValue(':lessons_count', $lessonsCount, PDO::PARAM_INT);
@@ -306,7 +331,8 @@ case 'add_sections':
                     $courseId = $db->lastInsertId();
 
                     // إضافة الدروس إلى قاعدة البيانات
-                    foreach ($playlistItemsResponse['items'] as $item) {
+                    $totalLessons = count($playlistItemsResponse['items']);
+                    foreach ($playlistItemsResponse['items'] as $index => $item) {
                         $videoId = $item['snippet']['resourceId']['videoId'];
                         $title = $item['snippet']['title'];
                         $url = "https://www.youtube.com/watch?v=" . $videoId;
@@ -326,6 +352,12 @@ case 'add_sections':
                         $stmt->bindValue(':language_id', $courseLanguage, PDO::PARAM_INT);
 
                         $stmt->execute();
+
+                        // تحديث التقدم
+                        updateProgress($index + 1, $totalLessons, $title);
+
+                        // تأخير صغير لتجنب تجاوز حد API
+                        usleep(100000); // 0.1 ثانية
                     }
 
                     echo json_encode(['success' => true, 'message' => 'تمت إضافة الكورس بنجاح!']);
@@ -350,3 +382,21 @@ function getLanguages($db) {
         return [];
     }
 }
+
+function getLatestAddedLessons($db, $courseId, $limit = 5) {
+    $stmt = $db->prepare("SELECT title FROM lessons WHERE course_id = ? ORDER BY id DESC LIMIT ?");
+    $stmt->execute([$courseId, $limit]);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+function updateProgress($current, $total, $latestLesson) {
+    $progress = round(($current / $total) * 100, 2);
+    file_put_contents('course_progress.txt', json_encode([
+        'progress' => $progress,
+        'current' => $current,
+        'total' => $total,
+        'latest_lesson' => $latestLesson
+    ]));
+}
+
+

@@ -51,6 +51,10 @@
                             document.getElementById('loadingContainer').style.display = 'none';
                             
                             if (response.success) {
+                                $('#loadingContainer').hide();
+                                $('#progressBar').show();
+                                $('#progressText').text('جاري إضافة الكورس...');
+                                statusCheckInterval = setInterval(checkCourseAdditionStatus, 2000);
                                 Swal.fire('تم!', response.message, 'success');
                                 // Reset the form
                                 document.getElementById('courseForm').reset();
@@ -79,7 +83,7 @@
             text: 'سيتم حذف جميع البيانات بشكل نهائي!',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'نعم، احذف الكل',
+            confirmButtonText: 'نعم، ��حذف الكل',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -184,7 +188,7 @@
                         }
                     });
                 } else {
-                    Swal.fire('تنبيه!', response.message, 'warning');
+                    Swal.fire('تنبه!', response.message, 'warning');
                 }
             },
             error: function(xhr, status, error) {
@@ -227,4 +231,32 @@
 
     // Call updateLanguageSelect on page load
     updateLanguageSelect();
+
+    // دالة للتحقق من حالة إضافة الكورس وتحديث شريط التقدم
+    function checkCourseAdditionStatus() {
+        $.ajax({
+            url: 'check_course_status.php',
+            method: 'GET',
+            success: function(response) {
+                if (response.status === 'completed') {
+                    Swal.fire('تم!', response.message, 'success');
+                    clearInterval(statusCheckInterval);
+                    $('#progressBar').hide();
+                    $('#progressText').text('');
+                } else if (response.status === 'in_progress') {
+                    $('#progressBar').show();
+                    $('#progressBar .progress-bar').css('width', response.progress + '%').attr('aria-valuenow', response.progress);
+                    $('#progressText').text('جاري إضافة الدرس ' + response.current + ' من ' + response.total + ': ' + response.latest_lesson);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // بدء التحقق كل 2 ثانية
+    var statusCheckInterval;
+
 </script>
+

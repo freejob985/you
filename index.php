@@ -1,12 +1,17 @@
 <?php
 // تضمين ملف api_functions.php
 require_once 'index/php.php';
+require_once 'index/helper_functions.php';
+
+// تهيئة نظام التسجيل
+initializeLogging();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <?php
-// تضمين ملف api_functions.php
+// تضمين ملف header.php
 require_once 'index/header.php';
 ?>
 <body class="bg-light">
@@ -35,7 +40,6 @@ require_once 'index/header.php';
                                     ?>
                                 </select>
                             </div>
-                            <!-- حذف حقل تاجات الكورس -->
                             <button type="submit" class="btn btn-primary w-100">إضافة الكورس</button>
                         </form>
                         <div id="loadingContainer" class="mt-3 text-center" style="display: none;">
@@ -134,8 +138,87 @@ require_once 'index/header.php';
         </div>
     </div>
 
+    <div id="progressBar" class="progress mt-3" style="display: none;">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div id="progressText" class="mt-2"></div>
+
+    <script>
+        // Initialize Tagify
+        var sectionsInput = document.querySelector('input[name=sectionsTags]');
+        new Tagify(sectionsInput);
+
+        var languageInput = document.querySelector('input[name=languageTags]');
+        new Tagify(languageInput);
+        var courseTagsInput = new Tagify(document.getElementById('courseTags'));
+
+        // Course form submission
+        document.getElementById('courseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const courseLink = document.getElementById('courseLink').value;
+            const courseLanguage = document.getElementById('courseLanguage').value;
+            
+            if (courseLink && courseLanguage) {
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: 'هل تريد إضافة هذا الكورس؟',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، أضف الكورس',
+                    cancelButtonText: 'إلغاء'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading animation
+                        document.getElementById('loadingContainer').style.display = 'block';
+                        
+                        // Send data to server
+                        $.ajax({
+                            url: '',
+                            method: 'POST',
+                            data: {
+                                courseLink: courseLink,
+                                courseLanguage: courseLanguage
+                            },
+                            success: function(response) {
+                                // Hide loading animation
+                                document.getElementById('loadingContainer').style.display = 'none';
+                                
+                                console.log('Server response:', response); // Log the raw response
+                                
+                                try {
+                                    const result = JSON.parse(response);
+                                    console.log('Parsed result:', result); // Log the parsed result
+                                    if (result.success) {
+                                        Swal.fire('تم!', result.message, 'success');
+                                        // Reset the form
+                                        document.getElementById('courseForm').reset();
+                                    } else {
+                                        Swal.fire('خطأ!', result.message || 'حدث خطأ غير معروف', 'error');
+                                    }
+                                } catch (error) {
+                                    console.error('Error parsing JSON:', error);
+                                    Swal.fire('خطأ!', 'حدث خطأ أثناء معالجة الاستجابة: ' + response, 'error');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Hide loading animation
+                                document.getElementById('loadingContainer').style.display = 'none';
+                                console.error('AJAX Error:', status, error);
+                                console.log('Response Text:', xhr.responseText);
+                                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس: ' + error, 'error');
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
+            }
+        });
+    </script>
+
 <?php
-// تضمين ملف api_functions.php
+// تضمين ملف footer.php
 require_once 'index/footer.php';
 ?>
 
