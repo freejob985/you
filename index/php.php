@@ -354,7 +354,7 @@ case 'add_sections':
                         $stmt->execute();
 
                         // تحديث التقدم
-                        updateProgress($index + 1, $totalLessons, $title);
+                        updateProgress($index + 1, $totalLessons, $title, $playlistInfo['title']);
 
                         // تأخير صغير لتجنب تجاوز حد API
                         usleep(100000); // 0.1 ثانية
@@ -389,14 +389,17 @@ function getLatestAddedLessons($db, $courseId, $limit = 5) {
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
-function updateProgress($current, $total, $latestLesson) {
+function updateProgress($current, $total, $latestLesson, $courseTitle) {
     $progress = round(($current / $total) * 100, 2);
     file_put_contents('course_progress.txt', json_encode([
         'progress' => $progress,
         'current' => $current,
         'total' => $total,
-        'latest_lesson' => $latestLesson
+        'latest_lesson' => $latestLesson,
+        'course_title' => $courseTitle
     ]));
 }
+
+
 
 

@@ -9,12 +9,13 @@ if (file_exists('course_progress.txt')) {
             'progress' => $progress['progress'],
             'current' => $progress['current'],
             'total' => $progress['total'],
-            'latest_lesson' => $progress['latest_lesson']
+            'latest_lesson' => $progress['latest_lesson'],
+            'course_title' => $progress['course_title']
         ]);
     } else {
         echo json_encode([
             'status' => 'completed',
-            'message' => 'تم إضافة الكورس بنجاح!'
+            'message' => 'تم إضافة الكورس "' . $progress['course_title'] . '" بنجاح!'
         ]);
         unlink('course_progress.txt');
     }

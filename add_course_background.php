@@ -2,8 +2,10 @@
 require_once 'index/php.php';
 require_once 'index/helper_functions.php';
 
-$playlistId = $argv[1];
-$courseLanguage = $argv[2];
+header('Content-Type: application/json');
+
+$playlistId = $_POST['courseLink'];
+$courseLanguage = $_POST['courseLanguage'];
 $apiKey = "AIzaSyDGPD8_t3EAlU4f_pMOGjECkVQr-p3oRvY"; // استبدل بمفتاح API الخاص بك
 
 try {
@@ -23,8 +25,6 @@ try {
 
     $playlistItemsResponse = getPlaylistItems($playlistId, $apiKey);
     $totalItems = count($playlistItemsResponse['items']);
-    $totalDuration = 0;
-    $lessonsCount = 0;
 
     // إضافة الكورس إلى قاعدة البيانات
     $stmt = $db->prepare('INSERT INTO courses (title, lessons_count, duration, thumbnail, language_id) VALUES (:title, :lessons_count, :duration, :thumbnail, :language_id)');
@@ -36,7 +36,24 @@ try {
     $stmt->execute();
     $courseId = $db->lastInsertId();
 
-    // إضافة الدروس إلى قاعدة البيانات
+    // إعداد ملف التقدم
+    file_put_contents('course_progress.txt', json_encode([
+        'progress' => 0,
+        'current' => 0,
+        'total' => $totalItems,
+        'latest_lesson' => '',
+        'course_title' => $playlistInfo['title']
+    ]));
+
+    // إرسال استجابة النجاح
+    echo json_encode(['success' => true, 'message' => "بدأت عملية إضافة الكورس: " . $playlistInfo['title']]);
+
+    // بدء عملية إضافة الدروس في الخلفية
+    ignore_user_abort(true);
+    set_time_limit(0);
+
+    $totalDuration = 0;
+
     foreach ($playlistItemsResponse['items'] as $index => $item) {
         $videoId = $item['snippet']['resourceId']['videoId'];
         $title = $item['snippet']['title'];
@@ -64,7 +81,8 @@ try {
             'progress' => $progress,
             'current' => $index + 1,
             'total' => $totalItems,
-            'latest_lesson' => $title
+            'latest_lesson' => $title,
+            'course_title' => $playlistInfo['title']
         ]));
 
         // تأخير صغير لتجنب تجاوز حد API
@@ -77,8 +95,15 @@ try {
     $stmt->bindValue(':id', $courseId, PDO::PARAM_INT);
     $stmt->execute();
 
-    // إرسال إشعار بنجاح العملية
-    file_put_contents('course_added_notification.txt', "تم إضافة الكورس بنجاح: " . $playlistInfo['title']);
+    // إنهاء العملية
+    file_put_contents('course_progress.txt', json_encode([
+        'progress' => 100,
+        'current' => $totalItems,
+        'total' => $totalItems,
+        'latest_lesson' => 'تم الانتهاء',
+        'course_title' => $playlistInfo['title']
+    ]));
+
 } catch (Exception $e) {
-    file_put_contents('course_added_notification.txt', "حدث خطأ: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => "حدث خطأ: " . $e->getMessage()]);
 }

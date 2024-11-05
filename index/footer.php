@@ -19,62 +19,90 @@
     var courseTagsInput = new Tagify(document.getElementById('courseTags'));
 
     // Course form submission
-    document.getElementById('courseForm').addEventListener('submit', function(e) {
+    $('#courseForm').submit(function(e) {
         e.preventDefault();
-        
         const courseLink = document.getElementById('courseLink').value;
         const courseLanguage = document.getElementById('courseLanguage').value;
         
         if (courseLink && courseLanguage) {
-            Swal.fire({
-                title: 'هل أنت متأكد؟',
-                text: 'هل تريد إضافة هذا الكورس؟',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'نعم، أضف الكورس',
-                cancelButtonText: 'إلغاء'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Show loading animation
-                    document.getElementById('loadingContainer').style.display = 'block';
-                    
-                    // Send data to server
-                    $.ajax({
-                        url: '',
-                        method: 'POST',
-                        data: {
-                            courseLink: courseLink,
-                            courseLanguage: courseLanguage
-                        },
-                        success: function(response) {
-                            // Hide loading animation
-                            document.getElementById('loadingContainer').style.display = 'none';
-                            
-                            if (response.success) {
-                                $('#loadingContainer').hide();
-                                $('#progressBar').show();
-                                $('#progressText').text('جاري إضافة الكورس...');
-                                statusCheckInterval = setInterval(checkCourseAdditionStatus, 2000);
-                                Swal.fire('تم!', response.message, 'success');
-                                // Reset the form
-                                document.getElementById('courseForm').reset();
-                            } else {
-                                Swal.fire('خطأ!', response.message, 'error');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error:', error);
-                            // Hide loading animation
-                            document.getElementById('loadingContainer').style.display = 'none';
-                            Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس.', 'error');
-                        }
-                    });
-                }
-            });
+            $('#courseForm').hide();
+            $('#progressContainer').show();
+            startCourseAddition(courseLink, courseLanguage);
         } else {
-            Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
+            alert('يرجى ملء جميع الحقول المطلوبة.');
         }
     });
+
+    function startCourseAddition(courseLink, courseLanguage) {
+        $('#courseForm').hide();
+        $('#progressContainer').show();
+        $.ajax({
+            url: 'add_course_background.php',
+            method: 'POST',
+            data: {
+                courseLink: courseLink,
+                courseLanguage: courseLanguage
+            },
+            success: function(response) {
+                console.log('Response:', response);
+                try {
+                    if (typeof response === 'string') {
+                        response = JSON.parse(response);
+                    }
+                    if (response.success) {
+                        statusCheckInterval = setInterval(checkCourseAdditionStatus, 2000);
+                    } else {
+                        Swal.fire('خطأ!', response.message, 'error');
+                        $('#courseForm').show();
+                        $('#progressContainer').hide();
+                    }
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    Swal.fire('خطأ!', 'حدث خطأ أثناء معالجة الاستجابة', 'error');
+                    $('#courseForm').show();
+                    $('#progressContainer').hide();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس', 'error');
+                $('#courseForm').show();
+                $('#progressContainer').hide();
+            }
+        });
+    }
+
+    function checkCourseAdditionStatus() {
+        $.ajax({
+            url: 'check_course_status.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log('Status response:', response);
+                if (response.status === 'completed') {
+                    clearInterval(statusCheckInterval);
+                    updateProgressUI(response);
+                    Swal.fire('تم!', response.message, 'success');
+                    $('#courseForm').show();
+                    $('#progressContainer').hide();
+                } else if (response.status === 'in_progress') {
+                    updateProgressUI(response);
+                } else if (response.status === 'not_started') {
+                    console.log('Course addition not started yet');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function updateProgressUI(data) {
+        $('#progressBar').css('width', data.progress + '%').attr('aria-valuenow', data.progress).text(data.progress + '%');
+        $('#courseTitleText').text(`الكورس: ${data.course_title}`);
+        $('#progressText').text(`جاري إضافة الدرس ${data.current} من ${data.total}`);
+        $('#latestLessonText').text(`آخر درس تمت إضافته: ${data.latest_lesson}`);
+    }
 
     // Delete all data
     document.getElementById('deleteAllData').addEventListener('click', function() {
@@ -83,7 +111,7 @@
             text: 'سيتم حذف جميع البيانات بشكل نهائي!',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'نعم، ��حذف الكل',
+            confirmButtonText: 'نعم، حذف الكل',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -231,29 +259,6 @@
 
     // Call updateLanguageSelect on page load
     updateLanguageSelect();
-
-    // دالة للتحقق من حالة إضافة الكورس وتحديث شريط التقدم
-    function checkCourseAdditionStatus() {
-        $.ajax({
-            url: 'check_course_status.php',
-            method: 'GET',
-            success: function(response) {
-                if (response.status === 'completed') {
-                    Swal.fire('تم!', response.message, 'success');
-                    clearInterval(statusCheckInterval);
-                    $('#progressBar').hide();
-                    $('#progressText').text('');
-                } else if (response.status === 'in_progress') {
-                    $('#progressBar').show();
-                    $('#progressBar .progress-bar').css('width', response.progress + '%').attr('aria-valuenow', response.progress);
-                    $('#progressText').text('جاري إضافة الدرس ' + response.current + ' من ' + response.total + ': ' + response.latest_lesson);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
 
     // بدء التحقق كل 2 ثانية
     var statusCheckInterval;

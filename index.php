@@ -42,25 +42,21 @@ require_once 'index/header.php';
                             </div>
                             <button type="submit" class="btn btn-primary w-100">إضافة الكورس</button>
                         </form>
-                        <div id="loadingContainer" class="mt-3 text-center" style="display: none;">
-                            <svg width="50" height="50" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#007bff">
-                                <g fill="none" fill-rule="evenodd">
-                                    <g transform="translate(1 1)" stroke-width="2">
-                                        <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
-                                        <path d="M36 18c0-9.94-8.06-18-18-18">
-                                            <animateTransform
-                                                attributeName="transform"
-                                                type="rotate"
-                                                from="0 18 18"
-                                                to="360 18 18"
-                                                dur="1s"
-                                                repeatCount="indefinite"/>
-                                        </path>
-                                    </g>
-                                </g>
-                            </svg>
-                            <p class="mt-2">جاري التحميل...</p>
+
+                        <!-- إضافة مساحة بين الزر وشريط التقدم -->
+                        <div class="mt-4"></div>
+
+                        <!-- شريط التقدم والإحصائيات -->
+                        <div id="progressContainer" style="display: none;">
+                            <h5 class="mb-3">تقدم إضافة الكورس</h5>
+                            <div class="progress mb-3">
+                                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                            <p id="courseTitleText" class="mb-2"></p>
+                            <p id="progressText" class="mb-2"></p>
+                            <p id="latestLessonText" class="mb-2"></p>
                         </div>
+
                         <button id="deleteAllData" class="btn btn-danger mt-3 w-100">
                             <i class="fas fa-trash-alt me-2"></i>حذف جميع البيانات
                         </button>
@@ -138,11 +134,6 @@ require_once 'index/header.php';
         </div>
     </div>
 
-    <div id="progressBar" class="progress mt-3" style="display: none;">
-        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-    <div id="progressText" class="mt-2"></div>
-
     <script>
         // Initialize Tagify
         var sectionsInput = document.querySelector('input[name=sectionsTags]');
@@ -160,61 +151,51 @@ require_once 'index/header.php';
             const courseLanguage = document.getElementById('courseLanguage').value;
             
             if (courseLink && courseLanguage) {
-                Swal.fire({
-                    title: 'هل أنت متأكد؟',
-                    text: 'هل تريد إضافة هذا الكورس؟',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'نعم، أضف الكورس',
-                    cancelButtonText: 'إلغاء'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show loading animation
-                        document.getElementById('loadingContainer').style.display = 'block';
-                        
-                        // Send data to server
-                        $.ajax({
-                            url: '',
-                            method: 'POST',
-                            data: {
-                                courseLink: courseLink,
-                                courseLanguage: courseLanguage
-                            },
-                            success: function(response) {
-                                // Hide loading animation
-                                document.getElementById('loadingContainer').style.display = 'none';
-                                
-                                console.log('Server response:', response); // Log the raw response
-                                
-                                try {
-                                    const result = JSON.parse(response);
-                                    console.log('Parsed result:', result); // Log the parsed result
-                                    if (result.success) {
-                                        Swal.fire('تم!', result.message, 'success');
-                                        // Reset the form
-                                        document.getElementById('courseForm').reset();
-                                    } else {
-                                        Swal.fire('خطأ!', result.message || 'حدث خطأ غير معروف', 'error');
-                                    }
-                                } catch (error) {
-                                    console.error('Error parsing JSON:', error);
-                                    Swal.fire('خطأ!', 'حدث خطأ أثناء معالجة الاستجابة: ' + response, 'error');
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                // Hide loading animation
-                                document.getElementById('loadingContainer').style.display = 'none';
-                                console.error('AJAX Error:', status, error);
-                                console.log('Response Text:', xhr.responseText);
-                                Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس: ' + error, 'error');
-                            }
-                        });
-                    }
-                });
+                $('#courseForm').hide();
+                $('#progressContainer').show();
+                startCourseAddition(courseLink, courseLanguage);
             } else {
                 Swal.fire('خطأ!', 'يرجى ملء جميع الحقول المطلوبة.', 'error');
             }
         });
+
+        function startCourseAddition(courseLink, courseLanguage) {
+            $.ajax({
+                url: 'add_course_background.php',
+                method: 'POST',
+                data: {
+                    courseLink: courseLink,
+                    courseLanguage: courseLanguage
+                },
+                success: function(response) {
+                    console.log('Response:', response);
+                    try {
+                        if (typeof response === 'string') {
+                            response = JSON.parse(response);
+                        }
+                        if (response.success) {
+                            statusCheckInterval = setInterval(checkCourseAdditionStatus, 2000);
+                        } else {
+                            Swal.fire('خطأ!', response.message || 'حدث خطأ غير معروف', 'error');
+                            $('#courseForm').show();
+                            $('#progressContainer').hide();
+                        }
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                        Swal.fire('خطأ!', 'حدث خطأ أثناء معالجة الاستجابة: ' + response, 'error');
+                        $('#courseForm').show();
+                        $('#progressContainer').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    console.log('Response Text:', xhr.responseText);
+                    Swal.fire('خطأ!', 'حدث خطأ أثناء إضافة الكورس: ' + error, 'error');
+                    $('#courseForm').show();
+                    $('#progressContainer').hide();
+                }
+            });
+        }
     </script>
 
 <?php

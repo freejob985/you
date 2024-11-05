@@ -48,8 +48,12 @@ $statsQuery = $db->query('
 $stats = $statsQuery->fetch(PDO::FETCH_ASSOC);
 
 // حساب نسبة الإكمال الإجمالية
-$overallCompletionRate = ($stats['completed_lessons'] / $stats['total_lessons']) * 100;
-$remainingLessons = $stats['total_lessons'] - $stats['completed_lessons'];
+$overallCompletionRate = 0;
+$remainingLessons = 0;
+if ($stats['total_lessons'] > 0) {
+    $overallCompletionRate = ($stats['completed_lessons'] / $stats['total_lessons']) * 100;
+    $remainingLessons = $stats['total_lessons'] - $stats['completed_lessons'];
+}
 
 // معالجة طلب AJAX لحذف الكورس
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_course') {
@@ -202,7 +206,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <div class="row">
             <?php foreach ($courses as $course): ?>
                 <?php 
-                    $courseCompletionRate = ($course['completed_lessons'] / $course['total_lessons']) * 100;
+                    $courseCompletionRate = 0;
+                    if ($course['total_lessons'] > 0) {
+                        $courseCompletionRate = ($course['completed_lessons'] / $course['total_lessons']) * 100;
+                    }
                 ?>
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
@@ -249,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <a href="http://localhost/administration/public/"><i class="fas fa-folder"></i> الملفات</a>
             <a href="http://localhost/Columns/"><i class="fas fa-columns"></i> الاعمدة</a>
             <a href="http://localhost/ask/"><i class="fas fa-question-circle"></i> الاسئلة</a>
-            <a href="http://localhost/phpmyadminx/"><i class="fas fa-database"></i> ادارة قواعد البيانات</a>
+            <a href="http://localhost/phpmyadminx/"><i class="fas fa-database"></i> ادارة قواعد البانات</a>
             <a href="http://localhost/pr.php"><i class="fas fa-bug"></i> اصطياد الاخطاء</a>
             <a href="http://localhost/Timmy/"><i class="fas fa-robot"></i> تيمي</a>
             <a href="http://localhost/copy/"><i class="fas fa-clipboard"></i> حافظة الملاحظات</a>
