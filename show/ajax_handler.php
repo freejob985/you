@@ -45,6 +45,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 echo json_encode(['success' => true, 'playlistItems' => $playlistItems, 'statistics' => $statistics]);
                 break;
 
+            case 'get_sections':
+                $lessonId = isset($_GET['lesson_id']) ? intval($_GET['lesson_id']) : 0;
+                try {
+                    $db = connectDB();
+                    
+                    // الحصول على language_id والأقسام الحالية للدرس
+                    $stmt = $db->prepare("
+                        SELECT l.section_tags, l.language_id, 
+                               (SELECT GROUP_CONCAT(name) FROM sections WHERE language_id = l.language_id) as available_sections 
+                        FROM lessons l 
+                        WHERE l.id = :lesson_id
+                    ");
+                    $stmt->execute([':lesson_id' => $lessonId]);
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    $sections = [];
+                    $availableSections = [];
+                    
+                    if ($result) {
+                        // الأقسام المحددة حالياً للدرس
+                        if ($result['section_tags']) {
+                            $sections = json_decode($result['section_tags'], true);
+                        }
+                        
+                        // جميع الأقسام المتاحة للغة
+                        if ($result['available_sections']) {
+                            $availableSections = explode(',', $result['available_sections']);
+                        }
+                    }
+                    
+                    echo json_encode([
+                        'success' => true, 
+                        'sections' => $sections,
+                        'availableSections' => array_values(array_unique($availableSections))
+                    ]);
+                } catch (Exception $e) {
+                    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+                }
+                break;
+
             default:
                 ob_end_clean();
                 echo json_encode(['error' => 'Invalid action']);
@@ -132,13 +172,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             case 'update_tags':
                 $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
-                $tags = isset($_POST['section_tags']) ? $_POST['section_tags'] : '';
-                $result = updateLessonTags($lessonId, $tags);
-                ob_end_clean();
-                if ($result) {
+                $tags = isset($_POST['section_tags']) ? json_decode($_POST['section_tags'], true) : [];
+                
+                try {
+                    $db = connectDB();
+                    $db->beginTransaction();
+                    
+                    // الحصول على language_id الخاص بالدرس
+                    $stmt = $db->prepare("SELECT language_id FROM lessons WHERE id = :lesson_id");
+                    $stmt->execute([':lesson_id' => $lessonId]);
+                    $languageId = $stmt->fetchColumn();
+                    
+                    if (!$languageId) {
+                        throw new Exception('لم يتم العثور على لغة الدرس');
+                    }
+                    
+                    // إضافة الأقسام الجديدة إلى جدول sections
+                    foreach ($tags as $tag) {
+                        // التحقق من وجود القسم
+                        $stmt = $db->prepare("SELECT id FROM sections WHERE name = :name AND language_id = :language_id");
+                        $stmt->execute([
+                            ':name' => $tag,
+                            ':language_id' => $languageId
+                        ]);
+                        $sectionId = $stmt->fetchColumn();
+                        
+                        // إذا لم يكن القسم موجوداً، قم بإضافته
+                        if (!$sectionId) {
+                            $stmt = $db->prepare("INSERT INTO sections (name, language_id) VALUES (:name, :language_id)");
+                            $stmt->execute([
+                                ':name' => $tag,
+                                ':language_id' => $languageId
+                            ]);
+                        }
+                    }
+                    
+                    // تحديث الأقسام للدرس
+                    $stmt = $db->prepare("UPDATE lessons SET section_tags = :tags WHERE id = :lesson_id");
+                    $stmt->execute([
+                        ':tags' => json_encode($tags),
+                        ':lesson_id' => $lessonId
+                    ]);
+                    
+                    $db->commit();
                     echo json_encode(['success' => true]);
-                } else {
-                    echo json_encode(['success' => false, 'error' => 'Failed to update lesson tags']);
+                } catch (Exception $e) {
+                    $db->rollBack();
+                    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
                 }
                 break;
 
