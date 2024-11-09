@@ -170,35 +170,40 @@ if ($lesson) {
         </button>
         <!-- Button to change section -->
         <button class="btn btn-light me-2" id="changeSection" data-lesson-id="<?php echo $lessonId; ?>">تغيير القسم</button>
-        <!-- Button to change tags -->
-        <!-- <button class="btn btn-light me-2" id="changeTags" data-lesson-id="<?php echo $lessonId; ?>">تغيير التصنيفات</button> -->
+        <!-- زر جديد لفتح modal الأقسام -->
+        <button class="btn btn-light me-2" id="manageSections" data-lesson-id="<?php echo $lessonId; ?>">
+            <i class="fas fa-tags"></i> إدارة الأقسام
+        </button>
     </div>
 </div>
 
-<!-- بعد عرض تفاصيل الدرس -->
-<div class="bg-white shadow-sm rounded p-4 mt-4">
-    <h3 class="text-xl font-bold mb-3">
-        إدارة الأقسام
-        <button id="toggleSectionsForm" class="btn btn-sm btn-outline-primary float-left">
-            <i class="fas fa-chevron-up"></i>
-        </button>
-    </h3>
-    <div id="sectionsFormContainer">
-        <!-- نموذج إضافة الأقسام -->
-        <form id="sectionsForm">
-            <input type="hidden" id="lessonLanguageId" value="<?php echo htmlspecialchars($lesson['language_id']); ?>">
-            <div class="mb-3">
-                <label for="sectionTags" class="form-label">الأقسام</label>
-                <input type="text" class="form-control" id="sectionTags" placeholder="أضف الأقسام">
+<!-- نحذف القسم القديم ونضيف Modal الأقسام -->
+<div class="modal fade" id="sectionsModal" tabindex="-1" aria-labelledby="sectionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sectionsModalLabel">إدارة الأقسام</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <button type="submit" class="btn btn-primary">حفظ الأقسام</button>
-        </form>
-        
-        <!-- عرض الأقسام الحالية -->
-        <div id="currentSections" class="mt-4">
-            <h4 class="font-bold mb-2">الأقسام الحالية</h4>
-            <div class="sections-list">
-                <!-- سيتم إضافة الأقسام هنا ديناميكياً -->
+            <div class="modal-body">
+                <form id="sectionsForm">
+                    <input type="hidden" id="lessonLanguageId" value="<?php echo htmlspecialchars($lesson['language_id']); ?>">
+                    <div class="mb-3">
+                        <label for="sectionTags" class="form-label">الأقسام</label>
+                        <input type="text" class="form-control" id="sectionTags" placeholder="أضف الأقسام">
+                    </div>
+                </form>
+                
+                <div id="currentSections" class="mt-4">
+                    <h6 class="font-bold mb-2">الأقسام الحالية</h6>
+                    <div class="sections-list">
+                        <!-- سيتم إضافة الأقسام هنا ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="button" class="btn btn-primary" id="saveSections">حفظ التغييرات</button>
             </div>
         </div>
     </div>

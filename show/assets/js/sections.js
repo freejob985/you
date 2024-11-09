@@ -1,15 +1,35 @@
 // تهيئة Tagify للأقسام
-let sectionTagify = new Tagify(document.querySelector('#sectionTags'), {
-    maxTags: 10,
-    dropdown: {
-        maxItems: 20,
-        classname: "tags-look",
-        enabled: 0,
-        closeOnSelect: false
-    }
+let sectionTagify;
+let sectionsModal;
+
+$(document).ready(function() {
+    // تهيئة Modal
+    sectionsModal = new bootstrap.Modal(document.getElementById('sectionsModal'));
+
+    // تهيئة Tagify
+    sectionTagify = new Tagify(document.querySelector('#sectionTags'), {
+        maxTags: 10,
+        dropdown: {
+            maxItems: 20,
+            classname: "tags-look",
+            enabled: 0,
+            closeOnSelect: false
+        }
+    });
+
+    // زر فتح modal الأقسام
+    $('#manageSections').click(function() {
+        loadCurrentSections();
+        sectionsModal.show();
+    });
+
+    // زر حفظ الأقسام
+    $('#saveSections').click(function() {
+        saveSections();
+    });
 });
 
-// تحميل الأقسام الحالية عند تحميل الصفحة
+// تحميل الأقسام الحالية
 function loadCurrentSections() {
     const lessonId = new URLSearchParams(window.location.search).get('lesson_id');
     if (!lessonId) return;
@@ -24,12 +44,13 @@ function loadCurrentSections() {
         success: function(response) {
             if (response.success) {
                 displaySections(response.sections);
-                // تحديث Tagify بالأقسام الحالية
+                sectionTagify.removeAllTags();
                 sectionTagify.addTags(response.sections.map(s => s.name));
             }
         },
         error: function(xhr, status, error) {
             console.error('Error loading sections:', error);
+            Swal.fire('خطأ!', 'حدث خطأ أثناء تحميل الأقسام', 'error');
         }
     });
 }
@@ -41,16 +62,15 @@ function displaySections(sections) {
 
     sections.forEach(section => {
         sectionsList.append(`
-            <div class="section-item p-2 mb-2 bg-light rounded">
+            <div class="section-item p-2 mb-2">
                 <span class="section-name">${section.name}</span>
             </div>
         `);
     });
 }
 
-// معالجة تقديم نموذج الأقسام
-$('#sectionsForm').submit(function(e) {
-    e.preventDefault();
+// حفظ الأقسام
+function saveSections() {
     const lessonId = new URLSearchParams(window.location.search).get('lesson_id');
     const languageId = $('#lessonLanguageId').val();
     const sections = sectionTagify.value;
@@ -67,7 +87,13 @@ $('#sectionsForm').submit(function(e) {
         success: function(response) {
             if (response.success) {
                 displaySections(response.sections);
-                Swal.fire('تم!', 'تم تحديث الأقسام بنجاح', 'success');
+                sectionsModal.hide();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم!',
+                    text: 'تم تحديث الأقسام بنجاح',
+                    confirmButtonText: 'حسناً'
+                });
             } else {
                 Swal.fire('خطأ!', 'حدث خطأ أثناء تحديث الأقسام', 'error');
             }
@@ -77,9 +103,4 @@ $('#sectionsForm').submit(function(e) {
             Swal.fire('خطأ!', 'حدث خطأ أثناء الاتصال بالخادم', 'error');
         }
     });
-});
-
-// تحميل الأقسام عند تحميل الصفحة
-$(document).ready(function() {
-    loadCurrentSections();
-});
+}
