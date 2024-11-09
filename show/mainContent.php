@@ -159,7 +159,7 @@ if ($lesson) {
     </p>
     <p><strong>المدة:</strong> <span id="lessonDuration"><?php echo formatDuration($lesson['duration']); ?></span></p>
     <p><strong>القسم:</strong> <span id="lessonSection"><?php echo htmlspecialchars(getSectionName($lesson['section_id'])); ?></span></p>
-    <p><strong>التصنيفات:</strong> <span id="lessonTags"><?php echo htmlspecialchars($lesson['section_tags']); ?></span></p>
+    <!-- <p><strong>التصنيفات:</strong> <span id="lessonTags"><?php echo htmlspecialchars($lesson['section_tags']); ?></span></p> -->
     <p><strong>رابط YouTube:</strong> <a href="<?php echo htmlspecialchars($lesson['url']); ?>" target="_blank" class="text-yellow-300 hover:text-yellow-100">مشاهدة على YouTube</a></p>
     <div class="mt-3">
         <!-- Button to change lesson status -->
@@ -171,7 +171,36 @@ if ($lesson) {
         <!-- Button to change section -->
         <button class="btn btn-light me-2" id="changeSection" data-lesson-id="<?php echo $lessonId; ?>">تغيير القسم</button>
         <!-- Button to change tags -->
-        <button class="btn btn-light me-2" id="changeTags" data-lesson-id="<?php echo $lessonId; ?>">تغيير التصنيفات</button>
+        <!-- <button class="btn btn-light me-2" id="changeTags" data-lesson-id="<?php echo $lessonId; ?>">تغيير التصنيفات</button> -->
+    </div>
+</div>
+
+<!-- بعد عرض تفاصيل الدرس -->
+<div class="bg-white shadow-sm rounded p-4 mt-4">
+    <h3 class="text-xl font-bold mb-3">
+        إدارة الأقسام
+        <button id="toggleSectionsForm" class="btn btn-sm btn-outline-primary float-left">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </h3>
+    <div id="sectionsFormContainer">
+        <!-- نموذج إضافة الأقسام -->
+        <form id="sectionsForm">
+            <input type="hidden" id="lessonLanguageId" value="<?php echo htmlspecialchars($lesson['language_id']); ?>">
+            <div class="mb-3">
+                <label for="sectionTags" class="form-label">الأقسام</label>
+                <input type="text" class="form-control" id="sectionTags" placeholder="أضف الأقسام">
+            </div>
+            <button type="submit" class="btn btn-primary">حفظ الأقسام</button>
+        </form>
+        
+        <!-- عرض الأقسام الحالية -->
+        <div id="currentSections" class="mt-4">
+            <h4 class="font-bold mb-2">الأقسام الحالية</h4>
+            <div class="sections-list">
+                <!-- سيتم إضافة الأقسام هنا ديناميكياً -->
+            </div>
+        </div>
     </div>
 </div>
 

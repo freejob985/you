@@ -142,6 +142,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
                 break;
 
+            case 'get_lesson_sections':
+                $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
+                $sections = getLessonSections($lessonId);
+                ob_end_clean();
+                echo json_encode(['success' => true, 'sections' => $sections]);
+                break;
+
+            case 'update_lesson_sections':
+                $lessonId = isset($_POST['lesson_id']) ? intval($_POST['lesson_id']) : 0;
+                $languageId = isset($_POST['language_id']) ? intval($_POST['language_id']) : 0;
+                $sections = isset($_POST['sections']) ? $_POST['sections'] : [];
+                
+                $result = updateLessonSections($lessonId, $languageId, $sections);
+                ob_end_clean();
+                if ($result) {
+                    $updatedSections = getLessonSections($lessonId);
+                    echo json_encode(['success' => true, 'sections' => $updatedSections]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Failed to update sections']);
+                }
+                break;
+
             default:
                 ob_end_clean();
                 echo json_encode(['error' => 'Invalid action']);

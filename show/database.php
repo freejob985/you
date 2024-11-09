@@ -442,4 +442,79 @@ function updateLessonStatusOrSection($lessonId, $type, $value) {
     $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
     return $stmt->execute();
 }
+
+/**
+ * يجلب أقسام درس معين
+ * 
+ * @param int $lessonId معرف الدرس
+ * @return array مصفوفة تحتوي على الأقسام
+ */
+function getLessonSections($lessonId) {
+    try {
+        $db = connectDB();
+        $stmt = $db->prepare("
+            SELECT s.id, s.name 
+            FROM sections s
+            JOIN lessons l ON l.section_id = s.id
+            WHERE l.id = :lesson_id
+        ");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getLessonSections error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return [];
+    }
+}
+
+/**
+ * تحديث أقسام درس معين
+ * 
+ * @param int $lessonId معرف الدرس
+ * @param int $languageId معرف اللغة
+ * @param array $sections مصفوفة تحتوي على الأقسام الجديدة
+ * @return bool نجاح أو فشل العملية
+ */
+function updateLessonSections($lessonId, $languageId, $sections) {
+    try {
+        $db = connectDB();
+        $db->beginTransaction();
+
+        // إضافة الأقسام الجديدة
+        foreach ($sections as $section) {
+            $sectionName = trim($section['value']);
+            
+            // التحقق من وجود القسم
+            $stmt = $db->prepare("SELECT id FROM sections WHERE name = :name AND language_id = :language_id");
+            $stmt->bindParam(':name', $sectionName, PDO::PARAM_STR);
+            $stmt->bindParam(':language_id', $languageId, PDO::PARAM_INT);
+            $stmt->execute();
+            $existingSection = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$existingSection) {
+                // إضافة قسم جديد
+                $stmt = $db->prepare("INSERT INTO sections (name, language_id) VALUES (:name, :language_id)");
+                $stmt->bindParam(':name', $sectionName, PDO::PARAM_STR);
+                $stmt->bindParam(':language_id', $languageId, PDO::PARAM_INT);
+                $stmt->execute();
+                $sectionId = $db->lastInsertId();
+            } else {
+                $sectionId = $existingSection['id'];
+            }
+            
+            // تحديث القسم في جدول الدروس
+            $stmt = $db->prepare("UPDATE lessons SET section_id = :section_id WHERE id = :lesson_id");
+            $stmt->bindParam(':section_id', $sectionId, PDO::PARAM_INT);
+            $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+
+        $db->commit();
+        return true;
+    } catch (Exception $e) {
+        $db->rollBack();
+        file_put_contents('debug.log', "updateLessonSections error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return false;
+    }
+}
 ?>
