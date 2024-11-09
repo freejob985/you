@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إضافة كورس جديد</title>
+    <title>قائمة الكورسات</title>
     
     <!-- روابط البوتستراب -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- رابط ماتريال ديزاين -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
@@ -24,11 +25,14 @@
     
     <!-- مكتبة توست -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     
-    <!-- مكتبة Tagify -->
-    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <!-- مكتبة SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     
@@ -41,15 +45,20 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-image: url('https://r4.wallpaperflare.com/wallpaper/504/416/967/youtube-geek-science-wallpaper-7816bd8810304c38c0dce17e6862d4ca.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
+            background-color: #f8f9fa;
+            padding-top: 60px;
+            padding-bottom: 60px;
         }
         /* ... باقي الأنماط ... */
     </style>
 </head>
 <body>
-    <!-- محتوى الصفحة -->
+    <!-- الهيدر الثابت -->
+    <header class="fixed-header">
+        <div class="container">
+            <h1>نظام إدارة الكورسات</h1>
+            <!-- ... باقي محتوى الهيدر ... -->
+        </div>
+    </header>
 </body>
-</html>
+</html> 

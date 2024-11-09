@@ -23,6 +23,15 @@
     <!-- مكتبة Tagify -->
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    
+    <!-- Context Menu Styles -->
+    <link rel="stylesheet" href="assets/contextMenu.css">
+    
+    <!-- Context Menu Script -->
+    <script src="assets/contextMenu.js" defer></script>
+
     <style>
         body {
             font-family: 'Cairo', sans-serif;

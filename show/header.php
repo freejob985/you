@@ -19,6 +19,15 @@
             text-align: center;
         }
     </style>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Context Menu Styles -->
+    <link rel="stylesheet" href="assets/contextMenu.css">
+
+    <!-- Context Menu Script -->
+    <script src="assets/contextMenu.js" defer></script>
 </head>
 <body class="bg-gray-100">
     <!-- Main Header -->

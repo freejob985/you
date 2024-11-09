@@ -120,7 +120,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="assets/contextMenu.css">
     
+    <!-- Context Menu Script -->
+    <script src="assets/contextMenu.js" defer></script>
     <style>
         body {
             font-family: 'Cairo', sans-serif;

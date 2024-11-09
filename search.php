@@ -25,7 +25,10 @@ $statuses = getStatuses();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="assets/contextMenu.css">
+    
+    <!-- Context Menu Script -->
+    <script src="assets/contextMenu.js" defer></script>
     <!-- الأنماط المخصصة -->
     <style>
         body {
