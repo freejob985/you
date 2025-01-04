@@ -18,6 +18,12 @@
             if (isset($_GET['lesson_id'])) {
                 $lessonId = $_GET['lesson_id'];
                 include_once("show/mainContent.php");
+                
+                // إضافة أزرار التنقل
+                echo '<div class="navigation-buttons mt-4 d-flex justify-content-between">';
+                echo '<button id="prevLesson" class="btn btn-primary"><i class="fas fa-arrow-right ml-2"></i> الدرس السابق</button>';
+                echo '<button id="nextLesson" class="btn btn-primary">الدرس التالي <i class="fas fa-arrow-left mr-2"></i></button>';
+                echo '</div>';
             } else {
                 echo "<p>لم يتم تحديد درس للعرض.</p>";
             }

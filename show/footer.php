@@ -18,6 +18,7 @@
     
     <?php include_once("script.php"); ?>
     <script src="show/assets/js/sections.js"></script>
+    <script src="show/assets/js/navigation.js"></script>
 
     <style>
         /* تنسيق Tagify */

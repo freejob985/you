@@ -45,6 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 echo json_encode(['success' => true, 'playlistItems' => $playlistItems, 'statistics' => $statistics]);
                 break;
 
+            case 'get_adjacent_lessons':
+                $lessonId = isset($_GET['lesson_id']) ? intval($_GET['lesson_id']) : 0;
+                $adjacentLessons = getAdjacentLessons($lessonId);
+                ob_end_clean();
+                echo json_encode($adjacentLessons);
+                break;
+
             default:
                 ob_end_clean();
                 echo json_encode(['error' => 'Invalid action']);

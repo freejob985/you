@@ -517,4 +517,52 @@ function updateLessonSections($lessonId, $languageId, $sections) {
         return false;
     }
 }
+
+/**
+ * يجلب معرفات الدروس المجاورة (السابق والتالي) لدرس معين
+ * 
+ * @param int $lessonId معرف الدرس الحالي
+ * @return array مصفوفة تحتوي على معرفات الدروس المجاورة
+ */
+function getAdjacentLessons($lessonId) {
+    try {
+        $db = connectDB();
+        
+        // الحصول على معرف الكورس للدرس الحالي
+        $stmt = $db->prepare("SELECT course_id FROM lessons WHERE id = :lesson_id");
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        $courseId = $stmt->fetchColumn();
+        
+        // الحصول على الدرس السابق
+        $stmt = $db->prepare("
+            SELECT id FROM lessons 
+            WHERE course_id = :course_id AND id < :lesson_id 
+            ORDER BY id DESC LIMIT 1
+        ");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        $prevId = $stmt->fetchColumn();
+        
+        // الحصول على الدرس التالي
+        $stmt = $db->prepare("
+            SELECT id FROM lessons 
+            WHERE course_id = :course_id AND id > :lesson_id 
+            ORDER BY id ASC LIMIT 1
+        ");
+        $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+        $stmt->bindParam(':lesson_id', $lessonId, PDO::PARAM_INT);
+        $stmt->execute();
+        $nextId = $stmt->fetchColumn();
+        
+        return [
+            'prev' => $prevId ?: null,
+            'next' => $nextId ?: null
+        ];
+    } catch (Exception $e) {
+        file_put_contents('debug.log', "getAdjacentLessons error: " . $e->getMessage() . "\n", FILE_APPEND);
+        return ['prev' => null, 'next' => null];
+    }
+}
 ?>
