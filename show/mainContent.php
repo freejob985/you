@@ -125,6 +125,61 @@ if ($lesson) {
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+        /* تنسيق صورة البروفايل */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #3498db;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            border-color: #2c3e50;
+        }
+
+        .lesson-header {
+            background: linear-gradient(to right, #f8f9fa, white);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .lesson-info {
+            flex-grow: 1;
+        }
+
+        .lesson-meta {
+            font-size: 0.9rem;
+        }
+
+        .lesson-meta i {
+            color: #3498db;
+            margin-right: 5px;
+        }
+
+        /* تحسين تنسيق الفيديو */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* نسبة 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -139,12 +194,34 @@ if ($lesson) {
     </a>
 </div>
 
-<!-- Lesson Title -->
-<h1 class="text-3xl font-bold mb-4"><?php echo htmlspecialchars($lesson['title']); ?></h1>
+<!-- إضافة صورة البروفايل في الهيدر -->
+<div class="lesson-header d-flex align-items-center mb-4">
+    <div class="profile-image me-3">
+        <img src="show/assets/images/HarryPotter_WB_F4_HarryPotterMidshot_Promo_080615_Port.jpg" 
+             alt="Profile Image" 
+             class="profile-avatar">
+    </div>
+    <div class="lesson-info">
+        <h1 class="text-2xl font-bold mb-2"><?php echo htmlspecialchars($lesson['title']); ?></h1>
+        <div class="lesson-meta text-muted">
+            <span class="me-3"><i class="fas fa-clock"></i> <?php echo $lesson['duration']; ?></span>
+            <span><i class="fas fa-eye"></i> <?php echo $lesson['views']; ?> مشاهدة</span>
+        </div>
+    </div>
+</div>
 
-<!-- Video player -->
-<div class="embed-responsive embed-responsive-16by9 mb-4">
-    <iframe class="embed-responsive-item w-full h-[600px]" src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video_id); ?>" allowfullscreen></iframe>
+<!-- باقي محتوى الدرس -->
+<div class="lesson-content bg-white shadow-sm rounded p-4">
+    <!-- محتوى الفيديو -->
+    <div class="video-container mb-4">
+        <?php if (isset($lesson['url'])): ?>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" 
+                        src="https://www.youtube.com/embed/<?php echo getYoutubeVideoId($lesson['url']); ?>" 
+                        allowfullscreen></iframe>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <!-- Lesson Information Section -->
