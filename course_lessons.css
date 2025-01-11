@@ -137,32 +137,103 @@ body {
     cursor: not-allowed;
 }
 
-/* إضافة تنسيقات جديدة للأقسام */
+/* تنسيقات الأقسام */
 .sections-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
 }
 
 .section-button {
     padding: 8px 16px;
     border-radius: 20px;
-    border: none;
-    background-color: #f0f0f0;
-    color: #333;
+    border: 2px solid #e9ecef;
+    background-color: white;
+    color: #2c3e50;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 100px;
+    text-align: center;
 }
 
 .section-button:hover {
     background-color: #2c3e50;
     color: white;
+    border-color: #2c3e50;
+    transform: translateY(-2px);
 }
 
 .section-button.active {
     background-color: #2c3e50;
     color: white;
+    border-color: #2c3e50;
+}
+
+/* تنسيقات الأقسام في الجدول */
+.section-cell {
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.section-cell:hover {
+    background: #e9ecef;
+}
+
+.section-cell.dragging {
+    opacity: 0.5;
+    background: #e9ecef;
+}
+
+/* تنسيقات قائمة الأقسام القابلة للسحب */
+.sections-draggable {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.section-item {
+    padding: 8px 15px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 20px;
+    cursor: move;
+    user-select: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.section-item:hover {
+    background: #34495e;
+    transform: translateY(-2px);
+}
+
+.section-item.sortable-ghost {
+    opacity: 0.5;
+}
+
+.section-item.sortable-chosen {
+    background: #3498db;
+}
+
+/* تنسيقات التفاعل مع السحب والإفلات */
+.drag-over {
+    background-color: rgba(52, 152, 219, 0.1) !important;
+    border: 2px dashed #3498db !important;
 }
 
 /* تنسيقات شريط التقدم */
@@ -271,40 +342,6 @@ body {
 #newSectionName:focus {
     border-color: #2c3e50;
     box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
-}
-
-/* تنسيقات قائمة الأقسام القابلة للسحب */
-.sections-draggable {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.section-item {
-    padding: 8px 15px;
-    background: #2c3e50;
-    color: white;
-    border-radius: 20px;
-    cursor: move;
-    user-select: none;
-    transition: all 0.3s ease;
-}
-
-.section-item:hover {
-    background: #34495e;
-    transform: translateY(-2px);
-}
-
-.section-item.sortable-ghost {
-    opacity: 0.5;
-}
-
-.section-item.sortable-chosen {
-    background: #3498db;
 }
 
 /* تنسيقات خلية القسم في الجدول */

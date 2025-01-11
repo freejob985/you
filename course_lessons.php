@@ -508,20 +508,27 @@ $totalPages = ceil($totalLessons / $perPage);
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // تهيئة قائمة الأقسام القابلة للسحب
-        new Sortable(document.getElementById('sectionsList'), {
+        const sectionsList = document.getElementById('sectionsList');
+        new Sortable(sectionsList, {
             group: {
                 name: 'sections',
                 pull: 'clone',
                 put: false
             },
             sort: false,
-            animation: 150
+            animation: 150,
+            onStart: function(evt) {
+                evt.item.classList.add('dragging');
+            },
+            onEnd: function(evt) {
+                evt.item.classList.remove('dragging');
+            }
         });
 
-        // تهيئة جدول الدروس لقبول الإفلات
-        const rows = document.querySelectorAll('.lesson-row');
-        rows.forEach(row => {
-            new Sortable(row.querySelector('.section-cell'), {
+        // تهيئة خلايا الأقسام في الجدول
+        const sectionCells = document.querySelectorAll('.section-cell');
+        sectionCells.forEach(cell => {
+            new Sortable(cell, {
                 group: {
                     name: 'sections',
                     pull: false,
@@ -531,51 +538,101 @@ $totalPages = ceil($totalLessons / $perPage);
                 animation: 150,
                 onAdd: function(evt) {
                     const sectionId = evt.item.dataset.sectionId;
-                    const lessonId = evt.to.parentElement.dataset.lessonId;
+                    const lessonId = evt.to.dataset.lessonId;
                     
                     // إزالة العنصر المضاف وتحديث النص
                     evt.item.remove();
                     
                     // تحديث القسم في قاعدة البيانات
                     updateLessonSection(lessonId, sectionId, evt.to);
+                },
+                // إضافة تأثيرات بصرية للسحب والإفلات
+                onStart: function(evt) {
+                    evt.from.classList.add('drag-over');
+                },
+                onEnd: function(evt) {
+                    document.querySelectorAll('.section-cell').forEach(cell => {
+                        cell.classList.remove('drag-over');
+                    });
                 }
+            });
+
+            // إضافة مستمع لحدث النقر المزدوج لإزالة القسم
+            cell.addEventListener('dblclick', function() {
+                handleSectionDoubleClick(this);
             });
         });
 
-        // دالة تحديث قسم الدرس
-        function updateLessonSection(lessonId, sectionId, cell) {
-            $.ajax({
-                url: 'lessons_actions.php',
-                method: 'POST',
-                data: {
-                    action: 'update_lesson_section',
-                    lesson_id: lessonId,
-                    section_id: sectionId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // تحديث نص الخلية
-                        cell.textContent = response.section_name;
-                        cell.dataset.sectionId = sectionId;
-                        
-                        // إظهار رسالة نجاح
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'تم!',
-                            text: 'تم تحديث قسم الدرس بنجاح',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                    } else {
-                        Swal.fire('خطأ', response.message, 'error');
-                    }
-                },
-                error: function() {
-                    Swal.fire('خطأ', 'حدث خطأ أثناء تحديث القسم', 'error');
-                }
+        // تحسين تفاعل أزرار الأقسام
+        const sectionButtons = document.querySelectorAll('.section-button');
+        sectionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                sectionButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const sectionId = this.dataset.sectionId;
+                filterLessonsBySection(sectionId);
             });
-        }
+        });
     });
+
+    /**
+     * تصفية الدروس حسب القسم المحدد
+     * @param {string} sectionId - معرف القسم المحدد
+     */
+    function filterLessonsBySection(sectionId) {
+        const rows = document.querySelectorAll('.lesson-row');
+        rows.forEach(row => {
+            const cell = row.querySelector('.section-cell');
+            if (sectionId === 'all' || cell.dataset.sectionId === sectionId) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    /**
+     * تحديث قسم الدرس في قاعدة البيانات
+     * @param {number} lessonId - معرف الدرس
+     * @param {number} sectionId - معرف القسم
+     * @param {HTMLElement} cell - خلية الجدول المستهدفة
+     */
+    function updateLessonSection(lessonId, sectionId, cell) {
+        // إظهار مؤشر التحميل
+        cell.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'update_lesson_section',
+                lesson_id: lessonId,
+                section_id: sectionId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // تحديث نص الخلية
+                    cell.textContent = response.section_name;
+                    cell.dataset.sectionId = sectionId || '';
+                    
+                    // إظهار إشعار نجاح
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم!',
+                        text: 'تم تحديث القسم بنجاح',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire('خطأ', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('خطأ', 'حدث خطأ أثناء تحديث القسم', 'error');
+            }
+        });
+    }
     </script>
 
     <script>
