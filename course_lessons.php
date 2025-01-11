@@ -10,9 +10,9 @@ if (!isset($_GET['course_id'])) {
 
 $courseId = (int)$_GET['course_id'];
 
-// جلب معلومات الكورس
+// جلب معلومات الكورس والحصول على معرف اللغة
 try {
-    $stmt = $db->prepare('SELECT * FROM courses WHERE id = ?');
+    $stmt = $db->prepare('SELECT c.*, t.id as language_id FROM courses c LEFT JOIN tags t ON c.language_id = t.id WHERE c.id = ?');
     $stmt->execute([$courseId]);
     $course = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -22,6 +22,28 @@ try {
 } catch(PDOException $e) {
     die("خطأ في قاعدة البيانات: " . $e->getMessage());
 }
+
+// جلب الأقسام المرتبطة باللغة
+$sections = [];
+if ($course['language_id']) {
+    $stmt = $db->prepare('SELECT * FROM sections WHERE language_id = ? ORDER BY name');
+    $stmt->execute([$course['language_id']]);
+    $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// حساب الإحصائيات المحدثة
+$statsQuery = "SELECT 
+    COUNT(*) as total_lessons,
+    SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_lessons,
+    SUM(CASE WHEN status = 'completed' THEN duration ELSE 0 END) as completed_duration,
+    SUM(CASE WHEN status != 'completed' THEN duration ELSE 0 END) as remaining_duration,
+    SUM(duration) as total_duration
+FROM lessons 
+WHERE course_id = ?";
+
+$statsStmt = $db->prepare($statsQuery);
+$statsStmt->execute([$courseId]);
+$stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
 
 // معالجة الفلترة والبحث
 $search = $_GET['search'] ?? '';
@@ -68,18 +90,6 @@ try {
     die("خطأ في قاعدة البيانات: " . $e->getMessage());
 }
 
-// حساب الإحصائيات
-$statsQuery = "SELECT 
-    COUNT(*) as total_lessons,
-    SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_lessons,
-    SUM(duration) as total_duration
-FROM lessons 
-WHERE course_id = ?";
-
-$statsStmt = $db->prepare($statsQuery);
-$statsStmt->execute([$courseId]);
-$stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
-
 // حساب عدد الصفحات
 $totalPages = ceil($totalLessons / $perPage);
 ?>
@@ -91,22 +101,26 @@ $totalPages = ceil($totalLessons / $perPage);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دروس <?php echo htmlspecialchars($course['title']); ?></title>
     
-    <!-- تضمين ملفات CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="course_lessons.css" rel="stylesheet">
-    <link href="assets/contextMenu.css" rel="stylesheet">
-    
     <!-- الخطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="course_lessons.css" rel="stylesheet">
+    <link href="assets/contextMenu.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
         <h1 class="mb-4"><?php echo htmlspecialchars($course['title']); ?></h1>
         
-        <!-- الإحصائيات -->
+        <!-- الإحصائيات المحدثة -->
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-value"><?php echo $stats['total_lessons']; ?></div>
@@ -117,8 +131,12 @@ $totalPages = ceil($totalLessons / $perPage);
                 <div class="stat-label">الدروس المكتملة</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value"><?php echo formatDuration($stats['total_duration']); ?></div>
-                <div class="stat-label">المدة الإجمالية</div>
+                <div class="stat-value"><?php echo formatDuration($stats['completed_duration']); ?></div>
+                <div class="stat-label">مدة الدروس المكتملة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value"><?php echo formatDuration($stats['remaining_duration']); ?></div>
+                <div class="stat-label">مدة الدروس المتبقية</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">
@@ -127,6 +145,18 @@ $totalPages = ceil($totalLessons / $perPage);
                 <div class="stat-label">نسبة الإكمال</div>
             </div>
         </div>
+        
+        <!-- أزرار الأقسام -->
+        <?php if (!empty($sections)): ?>
+        <div class="sections-container mb-4">
+            <button class="section-button active" data-section-id="all">جميع الأقسام</button>
+            <?php foreach ($sections as $section): ?>
+                <button class="section-button" data-section-id="<?php echo $section['id']; ?>">
+                    <?php echo htmlspecialchars($section['name']); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
         
         <!-- الفلترة والبحث -->
         <div class="filters-container">
@@ -223,14 +253,34 @@ $totalPages = ceil($totalLessons / $perPage);
         <?php endif; ?>
     </div>
 
-    <!-- تضمين JavaScript -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Context Menu -->
     <script src="assets/contextMenu.js"></script>
-    
+
     <script>
         $(document).ready(function() {
+            // تفعيل فلترة الأقسام
+            $('.section-button').click(function() {
+                const sectionId = $(this).data('section-id');
+                $('.section-button').removeClass('active');
+                $(this).addClass('active');
+                
+                if (sectionId === 'all') {
+                    $('.lessons-table tbody tr').show();
+                } else {
+                    $('.lessons-table tbody tr').hide();
+                    $(`.lessons-table tbody tr[data-section-id="${sectionId}"]`).show();
+                }
+            });
+
             // تبديل حالة الدرس
             $('.toggle-status').click(function() {
                 const lessonId = $(this).data('lesson-id');

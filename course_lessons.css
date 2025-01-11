@@ -1,3 +1,8 @@
+/* تنسيقات جامة */
+body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+}
+
 /* تنسيقات جدول الدروس */
 .lessons-table {
     width: 100%;
@@ -96,11 +101,13 @@
     font-size: 24px;
     font-weight: bold;
     color: #2c3e50;
+    font-family: 'Tajawal', sans-serif;
 }
 
 .stat-label {
     color: #7f8c8d;
     margin-top: 5px;
+    font-family: 'Cairo', sans-serif;
 }
 
 /* تنسيقات التنقل بين الصفحات */
@@ -128,4 +135,32 @@
 .pagination-button:disabled {
     background: #95a5a6;
     cursor: not-allowed;
+}
+
+/* إضافة تنسيقات جديدة للأقسام */
+.sections-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.section-button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.section-button:hover {
+    background-color: #2c3e50;
+    color: white;
+}
+
+.section-button.active {
+    background-color: #2c3e50;
+    color: white;
 } 
