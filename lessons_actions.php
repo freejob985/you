@@ -154,6 +154,66 @@ switch ($_POST['action']) {
         }
         break;
         
+    case 'update_lesson_order':
+        if (!isset($_POST['lesson_id'])) {
+            echo json_encode(['success' => false, 'message' => 'معرف الدرس مطلوب']);
+            return;
+        }
+
+        $lessonId = (int)$_POST['lesson_id'];
+        $prevLessonId = isset($_POST['prev_lesson_id']) ? (int)$_POST['prev_lesson_id'] : null;
+        $nextLessonId = isset($_POST['next_lesson_id']) ? (int)$_POST['next_lesson_id'] : null;
+
+        try {
+            // بدء المعاملة
+            $db->beginTransaction();
+
+            // الحصول على الترتيب الحالي للدروس المجاورة
+            if ($prevLessonId) {
+                $stmt = $db->prepare('SELECT sort_order FROM lessons WHERE id = ?');
+                $stmt->execute([$prevLessonId]);
+                $prevOrder = $stmt->fetchColumn();
+            }
+
+            if ($nextLessonId) {
+                $stmt = $db->prepare('SELECT sort_order FROM lessons WHERE id = ?');
+                $stmt->execute([$nextLessonId]);
+                $nextOrder = $stmt->fetchColumn();
+            }
+
+            // حساب الترتيب الجديد
+            if (!$prevLessonId) {
+                // إذا كان أول درس
+                $newOrder = isset($nextOrder) ? $nextOrder - 1000 : 0;
+            } elseif (!$nextLessonId) {
+                // إذا كان آخر درس
+                $newOrder = isset($prevOrder) ? $prevOrder + 1000 : 0;
+            } else {
+                // إذا كان في الوسط
+                $newOrder = ($prevOrder + $nextOrder) / 2;
+            }
+
+            // تحديث ترتيب الدرس
+            $stmt = $db->prepare('UPDATE lessons SET sort_order = ? WHERE id = ?');
+            $stmt->execute([$newOrder, $lessonId]);
+
+            // تأكيد المعاملة
+            $db->commit();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'تم تحديث ترتيب الدرس بنجاح'
+            ]);
+        } catch (Exception $e) {
+            // التراجع عن المعاملة في حالة حدوث خطأ
+            $db->rollBack();
+            echo json_encode([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء تحديث ترتيب الدرس: ' . $e->getMessage()
+            ]);
+        }
+        break;
+        
     default:
         echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف']);
         break;
