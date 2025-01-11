@@ -89,6 +89,38 @@ switch ($_POST['action']) {
         }
         break;
         
+    case 'update_lesson_section':
+        if (!isset($_POST['lesson_id']) || !isset($_POST['section_id'])) {
+            echo json_encode(['success' => false, 'message' => 'البيانات غير مكتملة']);
+            return;
+        }
+
+        $lessonId = (int)$_POST['lesson_id'];
+        $sectionId = (int)$_POST['section_id'];
+
+        try {
+            // تحديث قسم الدرس
+            $stmt = $db->prepare('UPDATE lessons SET section_id = ? WHERE id = ?');
+            $stmt->execute([$sectionId, $lessonId]);
+
+            // جلب اسم القسم الجديد
+            $stmt = $db->prepare('SELECT name FROM sections WHERE id = ?');
+            $stmt->execute([$sectionId]);
+            $sectionName = $stmt->fetchColumn();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'تم تحديث القسم بنجاح',
+                'section_name' => $sectionName
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء تحديث القسم: ' . $e->getMessage()
+            ]);
+        }
+        break;
+        
     default:
         echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف']);
         break;

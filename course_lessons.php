@@ -115,6 +115,7 @@ $totalPages = ceil($totalLessons / $perPage);
     <!-- Custom CSS -->
     <link href="course_lessons.css" rel="stylesheet">
     <link href="assets/contextMenu.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="container mt-4">
@@ -183,28 +184,20 @@ $totalPages = ceil($totalLessons / $perPage);
             <table class="lessons-table">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>عنوان الدرس</th>
                         <th>القسم</th>
-                        <th>المدة</th>
                         <th>الحالة</th>
-                        <th>المشاهدات</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php foreach ($lessons as $index => $lesson): ?>
-                        <tr>
-                            <td><?php echo ($page - 1) * $perPage + $index + 1; ?></td>
+                <tbody id="lessonsTableBody">
+                    <?php foreach ($lessons as $lesson): ?>
+                        <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
                             <td><?php echo htmlspecialchars($lesson['title']); ?></td>
-                            <td><?php echo htmlspecialchars($lesson['section_name'] ?? 'بدون قسم'); ?></td>
-                            <td><?php echo formatDuration($lesson['duration']); ?></td>
-                            <td>
-                                <span class="status-badge status-<?php echo $lesson['status']; ?>">
-                                    <?php echo getStatusLabel($lesson['status']); ?>
-                                </span>
+                            <td class="section-cell" data-section-id="<?php echo $lesson['section_id']; ?>">
+                                <?php echo htmlspecialchars($lesson['section_name'] ?? 'بدون قسم'); ?>
                             </td>
-                            <td><?php echo $lesson['views']; ?></td>
+                            <td><?php echo getStatusLabel($lesson['status']); ?></td>
                             <td>
                                 <div class="action-buttons">
                                     <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" 
@@ -225,6 +218,17 @@ $totalPages = ceil($totalLessons / $perPage);
                     <?php endforeach; ?>
                 </tbody>
             </table>
+        </div>
+        
+        <!-- إضافة قائمة الأقسام القابلة للسحب -->
+        <div id="sectionsList" class="sections-draggable">
+            <?php foreach ($sections as $section): ?>
+                <div class="section-item" 
+                     data-section-id="<?php echo $section['id']; ?>"
+                     draggable="true">
+                    <?php echo htmlspecialchars($section['name']); ?>
+                </div>
+            <?php endforeach; ?>
         </div>
         
         <!-- التنقل بين الصفحات -->
@@ -494,6 +498,79 @@ $totalPages = ceil($totalLessons / $perPage);
                 });
             }
         });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // تهيئة قائمة الأقسام القابلة للسحب
+        new Sortable(document.getElementById('sectionsList'), {
+            group: {
+                name: 'sections',
+                pull: 'clone',
+                put: false
+            },
+            sort: false,
+            animation: 150
+        });
+
+        // تهيئة جدول الدروس لقبول الإفلات
+        const rows = document.querySelectorAll('.lesson-row');
+        rows.forEach(row => {
+            new Sortable(row.querySelector('.section-cell'), {
+                group: {
+                    name: 'sections',
+                    pull: false,
+                    put: true
+                },
+                sort: false,
+                animation: 150,
+                onAdd: function(evt) {
+                    const sectionId = evt.item.dataset.sectionId;
+                    const lessonId = evt.to.parentElement.dataset.lessonId;
+                    
+                    // إزالة العنصر المضاف وتحديث النص
+                    evt.item.remove();
+                    
+                    // تحديث القسم في قاعدة البيانات
+                    updateLessonSection(lessonId, sectionId, evt.to);
+                }
+            });
+        });
+
+        // دالة تحديث قسم الدرس
+        function updateLessonSection(lessonId, sectionId, cell) {
+            $.ajax({
+                url: 'lessons_actions.php',
+                method: 'POST',
+                data: {
+                    action: 'update_lesson_section',
+                    lesson_id: lessonId,
+                    section_id: sectionId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // تحديث نص الخلية
+                        cell.textContent = response.section_name;
+                        cell.dataset.sectionId = sectionId;
+                        
+                        // إظهار رسالة نجاح
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'تم!',
+                            text: 'تم تحديث قسم الدرس بنجاح',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire('خطأ', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('خطأ', 'حدث خطأ أثناء تحديث القسم', 'error');
+                }
+            });
+        }
+    });
     </script>
 </body>
 </html> 

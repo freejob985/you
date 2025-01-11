@@ -271,4 +271,54 @@ body {
 #newSectionName:focus {
     border-color: #2c3e50;
     box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+}
+
+/* تنسيقات قائمة الأقسام القابلة للسحب */
+.sections-draggable {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.section-item {
+    padding: 8px 15px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 20px;
+    cursor: move;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.section-item:hover {
+    background: #34495e;
+    transform: translateY(-2px);
+}
+
+.section-item.sortable-ghost {
+    opacity: 0.5;
+}
+
+.section-item.sortable-chosen {
+    background: #3498db;
+}
+
+/* تنسيقات خلية القسم في الجدول */
+.section-cell {
+    min-height: 40px;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.section-cell.sortable-drag-enabled {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.section-cell.sortable-ghost {
+    background-color: rgba(52, 152, 219, 0.2);
 } 
