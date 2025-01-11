@@ -11,22 +11,28 @@ function getVideoDetails($videoId, $apiKey) {
 }
 */
 
-// دالة لتحويل مدة الفيديو من صيغة ISO 8601 إلى صيغة قابلة للقراءة
-function formatDuration($duration) {
-    $interval = new DateInterval($duration);
-    $parts = [];
-    
-    if ($interval->h > 0) {
-        $parts[] = $interval->h . ' ساعة';
-    }
-    if ($interval->i > 0) {
-        $parts[] = $interval->i . ' دقيقة';
-    }
-    if ($interval->s > 0 || empty($parts)) {
-        $parts[] = $interval->s . ' ثانية';
+/**
+ * تحويل الثواني إلى تنسيق قابل للقراءة (ساعات:دقائق:ثواني)
+ * 
+ * @param int $seconds عدد الثواني
+ * @return string الوقت بتنسيق قابل للقراءة
+ */
+function formatDuration($seconds) {
+    if (!is_numeric($seconds)) {
+        return '0:00';
     }
     
-    return implode(' و ', $parts);
+    $seconds = (int)$seconds;
+    
+    $hours = floor($seconds / 3600);
+    $minutes = floor(($seconds % 3600) / 60);
+    $secs = $seconds % 60;
+    
+    if ($hours > 0) {
+        return sprintf('%d:%02d:%02d', $hours, $minutes, $secs);
+    } else {
+        return sprintf('%d:%02d', $minutes, $secs);
+    }
 }
 
 // دالة لإضافة كورس جديد إلى قاعدة البيانات
@@ -159,6 +165,31 @@ function initializeLogging() {
     
     // Or starting a session if it's used in your application:
     // session_start();
+}
+
+/**
+ * تحويل حالة الدرس إلى نص قابل للقراءة
+ * 
+ * @param string $status حالة الدرس
+ * @return string النص المقابل للحالة
+ */
+function getStatusLabel($status) {
+    $statusLabels = [
+        'completed' => 'مكتمل',
+        'watching' => 'قيد المشاهدة',
+        'pending' => 'قيد الانتظار',
+        'problem' => 'مشكلة',
+        'discussion' => 'نقاش',
+        'search' => 'بحث',
+        'retry' => 'إعادة',
+        'retry_again' => 'إعادة ثانية',
+        'review' => 'مراجعة',
+        'excluded' => 'مستبعد',
+        'project' => 'مشروع تطبيقي',
+        'watch' => 'مشاهدة'
+    ];
+
+    return $statusLabels[$status] ?? 'غير محدد';
 }
 
 ?>

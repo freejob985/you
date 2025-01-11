@@ -1,0 +1,15 @@
+[11-Jan-2025 16:01:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such column: lesson_order in D:\server\htdocs\you\course_lessons.php:21
+Stack trace:
+#0 D:\server\htdocs\you\course_lessons.php(21): PDO->prepare('SELECT * FROM l...')
+#1 {main}
+  thrown in D:\server\htdocs\you\course_lessons.php on line 21
+[11-Jan-2025 16:01:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such column: lesson_order in D:\server\htdocs\you\course_lessons.php:21
+Stack trace:
+#0 D:\server\htdocs\you\course_lessons.php(21): PDO->prepare('SELECT * FROM l...')
+#1 {main}
+  thrown in D:\server\htdocs\you\course_lessons.php on line 21
+[11-Jan-2025 16:02:16 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such column: lesson_order in D:\server\htdocs\you\course_lessons.php:21
+Stack trace:
+#0 D:\server\htdocs\you\course_lessons.php(21): PDO->prepare('SELECT * FROM l...')
+#1 {main}
+  thrown in D:\server\htdocs\you\course_lessons.php on line 21
