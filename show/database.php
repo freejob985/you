@@ -76,7 +76,7 @@ function getCourseDetails($courseId) {
 function getPlaylistItems($courseId) {
     try {
         $db = connectDB();
-        $stmt = $db->prepare("SELECT id, title, status FROM lessons WHERE course_id = :course_id ORDER BY id");
+        $stmt = $db->prepare("SELECT id, title, status, duration FROM lessons WHERE course_id = :course_id ORDER BY id");
         $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

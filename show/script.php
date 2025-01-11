@@ -86,7 +86,7 @@ $(document).ready(function() {
      * @param {string} date - The date of the comment
      */
     function addComment(commentId, comment, date) {
-        const profileImage = 'https://scontent.fqtt2-1.fna.fbcdn.net/v/t39.30808-1/329724069_541779894594590_1088093019109401317_n.jpg?stp=dst-jpg_s200x200&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=FNTIXa2wDe0Q7kNvgFfRYW5&_nc_ht=scontent.fqtt2-1.fna&_nc_gid=AkV-4oPU4iZUpIerixkP1G6&oh=00_AYCawrcRwb1qzgcZNtHJu66cDM5T4byg62Vf8KyUGH186A&oe=670BB53A';
+        const profileImage = 'https://contentful.harrypotter.com/usf1vwtuqyxm/3SQ3X2km8wkQIsQWa02yOY/8801d7055a3e99dae8e60f54bb4b1db8/HarryPotter_WB_F4_HarryPotterMidshot_Promo_080615_Port.jpg?q=75&fm=jpg&w=914';
         $('#comments').prepend(`
             <div class="comment-card" data-comment-id="${commentId}">
                 <img src="${profileImage}" alt="Profile" class="comment-image">

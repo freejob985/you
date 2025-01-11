@@ -80,6 +80,139 @@
 .btn-prev:hover i {
     transform: translateX(5px);
 }
+
+.lesson-duration {
+    font-size: 0.8rem;
+    color: #6c757d;
+    background-color: rgba(0,0,0,0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.playlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.playlist-item:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.playlist-item-title {
+    flex-grow: 1;
+    margin-left: 8px;
+}
+
+.playlist-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 </style>
+
+<!-- إضافة JavaScript لتحديث طريقة عرض قائمة التشغيل -->
+<script>
+function formatDuration(duration) {
+    if (!duration) return '00:00';
+    
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function updatePlaylist(items) {
+    const playlistContainer = $('#playlist');
+    playlistContainer.empty();
+    
+    items.forEach(item => {
+        const formattedDuration = formatDuration(item.duration);
+        const statusClass = item.status ? `status-${item.status}` : '';
+        
+        const listItem = $(`
+            <li class="playlist-item ${statusClass}">
+                <div class="playlist-item-title">
+                    <a href="show.php?lesson_id=${item.id}" class="lesson-link">
+                        ${item.title}
+                    </a>
+                </div>
+                <div class="playlist-item-meta">
+                    <span class="lesson-duration">
+                        <i class="far fa-clock"></i>
+                        ${formattedDuration}
+                    </span>
+                    ${item.status ? `<span class="status-badge">${getStatusLabel(item.status)}</span>` : ''}
+                </div>
+            </li>
+        `);
+        
+        playlistContainer.append(listItem);
+    });
+}
+
+function getStatusLabel(status) {
+    switch (status) {
+        case 'completed': return 'مكتمل';
+        case 'watch': return 'مشاهدة';
+        case 'problem': return 'مشكلة';
+        case 'discussion': return 'نقاش';
+        case 'search': return 'بحث';
+        case 'retry': return 'إعادة';
+        case 'retry_again': return 'إعادة مرة أخرى';
+        case 'review': return 'مراجعة';
+        case 'excluded': return 'مستبعد';
+        case 'project': return 'مشروع';
+        default: return 'غير محدد';
+    }
+}
+
+// تحميل قائمة التشغيل عند تحميل الصفحة
+$(document).ready(function() {
+    // الحصول على معرف الدرس من URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lessonId = urlParams.get('lesson_id');
+    
+    if (lessonId) {
+        // الحصول على معرف الكورس من خلال AJAX
+        $.ajax({
+            url: 'show/ajax_handler.php',
+            method: 'GET',
+            data: {
+                action: 'get_lesson_details',
+                lesson_id: lessonId
+            },
+            success: function(response) {
+                if (response && response.course_id) {
+                    // تحميل قائمة التشغيل بعد الحصول على معرف الكورس
+                    $.ajax({
+                        url: 'show/ajax_handler.php',
+                        method: 'GET',
+                        data: {
+                            action: 'get_playlist',
+                            course_id: response.course_id
+                        },
+                        success: function(playlistResponse) {
+                            if (playlistResponse.success && playlistResponse.playlistItems) {
+                                updatePlaylist(playlistResponse.playlistItems);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error loading playlist:', error);
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error getting lesson details:', error);
+            }
+        });
+    }
+});
+</script>
 
 <?php include_once("show/footer.php"); ?>
