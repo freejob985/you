@@ -184,6 +184,8 @@ body {
     min-height: 40px;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .section-cell:hover {
@@ -358,4 +360,41 @@ body {
 
 .section-cell.sortable-ghost {
     background-color: rgba(52, 152, 219, 0.2);
+}
+
+/* ألوان متباينة للأقسام */
+.section-color-1 { background-color: #e3f2fd !important; }
+.section-color-2 { background-color: #f3e5f5 !important; }
+.section-color-3 { background-color: #e8f5e9 !important; }
+.section-color-4 { background-color: #fff3e0 !important; }
+.section-color-5 { background-color: #fce4ec !important; }
+.section-color-6 { background-color: #e0f7fa !important; }
+.section-color-7 { background-color: #f1f8e9 !important; }
+.section-color-8 { background-color: #fff8e1 !important; }
+
+/* تنسيقات السحب والإفلات المحسنة */
+.section-cell.drag-source {
+    opacity: 0.5;
+    border: 2px dashed #3498db;
+}
+
+.section-cell.drag-target {
+    background-color: rgba(52, 152, 219, 0.1);
+    border: 2px dashed #3498db;
+}
+
+/* مؤشر السحب */
+.section-cell.draggable {
+    cursor: move;
+}
+
+/* تأثير التحويم */
+.section-cell:hover::after {
+    content: '⇄';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 14px;
 } 
