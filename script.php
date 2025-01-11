@@ -55,6 +55,49 @@ function updateLessonStatusOrSection(lessonId, type, value) {
     });
 }
 
+function addNewSection(sectionName) {
+    const languageId = $('#courseLanguage').val();
+    
+    $.ajax({
+        url: 'lessons_actions.php',
+        method: 'POST',
+        data: {
+            action: 'add_section',
+            language_id: languageId,
+            section_name: sectionName
+        },
+        success: function(response) {
+            if (response.success) {
+                // تحديث قائمة الأقسام
+                const newOption = new Option(response.section.name, response.section.id);
+                $('#lessonSection').append(newOption);
+                
+                // تحديد القسم الجديد
+                $('#lessonSection').val(response.section.id).trigger('change');
+                
+                toastr.success('تم إضافة القسم بنجاح');
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            toastr.error('حدث خطأ أثناء إضافة القسم');
+            console.error(error);
+        }
+    });
+}
+
+// تحديث معالج النقر على زر إضافة قسم
+$('#addSectionBtn').click(function() {
+    const sectionName = $('#newSectionName').val().trim();
+    if (sectionName) {
+        addNewSection(sectionName);
+        $('#newSectionName').val('');
+    } else {
+        toastr.warning('يرجى إدخال اسم القسم');
+    }
+});
+
 // أضف هذا الكود في نهاية $(document).ready(function() { ... });
 
 loadStatusesAndSections();

@@ -26,6 +26,69 @@ switch ($_POST['action']) {
         handleDeleteLesson($db);
         break;
         
+    case 'add_section':
+        if (!isset($_POST['language_id']) || !isset($_POST['section_name'])) {
+            echo json_encode(['success' => false, 'message' => 'البيانات غير مكتملة']);
+            return;
+        }
+
+        $languageId = (int)$_POST['language_id'];
+        $sectionName = trim($_POST['section_name']);
+
+        try {
+            // التحقق من عدم وجود قسم بنفس الاسم
+            $stmt = $db->prepare('SELECT id FROM sections WHERE language_id = ? AND name = ?');
+            $stmt->execute([$languageId, $sectionName]);
+            if ($stmt->fetch()) {
+                echo json_encode(['success' => false, 'message' => 'هذا القسم موجود بالفعل']);
+                return;
+            }
+
+            // إضافة القسم الجديد
+            $stmt = $db->prepare('INSERT INTO sections (language_id, name) VALUES (?, ?)');
+            $stmt->execute([$languageId, $sectionName]);
+
+            // جلب معرف القسم الجديد
+            $newSectionId = $db->lastInsertId();
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'تم إضافة القسم بنجاح',
+                'section' => [
+                    'id' => $newSectionId,
+                    'name' => $sectionName
+                ]
+            ]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة القسم: ' . $e->getMessage()]);
+        }
+        break;
+        
+    case 'get_sections':
+        if (!isset($_POST['language_id'])) {
+            echo json_encode(['success' => false, 'message' => 'معرف اللغة مطلوب']);
+            return;
+        }
+
+        $languageId = (int)$_POST['language_id'];
+        
+        try {
+            $stmt = $db->prepare('SELECT id, name FROM sections WHERE language_id = ? ORDER BY name');
+            $stmt->execute([$languageId]);
+            $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            echo json_encode([
+                'success' => true,
+                'sections' => $sections
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء إلب الأقسام: ' . $e->getMessage()
+            ]);
+        }
+        break;
+        
     default:
         echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف']);
         break;
@@ -109,5 +172,34 @@ function getStatusLabel($status) {
     ];
 
     return $statusLabels[$status] ?? 'غير محدد';
+}
+
+/**
+ * إضافة قسم جديد
+ */
+function handleAddSection($db) {
+    if (!isset($_POST['language_id']) || !isset($_POST['section_name'])) {
+        echo json_encode(['success' => false, 'message' => 'البيانات غير مكتملة']);
+        return;
+    }
+
+    $languageId = (int)$_POST['language_id'];
+    $sectionName = trim($_POST['section_name']);
+
+    try {
+        $stmt = $db->prepare('INSERT INTO sections (language_id, name) VALUES (?, ?)');
+        $stmt->execute([$languageId, $sectionName]);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'تم إضافة القسم بنجاح',
+            'section' => [
+                'id' => $db->lastInsertId(),
+                'name' => $sectionName
+            ]
+        ]);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة القسم']);
+    }
 }
 ?>

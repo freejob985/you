@@ -122,41 +122,42 @@ $totalPages = ceil($totalLessons / $perPage);
         
         <!-- الإحصائيات المحدثة -->
         <div class="stats-container">
+            <!-- الإحصائيات الحالية -->
             <div class="stat-card">
-                <div class="stat-value"><?php echo $stats['total_lessons']; ?></div>
-                <div class="stat-label">إجمالي الدروس</div>
+                <div class="stat-value"><?php echo formatDuration($stats['total_duration']); ?></div>
+                <div class="stat-label">المدة الإجمالية</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value"><?php echo $stats['completed_lessons']; ?></div>
-                <div class="stat-label">الدروس المكتملة</div>
+                <div class="stat-value"><?php echo $stats['total_lessons'] - $stats['completed_lessons']; ?></div>
+                <div class="stat-label">الدروس المتبقية</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value"><?php echo formatDuration($stats['completed_duration']); ?></div>
-                <div class="stat-label">مدة الدروس المكتملة</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value"><?php echo formatDuration($stats['remaining_duration']); ?></div>
-                <div class="stat-label">مدة الدروس المتبقية</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">
-                    <?php echo round(($stats['completed_lessons'] / $stats['total_lessons']) * 100); ?>%
+            <!-- إضافة شريط التقدم -->
+            <div class="progress-card">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" 
+                         style="width: <?php echo round(($stats['completed_lessons'] / $stats['total_lessons']) * 100); ?>%">
+                        <?php echo round(($stats['completed_lessons'] / $stats['total_lessons']) * 100); ?>%
+                    </div>
                 </div>
-                <div class="stat-label">نسبة الإكمال</div>
+                <div class="progress-label">تقدم الكورس</div>
             </div>
         </div>
         
-        <!-- أزرار الأقسام -->
-        <?php if (!empty($sections)): ?>
-        <div class="sections-container mb-4">
-            <button class="section-button active" data-section-id="all">جميع الأقسام</button>
+        <!-- تحديث قسم الأقسام -->
+        <div class="sections-header">
+            <h3>الأقسام</h3>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSectionModal">
+                <i class="fas fa-plus"></i> إضافة قسم
+            </button>
+        </div>
+        <div class="sections-container">
+            <button class="section-button active" data-section-id="all">الكل</button>
             <?php foreach ($sections as $section): ?>
                 <button class="section-button" data-section-id="<?php echo $section['id']; ?>">
                     <?php echo htmlspecialchars($section['name']); ?>
                 </button>
             <?php endforeach; ?>
         </div>
-        <?php endif; ?>
         
         <!-- الفلترة والبحث -->
         <div class="filters-container">
@@ -251,6 +252,48 @@ $totalPages = ceil($totalLessons / $perPage);
                 <?php endif; ?>
             </div>
         <?php endif; ?>
+
+        <!-- إضافة هذا القسم في الـ HTML بعد عنوان الصفحة -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="stat-item">
+                                    <h6>إجمالي الدروس</h6>
+                                    <span class="stat-value"><?php echo $stats['total_lessons']; ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="stat-item">
+                                    <h6>الدروس المكتملة</h6>
+                                    <span class="stat-value"><?php echo $stats['completed_lessons']; ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <h6>مدة الدروس المكتملة</h6>
+                                    <span class="stat-value"><?php echo formatDuration($stats['completed_duration']); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <h6>مدة الدروس المتبقية</h6>
+                                    <span class="stat-value"><?php echo formatDuration($stats['remaining_duration']); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="stat-item">
+                                    <h6>نسبة الإكمال</h6>
+                                    <span class="stat-value"><?php echo round(($stats['completed_lessons'] / $stats['total_lessons']) * 100, 1); ?>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- jQuery -->
@@ -264,6 +307,28 @@ $totalPages = ceil($totalLessons / $perPage);
 
     <!-- Context Menu -->
     <script src="assets/contextMenu.js"></script>
+
+    <!-- مودال إضافة قسم جديد -->
+    <div class="modal fade" id="addSectionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة قسم جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">اسم القسم</label>
+                        <input type="text" class="form-control" id="newSectionName" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveSectionBtn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -355,6 +420,79 @@ $totalPages = ceil($totalLessons / $perPage);
                     }
                 });
             });
+
+            // تهيئة مودال إضافة قسم جديد
+            const addSectionModal = new bootstrap.Modal(document.getElementById('addSectionModal'));
+            
+            // معالج حدث النقر على زر حفظ القسم الجديد
+            $('#saveSectionBtn').click(function() {
+                const sectionName = $('#newSectionName').val().trim();
+                const languageId = <?php echo $course['language_id']; ?>;
+                
+                if (!sectionName) {
+                    Swal.fire('تنبيه', 'يرجى إدخال اسم القسم', 'warning');
+                    return;
+                }
+                
+                // إرسال طلب إضافة القسم
+                $.ajax({
+                    url: 'lessons_actions.php',
+                    method: 'POST',
+                    data: {
+                        action: 'add_section',
+                        language_id: languageId,
+                        section_name: sectionName
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // إضافة القسم الجديد إلى القائمة المنسدلة
+                            const newOption = new Option(response.section.name, response.section.id);
+                            $('#sectionFilter').append(newOption);
+                            
+                            // إغلاق المودال وإظهار رسالة نجاح
+                            addSectionModal.hide();
+                            $('#newSectionName').val('');
+                            
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'تم!',
+                                text: 'تم إضافة القسم بنجاح'
+                            });
+                            
+                            // تحديث قائمة الأقسام
+                            loadSections();
+                        } else {
+                            Swal.fire('خطأ', response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('خطأ', 'حدث خطأ أثناء إضافة القسم', 'error');
+                    }
+                });
+            });
+            
+            // دالة تحديث قائمة الأقسام
+            function loadSections() {
+                $.ajax({
+                    url: 'lessons_actions.php',
+                    method: 'POST',
+                    data: {
+                        action: 'get_sections',
+                        language_id: <?php echo $course['language_id']; ?>
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            const sectionFilter = $('#sectionFilter');
+                            sectionFilter.empty();
+                            sectionFilter.append(new Option('جميع الأقسام', ''));
+                            
+                            response.sections.forEach(function(section) {
+                                sectionFilter.append(new Option(section.name, section.id));
+                            });
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
