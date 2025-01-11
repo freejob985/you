@@ -194,7 +194,10 @@ $totalPages = ceil($totalLessons / $perPage);
                     <?php foreach ($lessons as $lesson): ?>
                         <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
                             <td><?php echo htmlspecialchars($lesson['title']); ?></td>
-                            <td class="section-cell" data-section-id="<?php echo $lesson['section_id']; ?>">
+                            <td class="section-cell" 
+                                data-section-id="<?php echo $lesson['section_id']; ?>"
+                                data-lesson-id="<?php echo $lesson['id']; ?>"
+                                ondblclick="handleSectionDoubleClick(this)">
                                 <?php echo htmlspecialchars($lesson['section_name'] ?? 'بدون قسم'); ?>
                             </td>
                             <td><?php echo getStatusLabel($lesson['status']); ?></td>
@@ -225,6 +228,8 @@ $totalPages = ceil($totalLessons / $perPage);
             <?php foreach ($sections as $section): ?>
                 <div class="section-item" 
                      data-section-id="<?php echo $section['id']; ?>"
+                     data-section-name="<?php echo htmlspecialchars($section['name']); ?>"
+                     ondblclick="handleSectionItemDoubleClick(this)"
                      draggable="true">
                     <?php echo htmlspecialchars($section['name']); ?>
                 </div>
@@ -571,6 +576,125 @@ $totalPages = ceil($totalLessons / $perPage);
             });
         }
     });
+    </script>
+
+    <script>
+    /**
+     * معالجة النقر المزدوج على خلية القسم في الجدول
+     * @param {HTMLElement} cell - خلية القسم
+     */
+    function handleSectionDoubleClick(cell) {
+        const lessonId = cell.dataset.lessonId;
+        
+        // تأكيد إزالة القسم
+        Swal.fire({
+            title: 'إزالة القسم',
+            text: 'هل تريد إزالة هذا القسم من الدرس؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                updateLessonSection(lessonId, null, cell);
+            }
+        });
+    }
+
+    /**
+     * معالجة النقر المزدوج على عنصر القسم في القائمة
+     * @param {HTMLElement} item - عنصر القسم
+     */
+    function handleSectionItemDoubleClick(item) {
+        const sectionId = item.dataset.sectionId;
+        const sectionName = item.dataset.sectionName;
+        
+        // تأكيد حذف القسم
+        Swal.fire({
+            title: 'حذف القسم',
+            text: `هل تريد حذف القسم "${sectionName}"؟`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteSection(sectionId, item);
+            }
+        });
+    }
+
+    /**
+     * حذف قسم من قاعدة البيانات
+     * @param {number} sectionId - معرف القسم
+     * @param {HTMLElement} element - عنصر القسم في DOM
+     */
+    function deleteSection(sectionId, element) {
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'delete_section',
+                section_id: sectionId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // إزالة العنصر من DOM
+                    element.remove();
+                    
+                    // تحديث خلايا الجدول المرتبطة
+                    $(`.section-cell[data-section-id="${sectionId}"]`).each(function() {
+                        $(this).text('بدون قسم').removeAttr('data-section-id');
+                    });
+                    
+                    Swal.fire('تم!', 'تم حذف القسم بنجاح', 'success');
+                } else {
+                    Swal.fire('خطأ', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('خطأ', 'حدث خطأ أثناء حذف القسم', 'error');
+            }
+        });
+    }
+
+    // تحديث دالة updateLessonSection لتدعم إزالة القسم
+    function updateLessonSection(lessonId, sectionId, cell) {
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'update_lesson_section',
+                lesson_id: lessonId,
+                section_id: sectionId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // تحديث نص الخلية
+                    cell.textContent = sectionId ? response.section_name : 'بدون قسم';
+                    
+                    if (sectionId) {
+                        cell.dataset.sectionId = sectionId;
+                    } else {
+                        cell.removeAttribute('data-section-id');
+                    }
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم!',
+                        text: 'تم تحديث القسم بنجاح',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire('خطأ', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('خطأ', 'حدث خطأ أثناء تحديث القسم', 'error');
+            }
+        });
+    }
     </script>
 </body>
 </html> 

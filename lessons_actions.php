@@ -90,23 +90,27 @@ switch ($_POST['action']) {
         break;
         
     case 'update_lesson_section':
-        if (!isset($_POST['lesson_id']) || !isset($_POST['section_id'])) {
-            echo json_encode(['success' => false, 'message' => 'البيانات غير مكتملة']);
+        if (!isset($_POST['lesson_id'])) {
+            echo json_encode(['success' => false, 'message' => 'معرف الدرس مطلوب']);
             return;
         }
 
         $lessonId = (int)$_POST['lesson_id'];
-        $sectionId = (int)$_POST['section_id'];
+        $sectionId = isset($_POST['section_id']) ? (int)$_POST['section_id'] : null;
 
         try {
-            // تحديث قسم الدرس
-            $stmt = $db->prepare('UPDATE lessons SET section_id = ? WHERE id = ?');
-            $stmt->execute([$sectionId, $lessonId]);
+            if ($sectionId) {
+                $stmt = $db->prepare('UPDATE lessons SET section_id = ? WHERE id = ?');
+                $stmt->execute([$sectionId, $lessonId]);
 
-            // جلب اسم القسم الجديد
-            $stmt = $db->prepare('SELECT name FROM sections WHERE id = ?');
-            $stmt->execute([$sectionId]);
-            $sectionName = $stmt->fetchColumn();
+                $stmt = $db->prepare('SELECT name FROM sections WHERE id = ?');
+                $stmt->execute([$sectionId]);
+                $sectionName = $stmt->fetchColumn();
+            } else {
+                $stmt = $db->prepare('UPDATE lessons SET section_id = NULL WHERE id = ?');
+                $stmt->execute([$lessonId]);
+                $sectionName = 'بدون قسم';
+            }
 
             echo json_encode([
                 'success' => true,
@@ -117,6 +121,35 @@ switch ($_POST['action']) {
             echo json_encode([
                 'success' => false,
                 'message' => 'حدث خطأ أثناء تحديث القسم: ' . $e->getMessage()
+            ]);
+        }
+        break;
+        
+    case 'delete_section':
+        if (!isset($_POST['section_id'])) {
+            echo json_encode(['success' => false, 'message' => 'معرف القسم مطلوب']);
+            return;
+        }
+
+        $sectionId = (int)$_POST['section_id'];
+
+        try {
+            // تحديث الدروس المرتبطة بهذا القسم
+            $stmt = $db->prepare('UPDATE lessons SET section_id = NULL WHERE section_id = ?');
+            $stmt->execute([$sectionId]);
+
+            // حذف القسم
+            $stmt = $db->prepare('DELETE FROM sections WHERE id = ?');
+            $stmt->execute([$sectionId]);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'تم حذف القسم بنجاح'
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء حذف القسم: ' . $e->getMessage()
             ]);
         }
         break;
