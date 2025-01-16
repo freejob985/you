@@ -214,6 +214,36 @@ switch ($_POST['action']) {
         }
         break;
         
+    case 'update_lesson_status':
+        try {
+            $lessonId = $_POST['lesson_id'];
+            $status = $_POST['status'];
+            
+            // التحقق من صحة البيانات
+            if (!$lessonId || !$status || !isValidStatus($status)) {
+                throw new Exception('البيانات غير صحيحة');
+            }
+            
+            // تحديث حالة الدرس
+            $stmt = $db->prepare('UPDATE lessons SET status = ? WHERE id = ?');
+            $result = $stmt->execute([$status, $lessonId]);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'تم تحديث الحالة بنجاح'
+                ]);
+            } else {
+                throw new Exception('فشل تحديث الحالة');
+            }
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+        break;
+        
     default:
         echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف']);
         break;
@@ -326,5 +356,19 @@ function handleAddSection($db) {
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة القسم']);
     }
+}
+
+/**
+ * التحقق من صحة الحالة
+ * @param string $status الحالة المراد التحقق منها
+ * @return bool
+ */
+function isValidStatus($status) {
+    $validStatuses = [
+        'completed', 'watch', 'review', 'problem', 
+        'retry', 'retry_again', 'discussion', 'search',
+        'excluded', 'project'
+    ];
+    return in_array($status, $validStatuses);
 }
 ?>

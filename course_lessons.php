@@ -1,4 +1,10 @@
 <?php
+// تفعيل تتبع الأخطاء
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
+ini_set('error_log', 'debug.log');
+
 // تضمين الملفات المطلوبة
 require_once 'index/php.php';
 require_once 'index/helper_functions.php';
@@ -92,6 +98,11 @@ try {
 
 // حساب عدد الصفحات
 $totalPages = ceil($totalLessons / $perPage);
+
+// تسجيل معلومات التتبع
+error_log("Course ID: $courseId");
+error_log("Total Lessons: $totalLessons");
+error_log("Lessons count: " . count($lessons));
 ?>
 
 <!DOCTYPE html>
@@ -123,6 +134,8 @@ td.section-cell {
 }
 
     </style>
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
@@ -181,8 +194,15 @@ td.section-cell {
                     <select name="status" class="form-select" style="width: auto;">
                         <option value="">كل الحالات</option>
                         <option value="completed" <?php echo $status === 'completed' ? 'selected' : ''; ?>>مكتمل</option>
-                        <option value="watching" <?php echo $status === 'watching' ? 'selected' : ''; ?>>قيد المشاهدة</option>
-                        <option value="pending" <?php echo $status === 'pending' ? 'selected' : ''; ?>>قيد الانتظار</option>
+                        <option value="watch" <?php echo $status === 'watch' ? 'selected' : ''; ?>>مشاهدة</option>
+                        <option value="review" <?php echo $status === 'review' ? 'selected' : ''; ?>>مراجعة</option>
+                        <option value="problem" <?php echo $status === 'problem' ? 'selected' : ''; ?>>مشكلة</option>
+                        <option value="retry" <?php echo $status === 'retry' ? 'selected' : ''; ?>>إعادة</option>
+                        <option value="retry_again" <?php echo $status === 'retry_again' ? 'selected' : ''; ?>>إعادة ثانية</option>
+                        <option value="discussion" <?php echo $status === 'discussion' ? 'selected' : ''; ?>>نقاش</option>
+                        <option value="search" <?php echo $status === 'search' ? 'selected' : ''; ?>>بحث</option>
+                        <option value="excluded" <?php echo $status === 'excluded' ? 'selected' : ''; ?>>مستبعد</option>
+                        <option value="project" <?php echo $status === 'project' ? 'selected' : ''; ?>>مشروع تطبيقي</option>
                     </select>
                     <button type="submit" class="btn btn-primary">تطبيق</button>
                 </div>
@@ -201,49 +221,47 @@ td.section-cell {
                     </tr>
                 </thead>
                 <tbody id="lessonsTableBody">
-                    <?php foreach ($lessons as $lesson): ?>
-                        <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
-                            <td><?php echo htmlspecialchars($lesson['title']); ?></td>
-                            <td class="section-cell" 
-                                data-lesson-id="<?php echo $lesson['id']; ?>"
-                                data-section-id="<?php echo $lesson['section_id']; ?>"
-                                data-section-type="<?php echo strtolower($lesson['section_name'] ?? 'default'); ?>">
-                                <?php echo $lesson['section_name'] ?? 'غير مصنف'; ?>
-                            </td>
-                            <td><?php echo getStatusLabel($lesson['status']); ?></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" 
-                                       class="action-button btn-primary">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button class="action-button btn-success toggle-status" 
-                                            data-lesson-id="<?php echo $lesson['id']; ?>">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button class="action-button btn-danger delete-lesson" 
-                                            data-lesson-id="<?php echo $lesson['id']; ?>">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
+                    <?php if (empty($lessons)): ?>
+                        <tr>
+                            <td colspan="4" class="text-center">لا توجد دروس متاحة</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach ($lessons as $lesson): ?>
+                            <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
+                                <td><?php echo htmlspecialchars($lesson['title']); ?></td>
+                                <td class="section-cell" 
+                                    data-lesson-id="<?php echo $lesson['id']; ?>"
+                                    data-section-id="<?php echo $lesson['section_id']; ?>"
+                                    data-section-type="<?php echo strtolower($lesson['section_name'] ?? 'default'); ?>">
+                                    <?php echo $lesson['section_name'] ?? 'غير مصنف'; ?>
+                                </td>
+                                <td class="status-cell status-<?php echo $lesson['status']; ?>" 
+                                    data-lesson-id="<?php echo $lesson['id']; ?>"
+                                    data-status="<?php echo $lesson['status']; ?>"
+                                    onclick="showStatusDropdown(this)">
+                                    <?php echo getStatusLabel($lesson['status']); ?>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="show.php?lesson_id=<?php echo $lesson['id']; ?>" 
+                                           class="action-button btn-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button class="action-button btn-success toggle-status" 
+                                                data-lesson-id="<?php echo $lesson['id']; ?>">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="action-button btn-danger delete-lesson" 
+                                                data-lesson-id="<?php echo $lesson['id']; ?>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
-        </div>
-        
-        <!-- إضافة قائمة الأقسام القابلة للسحب -->
-        <div id="sectionsList" class="sections-draggable">
-            <?php foreach ($sections as $section): ?>
-                <div class="section-item" 
-                     data-section-id="<?php echo $section['id']; ?>"
-                     data-section-name="<?php echo htmlspecialchars($section['name']); ?>"
-                     ondblclick="handleSectionItemDoubleClick(this)"
-                     draggable="true">
-                    <?php echo htmlspecialchars($section['name']); ?>
-                </div>
-            <?php endforeach; ?>
         </div>
         
         <!-- التنقل بين الصفحات -->
@@ -348,6 +366,29 @@ td.section-cell {
             </div>
         </div>
     </div>
+
+    <!-- Toastr JS (أضف هذا قبل إغلاق body) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- إضافة تهيئة Toastr -->
+    <script>
+    // تهيئة إعدادات Toastr
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+        "rtl": true // لدعم اللغة العربية
+    };
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -977,7 +1018,139 @@ td.section-cell {
     });
     </script>
 
+    <script>
+    // تعريف الحالات المتاحة
+    const sections = <?php echo json_encode($sections); ?>;
+    const statusConfig = {
+        completed: { label: 'مكتمل', color: '#000000' },
+        watch: { label: 'مشاهدة', color: '#007bff' },
+        review: { label: 'مراجعة', color: '#007bff' },
+        problem: { label: 'مشكلة', color: '#ffc107' },
+        retry: { label: 'إعادة', color: '#ffc107' },
+        retry_again: { label: 'إعادة ثانية', color: '#ffc107' },
+        discussion: { label: 'نقاش', color: '#17a2b8' },
+        search: { label: 'بحث', color: '#17a2b8' },
+        excluded: { label: 'مستبعد', color: '#dc3545' },
+        project: { label: 'مشروع تطبيقي', color: '#6c757d' }
+    };
 
- 
+    /**
+     * عرض قائمة اختيار الحالة
+     * @param {HTMLElement} cell - خلية الحالة
+     */
+    function showStatusDropdown(cell) {
+        // إزالة أي قوائم منسدلة سابقة
+        const existingDropdown = document.querySelector('.status-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+        }
+
+        // إنشاء القائمة المنسدلة
+        const dropdown = document.createElement('div');
+        dropdown.className = 'status-dropdown show';
+
+        // إضافة خيارات الحالات
+        Object.entries(statusConfig).forEach(([status, config]) => {
+            const item = document.createElement('div');
+            item.className = 'status-dropdown-item';
+            
+            const indicator = document.createElement('span');
+            indicator.className = 'status-indicator';
+            indicator.style.backgroundColor = config.color;
+            
+            const label = document.createElement('span');
+            label.textContent = config.label;
+            
+            item.appendChild(indicator);
+            item.appendChild(label);
+            
+            item.onclick = () => {
+                updateLessonStatus(cell.dataset.lessonId, status);
+                dropdown.remove();
+            };
+            
+            dropdown.appendChild(item);
+        });
+
+        // تحديد موقع القائمة
+        const rect = cell.getBoundingClientRect();
+        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+        dropdown.style.left = `${rect.left + window.scrollX}px`;
+
+        // إضافة القائمة للصفحة
+        document.body.appendChild(dropdown);
+
+        // إغلاق القائمة عند النقر خارجها
+        document.addEventListener('click', function closeDropdown(e) {
+            if (!dropdown.contains(e.target) && e.target !== cell) {
+                dropdown.remove();
+                document.removeEventListener('click', closeDropdown);
+            }
+        });
+    }
+
+    /**
+     * تحديث حالة الدرس
+     * @param {string} lessonId - معرف الدرس
+     * @param {string} status - الحالة الجديدة
+     */
+    function updateLessonStatus(lessonId, status) {
+        // إظهار مؤشر التحميل
+        const cell = document.querySelector(`.status-cell[data-lesson-id="${lessonId}"]`);
+        const originalContent = cell.innerHTML;
+        cell.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'update_lesson_status',
+                lesson_id: lessonId,
+                status: status
+            },
+            success: function(response) {
+                if (response.success) {
+                    // تحديث واجهة المستخدم
+                    cell.textContent = statusConfig[status].label;
+                    cell.className = `status-cell status-${status}`;
+                    cell.dataset.status = status;
+                    
+                    // إضافة تأثير بصري للتحديث
+                    cell.classList.add('updated');
+                    setTimeout(() => cell.classList.remove('updated'), 1000);
+                    
+                    toastr.success('تم تحديث الحالة بنجاح');
+                } else {
+                    // استعادة المحتوى الأصلي في حالة الفشل
+                    cell.innerHTML = originalContent;
+                    toastr.error(response.message || 'فشل تحديث الحالة');
+                }
+            },
+            error: function(xhr, status, error) {
+                // استعادة المحتوى الأصلي في حالة الخطأ
+                cell.innerHTML = originalContent;
+                console.error('Error:', error);
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    }
+    </script>
+
+    <script>
+    // تحديث عرض الأقسام في الجدول
+    function updateSectionDisplay() {
+        const sectionCells = document.querySelectorAll('.section-cell');
+        sectionCells.forEach(cell => {
+            const sectionType = cell.dataset.sectionType || 'default';
+            cell.classList.add(`section-${sectionType}`);
+        });
+    }
+
+    // تنفيذ عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSectionDisplay();
+    });
+    </script>
+
 </body>
 </html> 

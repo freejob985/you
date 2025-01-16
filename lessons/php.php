@@ -1,4 +1,106 @@
 <?php
+/**
+ * جلب الدروس مع معلومات الأقسام والحالات
+ * @param int $courseId معرف الكورس
+ * @param string $search نص البحث (اختياري)
+ * @param string $status حالة الدرس (اختياري)
+ * @param int $page رقم الصفحة
+ * @param int $perPage عدد العناصر في الصفحة
+ * @return array
+ */
+function getLessons($courseId, $search = '', $status = '', $page = 1, $perPage = 20) {
+    global $db;
+    
+    try {
+        // بناء الاستعلام الأساسي
+        $query = "SELECT l.*, s.name as section_name 
+                 FROM lessons l 
+                 LEFT JOIN sections s ON l.section_id = s.id 
+                 WHERE l.course_id = :course_id";
+        $params = ['course_id' => $courseId];
+
+        // إضافة شرط البحث
+        if (!empty($search)) {
+            $query .= " AND l.title LIKE :search";
+            $params['search'] = "%{$search}%";
+        }
+
+        // إضافة شرط الحالة
+        if (!empty($status)) {
+            $query .= " AND l.status = :status";
+            $params['status'] = $status;
+        }
+
+        // إضافة الترتيب
+        $query .= " ORDER BY l.sort_order ASC";
+
+        // إضافة الصفحات
+        $offset = ($page - 1) * $perPage;
+        $query .= " LIMIT :limit OFFSET :offset";
+        
+        // تنفيذ الاستعلام
+        $stmt = $db->prepare($query);
+        
+        // ربط المعاملات
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":{$key}", $value);
+        }
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+        error_log("Error fetching lessons: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * جلب إجمالي عدد الدروس للكورس
+ * @param int $courseId معرف الكورس
+ * @param string $search نص البحث (اختياري)
+ * @param string $status حالة الدرس (اختياري)
+ * @return int
+ */
+function getTotalLessons($courseId, $search = '', $status = '') {
+    global $db;
+    
+    try {
+        $query = "SELECT COUNT(*) FROM lessons WHERE course_id = :course_id";
+        $params = ['course_id' => $courseId];
+
+        if (!empty($search)) {
+            $query .= " AND title LIKE :search";
+            $params['search'] = "%{$search}%";
+        }
+
+        if (!empty($status)) {
+            $query .= " AND status = :status";
+            $params['status'] = $status;
+        }
+
+        $stmt = $db->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":{$key}", $value);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchColumn();
+
+    } catch (PDOException $e) {
+        error_log("Error counting lessons: " . $e->getMessage());
+        return 0;
+    }
+}
+
+// إضافة تسجيل الأخطاء للتتبع
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
+ini_set('error_log', 'debug.log');
+
 // إنشاء اتصال بقاعدة البيانات SQLite باستخدام PDO
 try {
     $db = new PDO('sqlite:courses.db');

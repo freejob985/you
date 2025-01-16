@@ -13,3 +13,12 @@ Stack trace:
 #0 D:\server\htdocs\you\course_lessons.php(21): PDO->prepare('SELECT * FROM l...')
 #1 {main}
   thrown in D:\server\htdocs\you\course_lessons.php on line 21
+[16-Jan-2025 19:55:44 Europe/Berlin] Course ID: 27
+[16-Jan-2025 19:55:44 Europe/Berlin] Total Lessons: 0
+[16-Jan-2025 19:55:44 Europe/Berlin] Lessons count: 0
+[16-Jan-2025 19:55:54 Europe/Berlin] Course ID: 27
+[16-Jan-2025 19:55:54 Europe/Berlin] Total Lessons: 53
+[16-Jan-2025 19:55:54 Europe/Berlin] Lessons count: 20
+[16-Jan-2025 19:56:17 Europe/Berlin] Course ID: 27
+[16-Jan-2025 19:56:17 Europe/Berlin] Total Lessons: 53
+[16-Jan-2025 19:56:17 Europe/Berlin] Lessons count: 20
