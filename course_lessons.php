@@ -116,6 +116,13 @@ $totalPages = ceil($totalLessons / $perPage);
     <link href="course_lessons.css" rel="stylesheet">
     <link href="assets/contextMenu.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+td.section-cell {
+    text-align: center;
+    font-weight: 700;
+}
+
+    </style>
 </head>
 <body>
     <div class="container mt-4">
@@ -198,10 +205,10 @@ $totalPages = ceil($totalLessons / $perPage);
                         <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
                             <td><?php echo htmlspecialchars($lesson['title']); ?></td>
                             <td class="section-cell" 
-                                data-section-id="<?php echo $lesson['section_id']; ?>"
                                 data-lesson-id="<?php echo $lesson['id']; ?>"
-                                ondblclick="handleSectionDoubleClick(this)">
-                                <?php echo htmlspecialchars($lesson['section_name'] ?? 'بدون قسم'); ?>
+                                data-section-id="<?php echo $lesson['section_id']; ?>"
+                                data-section-type="<?php echo strtolower($lesson['section_name'] ?? 'default'); ?>">
+                                <?php echo $lesson['section_name'] ?? 'غير مصنف'; ?>
                             </td>
                             <td><?php echo getStatusLabel($lesson['status']); ?></td>
                             <td>
@@ -318,7 +325,7 @@ $totalPages = ceil($totalLessons / $perPage);
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Context Menu -->
-    <script src="assets/contextMenu.js"></script>
+    <!-- <script src="assets/contextMenu.js"></script> -->
 
     <!-- مودال إضافة قسم جديد -->
     <div class="modal fade" id="addSectionModal" tabindex="-1">
@@ -513,127 +520,88 @@ $totalPages = ceil($totalLessons / $perPage);
      * تهيئة وظائف السحب والإفلات
      */
     document.addEventListener('DOMContentLoaded', function() {
-        // تهيئة أزرار الأقسام للسحب
-        const sectionButtons = document.querySelectorAll('.section-button.draggable');
-        sectionButtons.forEach(button => {
-            button.addEventListener('dragstart', handleButtonDragStart);
-            button.addEventListener('dragend', handleDragEnd);
-        });
-
-        // تهيئة خلايا الجدول كمناطق إفلات
         const sectionCells = document.querySelectorAll('.section-cell');
+        
         sectionCells.forEach(cell => {
-            cell.addEventListener('dragover', handleDragOver);
-            cell.addEventListener('dragenter', handleDragEnter);
-            cell.addEventListener('dragleave', handleDragLeave);
-            cell.addEventListener('drop', handleDrop);
+            // تهيئة السحب والإفلات
+            cell.setAttribute('draggable', true);
+            
+            cell.addEventListener('dragstart', function(e) {
+                e.stopPropagation();
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.dataset.sectionId);
+            });
+            
+            cell.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+            
+            cell.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            cell.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            
+            cell.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('drag-over');
+                
+                const sourceSectionId = e.dataTransfer.getData('text/plain');
+                const targetLessonId = this.dataset.lessonId;
+                
+                updateLessonSection(targetLessonId, sourceSectionId);
+            });
+            
+            // معالجة النقر المزدوج
+            cell.addEventListener('dblclick', function(e) {
+                e.stopPropagation();
+                showSectionDropdown(this);
+            });
         });
     });
 
-    /**
-     * معالجة بدء سحب زر القسم
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleButtonDragStart(e) {
-        const button = e.target;
-        const sectionId = button.dataset.sectionId;
-        const sectionName = button.dataset.sectionName;
-
-        e.dataTransfer.setData('application/json', JSON.stringify({
-            sectionId: sectionId,
-            sectionName: sectionName,
-            sourceType: 'button'
-        }));
-
-        button.classList.add('dragging');
+    function showSectionDropdown(cell) {
+        // إزالة أي قوائم منسدلة سابقة
+        const existingDropdowns = document.querySelectorAll('.section-dropdown');
+        existingDropdowns.forEach(dropdown => dropdown.remove());
         
-        // إضافة تأثير بصري للسحب
-        const dragImage = button.cloneNode(true);
-        dragImage.style.opacity = '0.6';
-        document.body.appendChild(dragImage);
-        e.dataTransfer.setDragImage(dragImage, 0, 0);
-        setTimeout(() => document.body.removeChild(dragImage), 0);
-    }
-
-    /**
-     * معالجة نهاية السحب
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleDragEnd(e) {
-        e.target.classList.remove('dragging');
-        document.querySelectorAll('.drag-over').forEach(el => {
-            el.classList.remove('drag-over');
+        const dropdown = document.createElement('div');
+        dropdown.className = 'section-dropdown show';
+        
+        // إضافة الأقسام المتاحة
+        const sections = <?php echo json_encode($sections); ?>;
+        sections.forEach(section => {
+            const item = document.createElement('div');
+            item.className = 'section-dropdown-item';
+            item.textContent = section.name;
+            item.onclick = () => {
+                updateLessonSection(cell.dataset.lessonId, section.id);
+                dropdown.remove();
+            };
+            dropdown.appendChild(item);
+        });
+        
+        // تحديد موقع القائمة
+        const rect = cell.getBoundingClientRect();
+        dropdown.style.top = rect.bottom + window.scrollY + 'px';
+        dropdown.style.left = rect.left + window.scrollX + 'px';
+        
+        document.body.appendChild(dropdown);
+        
+        // إغلاق القائمة عند النقر خارجها
+        document.addEventListener('click', function closeDropdown(e) {
+            if (!dropdown.contains(e.target) && e.target !== cell) {
+                dropdown.remove();
+                document.removeEventListener('click', closeDropdown);
+            }
         });
     }
 
-    /**
-     * معالجة السحب فوق منطقة الإفلات
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-    }
-
-    /**
-     * معالجة الدخول إلى منطقة الإفلات
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleDragEnter(e) {
-        const cell = e.target.closest('.section-cell');
-        if (cell) {
-            cell.classList.add('drag-over');
-        }
-    }
-
-    /**
-     * معالجة الخروج من منطقة الإفلات
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleDragLeave(e) {
-        const cell = e.target.closest('.section-cell');
-        const relatedTarget = e.relatedTarget?.closest('.section-cell');
-        if (cell && cell !== relatedTarget) {
-            cell.classList.remove('drag-over');
-        }
-    }
-
-    /**
-     * معالجة إفلات العنصر
-     * @param {DragEvent} e - حدث السحب
-     */
-    function handleDrop(e) {
-        e.preventDefault();
-        const cell = e.target.closest('.section-cell');
-        if (!cell) return;
-
-        cell.classList.remove('drag-over');
-
-        try {
-            const data = JSON.parse(e.dataTransfer.getData('application/json'));
-            const lessonId = cell.dataset.lessonId;
-
-            if (data.sourceType === 'button' && lessonId) {
-                // إظهار مؤشر التحميل
-                const originalContent = cell.innerHTML;
-                cell.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-                // تحديث القسم
-                updateLessonSection(lessonId, data.sectionId, cell, originalContent);
-            }
-        } catch (error) {
-            console.error('خطأ في معالجة البيانات المنقولة:', error);
-        }
-    }
-
-    /**
-     * تحديث قسم الدرس
-     * @param {string} lessonId - معرف الدرس
-     * @param {string} sectionId - معرف القسم
-     * @param {HTMLElement} cell - خلية الجدول
-     * @param {string} originalContent - المحتوى الأصلي للخلية
-     */
-    function updateLessonSection(lessonId, sectionId, cell, originalContent) {
+    function updateLessonSection(lessonId, sectionId) {
         $.ajax({
             url: 'lessons_actions.php',
             method: 'POST',
@@ -644,44 +612,20 @@ $totalPages = ceil($totalLessons / $perPage);
             },
             success: function(response) {
                 if (response.success) {
+                    const cell = document.querySelector(`.section-cell[data-lesson-id="${lessonId}"]`);
                     cell.textContent = response.section_name;
                     cell.dataset.sectionId = sectionId;
+                    cell.dataset.sectionType = response.section_name.toLowerCase();
                     
-                    // تحديث التنسيقات
-                    updateSectionCellStyles(cell);
-                    
-                    // إظهار رسالة نجاح
                     toastr.success('تم تحديث القسم بنجاح');
                 } else {
-                    cell.innerHTML = originalContent;
-                    toastr.error(response.message);
+                    toastr.error('فشل تحديث القسم');
                 }
             },
             error: function() {
-                cell.innerHTML = originalContent;
                 toastr.error('حدث خطأ في الاتصال بالخادم');
             }
         });
-    }
-
-    /**
-     * تحديث تنسيقات خلية القسم
-     * @param {HTMLElement} cell - خلية القسم
-     */
-    function updateSectionCellStyles(cell) {
-        // إزالة الألوان السابقة
-        cell.classList.forEach(className => {
-            if (className.startsWith('section-color-')) {
-                cell.classList.remove(className);
-            }
-        });
-        
-        // إضافة اللون الجديد
-        const sectionId = cell.dataset.sectionId;
-        if (sectionId) {
-            const colorIndex = (parseInt(sectionId) % 8) + 1;
-            cell.classList.add(`section-color-${colorIndex}`);
-        }
     }
     </script>
 
@@ -894,6 +838,146 @@ $totalPages = ceil($totalLessons / $perPage);
             }
         });
     }
+
+    function initializeDragAndDrop() {
+        const sectionCells = document.querySelectorAll('.section-cell');
+        
+        sectionCells.forEach(cell => {
+            // تهيئة خاصية السحب
+            cell.setAttribute('draggable', 'true');
+            
+            // معالجة بدء السحب
+            cell.addEventListener('dragstart', (e) => {
+                e.stopPropagation();
+                cell.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', cell.getAttribute('data-section-id'));
+            });
+            
+            // معالجة انتهاء السحب
+            cell.addEventListener('dragend', () => {
+                cell.classList.remove('dragging');
+            });
+            
+            // معالجة السحب فوق الخلية
+            cell.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                cell.classList.add('drag-over');
+            });
+            
+            // معالجة مغادرة السحب
+            cell.addEventListener('dragleave', () => {
+                cell.classList.remove('drag-over');
+            });
+            
+            // معالجة الإفلات
+            cell.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const sourceId = e.dataTransfer.getData('text/plain');
+                const targetCell = e.target.closest('.section-cell');
+                const lessonId = targetCell.getAttribute('data-lesson-id');
+                
+                updateLessonSection(lessonId, sourceId);
+                cell.classList.remove('drag-over');
+            });
+            
+            // معالجة النقر المزدوج
+            cell.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                showSectionDropdown(e.target, cell.getAttribute('data-lesson-id'));
+            });
+        });
+    }
+
+    /**
+     * عرض القائمة المنسدلة للأقسام
+     * @param {HTMLElement} target - العنصر الذي تم النقر عليه
+     * @param {string} lessonId - معرف الدرس
+     */
+    function showSectionDropdown(target, lessonId) {
+        // إزالة أي قائمة منسدلة موجودة
+        const existingDropdown = document.querySelector('.section-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+        }
+        
+        // إنشاء القائمة المنسدلة
+        const dropdown = document.createElement('div');
+        dropdown.className = 'section-dropdown';
+        
+        // إضافة الأقسام المتاحة
+        sections.forEach(section => {
+            const item = document.createElement('div');
+            item.className = 'section-dropdown-item';
+            item.textContent = section.name;
+            item.onclick = () => {
+                updateLessonSection(lessonId, section.id);
+                dropdown.remove();
+            };
+            dropdown.appendChild(item);
+        });
+        
+        // تحديد موقع القائمة المنسدلة
+        const rect = target.getBoundingClientRect();
+        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+        dropdown.style.left = `${rect.left + window.scrollX}px`;
+        
+        // إضافة القائمة للصفحة
+        document.body.appendChild(dropdown);
+        
+        // إغلاق القائمة عند النقر خارجها
+        document.addEventListener('click', function closeDropdown(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.remove();
+                document.removeEventListener('click', closeDropdown);
+            }
+        });
+    }
+
+    /**
+     * تحديث قسم الدرس
+     * @param {string} lessonId - معرف الدرس
+     * @param {string} sectionId - معرف القسم الجديد
+     */
+    function updateLessonSection(lessonId, sectionId) {
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'update_lesson_section',
+                lesson_id: lessonId,
+                section_id: sectionId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // تحديث واجهة المستخدم
+                    const cell = document.querySelector(`.section-cell[data-lesson-id="${lessonId}"]`);
+                    cell.textContent = response.section_name;
+                    cell.setAttribute('data-section-id', sectionId);
+                    
+                    // إضافة تأثير بصري للتحديث
+                    cell.classList.add('updated');
+                    setTimeout(() => cell.classList.remove('updated'), 1000);
+                    
+                    toastr.success('تم تحديث القسم بنجاح');
+                } else {
+                    toastr.error('فشل تحديث القسم');
+                }
+            },
+            error: function() {
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    }
+
+    // تهيئة وظائف السحب والإفلات عند تحميل الصفحة
+    $(document).ready(function() {
+        initializeDragAndDrop();
+    });
     </script>
+
+
+ 
 </body>
 </html> 

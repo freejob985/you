@@ -174,28 +174,81 @@ body {
     border-color: #2c3e50;
 }
 
-/* تنسيقات الأقسام في الجدول */
+/* تنسيقات خلية القسم */
 .section-cell {
     position: relative;
-    cursor: move;
-    user-select: none;
     padding: 8px 12px;
-    background: #f8f9fa;
     border-radius: 4px;
-    margin: 2px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
 }
 
+/* ألوان الأقسام المختلفة */
+.section-cell[data-section-type="frontend"] { 
+    background-color: #e3f2fd; 
+    border-color: #90caf9;
+}
+.section-cell[data-section-type="backend"] { 
+    background-color: #f3e5f5; 
+    border-color: #ce93d8;
+}
+.section-cell[data-section-type="database"] { 
+    background-color: #e8f5e9; 
+    border-color: #a5d6a7;
+}
+.section-cell[data-section-type="api"] { 
+    background-color: #fff3e0; 
+    border-color: #ffcc80;
+}
+
+/* تأثيرات التحويم */
+.section-cell:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* تنسيقات أثناء السحب */
 .section-cell.dragging {
-    opacity: 0.5;
-    background-color: rgba(52, 152, 219, 0.1);
-    border: 2px dashed #3498db;
+    opacity: 0.6;
+    background-color: #f8f9fa !important;
+    border: 2px dashed #adb5bd;
 }
 
+/* تنسيقات منطقة الإفلات */
 .section-cell.drag-over {
-    background-color: rgba(52, 152, 219, 0.2);
-    border: 2px dashed #3498db;
-    transform: scale(1.02);
+    background-color: #e9ecef;
+    border: 2px dashed #2196f3;
+}
+
+/* القائمة المنسدلة للأقسام */
+.section-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.section-dropdown.show {
+    display: block;
+}
+
+.section-dropdown-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.section-dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
 }
 
 /* تحسين مؤشر السحب */
