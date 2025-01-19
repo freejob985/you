@@ -171,9 +171,103 @@ td.section-cell {
             border-radius: 10px;
             padding: 15px 20px;
         }
+        
+        /* تنسيقات قسم الكورسات المرتبطة */
+        .related-courses {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .related-courses .section-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-right: 15px;
+        }
+
+        .related-courses .section-title:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 2px;
+        }
+
+        .related-courses .card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .related-courses .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .related-courses .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .related-courses .card-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-courses .btn {
+            margin-top: 1rem;
+        }
     </style>
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+        /* تنسيقات عنوان الدرس القابل للنسخ */
+        .lesson-title {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 25px;
+            display: inline-block;
+        }
+
+        .lesson-title:hover {
+            color: #007bff;
+        }
+
+        .lesson-title::after {
+            content: '\f0c5';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lesson-title:hover::after {
+            opacity: 1;
+        }
+
+        /* تنسيق رسائل Toastr */
+        .toast-success {
+            background-color: #28a745;
+        }
+
+        .toast-error {
+            background-color: #dc3545;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-4">
@@ -222,7 +316,12 @@ td.section-cell {
                     <?php else: ?>
                         <?php foreach ($lessons as $lesson): ?>
                             <tr data-lesson-id="<?php echo $lesson['id']; ?>" class="lesson-row">
-                                <td><?php echo htmlspecialchars($lesson['title']); ?></td>
+                                <td>
+                                    <span class="lesson-title" onclick="copyToClipboard('<?php echo htmlspecialchars($lesson['title'], ENT_QUOTES); ?>')" 
+                                          title="انقر للنسخ">
+                                        <?php echo htmlspecialchars($lesson['title']); ?>
+                                    </span>
+                                </td>
                                 <td class="section-cell" 
                                     data-lesson-id="<?php echo $lesson['id']; ?>"
                                     data-section-id="<?php echo $lesson['section_id']; ?>"
@@ -344,6 +443,8 @@ td.section-cell {
 
     <!-- Context Menu -->
     <!-- <script src="assets/contextMenu.js"></script> -->
+    <script src="assets/contextMenu.js"></script> -<script src="assets/contextMenu.js"></script> -->
+    ->
 
     <!-- مودال إضافة قسم جديد -->
     <div class="modal fade" id="addSectionModal" tabindex="-1">
@@ -653,80 +754,122 @@ td.section-cell {
 
     <script>
     /**
-     * تهيئة وظائف السحب والإفلات
+     * دالة فتح مشغل الفيديو
+     * @param {string} videoUrl - رابط فيديو اليوتيوب
+     * @param {string} title - عنوان الدرس
      */
+    function openVideoPlayer(videoUrl, title) {
+        if (!videoUrl) {
+            alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
+            return;
+        }
+
+        // تحديث عنوان الموديول
+        document.getElementById('videoModalLabel').textContent = title;
+
+        // تحويل رابط اليوتيوب إلى رابط التضمين
+        let embedUrl = '';
+        try {
+            if (videoUrl.includes('youtube.com/watch?v=')) {
+                const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else if (videoUrl.includes('youtu.be/')) {
+                const videoId = videoUrl.split('youtu.be/')[1];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else {
+                embedUrl = videoUrl;
+            }
+
+            // تحديث مصدر الـ iframe
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = embedUrl;
+
+            // فتح الموديول
+            const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+            videoModal.show();
+
+            // إيقاف الفيديو عند إغلاق الموديول
+            document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                iframe.src = '';
+            });
+        } catch (error) {
+            console.error('خطأ في معالجة رابط الفيديو:', error);
+            alert('عذراً، حدث خطأ في تحميل الفيديو');
+        }
+    }
+
+    // تهيئة التلميحات
     document.addEventListener('DOMContentLoaded', function() {
-        const sectionCells = document.querySelectorAll('.section-cell');
-        
-        sectionCells.forEach(cell => {
-            // تهيئة السحب والإفلات
-            cell.setAttribute('draggable', true);
-            
-            cell.addEventListener('dragstart', function(e) {
-                e.stopPropagation();
-                this.classList.add('dragging');
-                e.dataTransfer.setData('text/plain', this.dataset.sectionId);
-            });
-            
-            cell.addEventListener('dragend', function() {
-                this.classList.remove('dragging');
-            });
-            
-            cell.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('drag-over');
-            });
-            
-            cell.addEventListener('dragleave', function() {
-                this.classList.remove('drag-over');
-            });
-            
-            cell.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const sourceSectionId = e.dataTransfer.getData('text/plain');
-                const targetLessonId = this.dataset.lessonId;
-                
-                updateLessonSection(targetLessonId, sourceSectionId);
-            });
-            
-            // معالجة النقر المزدوج
-            cell.addEventListener('dblclick', function(e) {
-                e.stopPropagation();
-                showSectionDropdown(this);
-            });
+        // تفعيل التلميحات لجميع الأزرار
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
+    </script>
 
-    function showSectionDropdown(cell) {
+    <script>
+    // تعريف الحالات المتاحة
+    const sections = <?php echo json_encode($sections); ?>;
+    const statusConfig = {
+        completed: { label: 'مكتمل', color: '#000000' },
+        watch: { label: 'مشاهدة', color: '#007bff' },
+        review: { label: 'مراجعة', color: '#007bff' },
+        problem: { label: 'مشكلة', color: '#ffc107' },
+        retry: { label: 'إعادة', color: '#ffc107' },
+        retry_again: { label: 'إعادة ثانية', color: '#ffc107' },
+        discussion: { label: 'نقاش', color: '#17a2b8' },
+        search: { label: 'بحث', color: '#17a2b8' },
+        excluded: { label: 'مستبعد', color: '#dc3545' },
+        project: { label: 'مشروع تطبيقي', color: '#6c757d' }
+    };
+
+    /**
+     * عرض قائمة اختيار الحالة
+     * @param {HTMLElement} cell - خلية الحالة
+     */
+    function showStatusDropdown(cell) {
         // إزالة أي قوائم منسدلة سابقة
-        const existingDropdowns = document.querySelectorAll('.section-dropdown');
-        existingDropdowns.forEach(dropdown => dropdown.remove());
-        
+        const existingDropdown = document.querySelector('.status-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+        }
+
+        // إنشاء القائمة المنسدلة
         const dropdown = document.createElement('div');
-        dropdown.className = 'section-dropdown show';
-        
-        // إضافة الأقسام المتاحة
-        const sections = <?php echo json_encode($sections); ?>;
-        sections.forEach(section => {
+        dropdown.className = 'status-dropdown show';
+
+        // إضافة خيارات الحالات
+        Object.entries(statusConfig).forEach(([status, config]) => {
             const item = document.createElement('div');
-            item.className = 'section-dropdown-item';
-            item.textContent = section.name;
+            item.className = 'status-dropdown-item';
+            
+            const indicator = document.createElement('span');
+            indicator.className = 'status-indicator';
+            indicator.style.backgroundColor = config.color;
+            
+            const label = document.createElement('span');
+            label.textContent = config.label;
+            
+            item.appendChild(indicator);
+            item.appendChild(label);
+            
             item.onclick = () => {
-                updateLessonSection(cell.dataset.lessonId, section.id);
+                updateLessonStatus(cell.dataset.lessonId, status);
                 dropdown.remove();
             };
+            
             dropdown.appendChild(item);
         });
-        
+
         // تحديد موقع القائمة
         const rect = cell.getBoundingClientRect();
-        dropdown.style.top = rect.bottom + window.scrollY + 'px';
-        dropdown.style.left = rect.left + window.scrollX + 'px';
-        
+        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+        dropdown.style.left = `${rect.left + window.scrollX}px`;
+
+        // إضافة القائمة للصفحة
         document.body.appendChild(dropdown);
-        
+
         // إغلاق القائمة عند النقر خارجها
         document.addEventListener('click', function closeDropdown(e) {
             if (!dropdown.contains(e.target) && e.target !== cell) {
@@ -736,29 +879,47 @@ td.section-cell {
         });
     }
 
-    function updateLessonSection(lessonId, sectionId) {
+    /**
+     * تحديث حالة الدرس
+     * @param {string} lessonId - معرف الدرس
+     * @param {string} status - الحالة الجديدة
+     */
+    function updateLessonStatus(lessonId, status) {
+        // إظهار مؤشر التحميل
+        const cell = document.querySelector(`.status-cell[data-lesson-id="${lessonId}"]`);
+        const originalContent = cell.innerHTML;
+        cell.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
         $.ajax({
             url: 'lessons_actions.php',
             method: 'POST',
             data: {
-                action: 'update_lesson_section',
+                action: 'update_lesson_status',
                 lesson_id: lessonId,
-                section_id: sectionId
+                status: status
             },
             success: function(response) {
                 if (response.success) {
-                    // تحديث حالة الدرس في الجدول
-                    const cell = document.querySelector(`.section-cell[data-lesson-id="${lessonId}"]`);
-                    cell.textContent = response.section_name;
-                    cell.dataset.sectionId = sectionId;
-                    cell.dataset.sectionType = response.section_name.toLowerCase();
+                    // تحديث واجهة المستخدم
+                    cell.textContent = statusConfig[status].label;
+                    cell.className = `status-cell status-${status}`;
+                    cell.dataset.status = status;
                     
-                    toastr.success('تم تحديث القسم بنجاح');
+                    // إضافة تأثير بصري للتحديث
+                    cell.classList.add('updated');
+                    setTimeout(() => cell.classList.remove('updated'), 1000);
+                    
+                    toastr.success('تم تحديث الحالة بنجاح');
                 } else {
-                    toastr.error('فشل تحديث القسم');
+                    // استعادة المحتوى الأصلي في حالة الفشل
+                    cell.innerHTML = originalContent;
+                    toastr.error(response.message || 'فشل تحديث الحالة');
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                // استعادة المحتوى الأصلي في حالة الخطأ
+                cell.innerHTML = originalContent;
+                console.error('Error:', error);
                 toastr.error('حدث خطأ في الاتصال بالخادم');
             }
         });
@@ -766,125 +927,49 @@ td.section-cell {
     </script>
 
     <script>
+    // تحديث عرض الأقسام في الجدول
+    function updateSectionDisplay() {
+        const sectionCells = document.querySelectorAll('.section-cell');
+        sectionCells.forEach(cell => {
+            const sectionType = cell.dataset.sectionType || 'default';
+            cell.classList.add(`section-${sectionType}`);
+        });
+    }
+
+    // تنفيذ عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSectionDisplay();
+    });
+    </script>
+
+    <script>
     /**
-     * معالجة النقر المزدوج على خلية القسم في الجدول
-     * @param {HTMLElement} cell - خلية القسم
+     * دالة نسخ النص إلى الحافظة
+     * @param {string} text - النص المراد نسخه
      */
-    function handleSectionDoubleClick(cell) {
-        const lessonId = cell.dataset.lessonId;
+    function copyToClipboard(text) {
+        // إنشاء عنصر input مؤقت
+        const tempInput = document.createElement('input');
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
         
-        // تأكيد إزالة القسم
-        Swal.fire({
-            title: 'إزالة القسم',
-            text: 'هل تريد إزالة هذا القسم من الدرس؟',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'نعم',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                updateLessonSection(lessonId, null, cell);
-            }
-        });
-    }
-
-    /**
-     * معالجة النقر المزدوج على عنصر القسم في القائمة
-     * @param {HTMLElement} item - عنصر القسم
-     */
-    function handleSectionItemDoubleClick(item) {
-        const sectionId = item.dataset.sectionId;
-        const sectionName = item.dataset.sectionName;
+        // تحديد النص
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // للأجهزة المحمولة
         
-        // تأكيد حذف القسم
-        Swal.fire({
-            title: 'حذف القسم',
-            text: `هل تريد حذف القسم "${sectionName}"؟`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'نعم',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteSection(sectionId, item);
-            }
-        });
-    }
-
-    /**
-     * حذف قسم من قاعدة البيانات
-     * @param {number} sectionId - معرف القسم
-     * @param {HTMLElement} element - عنصر القسم في DOM
-     */
-    function deleteSection(sectionId, element) {
-        $.ajax({
-            url: 'lessons_actions.php',
-            method: 'POST',
-            data: {
-                action: 'delete_section',
-                section_id: sectionId
-            },
-            success: function(response) {
-                if (response.success) {
-                    // إزالة العنصر من DOM
-                    element.remove();
-                    
-                    // تحديث خلايا الجدول المرتبطة
-                    $(`.section-cell[data-section-id="${sectionId}"]`).each(function() {
-                        $(this).text('بدون قسم').removeAttr('data-section-id');
-                    });
-                    
-                    Swal.fire('تم!', 'تم حذف القسم بنجاح', 'success');
-                } else {
-                    Swal.fire('خطأ', response.message, 'error');
-                }
-            },
-            error: function() {
-                Swal.fire('خطأ', 'حدث خطأ أثناء حذف القسم', 'error');
-            }
-        });
-    }
-
-    // تحديث دالة updateLessonSection لتدعم إزالة القسم
-    function updateLessonSection(lessonId, sectionId, cell) {
-        $.ajax({
-            url: 'lessons_actions.php',
-            method: 'POST',
-            data: {
-                action: 'update_lesson_section',
-                lesson_id: lessonId,
-                section_id: sectionId
-            },
-            success: function(response) {
-                if (response.success) {
-                    // تحديث نص الخلية
-                    cell.textContent = sectionId ? response.section_name : 'بدون قسم';
-                    
-                    if (sectionId) {
-                        cell.dataset.sectionId = sectionId;
-                    } else {
-                        cell.removeAttribute('data-section-id');
-                    }
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'تم!',
-                        text: 'تم تحديث القسم بنجاح',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-                } else {
-                    Swal.fire('خطأ', response.message, 'error');
-                }
-            },
-            error: function() {
-                Swal.fire('خطأ', 'حدث خطأ أثناء تحديث القسم', 'error');
-            }
-        });
+        try {
+            // نسخ النص
+            document.execCommand('copy');
+            // عرض رسالة نجاح
+            toastr.success('تم نسخ عنوان الدرس بنجاح', 'تم النسخ');
+        } catch (err) {
+            // عرض رسالة خطأ في حالة الفشل
+            toastr.error('حدث خطأ أثناء النسخ', 'خطأ');
+            console.error('فشل النسخ:', err);
+        }
+        
+        // إزالة العنصر المؤقت
+        document.body.removeChild(tempInput);
     }
     </script>
 
@@ -1118,195 +1203,35 @@ td.section-cell {
     </script>
 
     <script>
-    // تعريف الحالات المتاحة
-    const sections = <?php echo json_encode($sections); ?>;
-    const statusConfig = {
-        completed: { label: 'مكتمل', color: '#000000' },
-        watch: { label: 'مشاهدة', color: '#007bff' },
-        review: { label: 'مراجعة', color: '#007bff' },
-        problem: { label: 'مشكلة', color: '#ffc107' },
-        retry: { label: 'إعادة', color: '#ffc107' },
-        retry_again: { label: 'إعادة ثانية', color: '#ffc107' },
-        discussion: { label: 'نقاش', color: '#17a2b8' },
-        search: { label: 'بحث', color: '#17a2b8' },
-        excluded: { label: 'مستبعد', color: '#dc3545' },
-        project: { label: 'مشروع تطبيقي', color: '#6c757d' }
-    };
-
-    /**
-     * عرض قائمة اختيار الحالة
-     * @param {HTMLElement} cell - خلية الحالة
-     */
-    function showStatusDropdown(cell) {
-        // إزالة أي قوائم منسدلة سابقة
-        const existingDropdown = document.querySelector('.status-dropdown');
-        if (existingDropdown) {
-            existingDropdown.remove();
-        }
-
-        // إنشاء القائمة المنسدلة
-        const dropdown = document.createElement('div');
-        dropdown.className = 'status-dropdown show';
-
-        // إضافة خيارات الحالات
-        Object.entries(statusConfig).forEach(([status, config]) => {
-            const item = document.createElement('div');
-            item.className = 'status-dropdown-item';
-            
-            const indicator = document.createElement('span');
-            indicator.className = 'status-indicator';
-            indicator.style.backgroundColor = config.color;
-            
-            const label = document.createElement('span');
-            label.textContent = config.label;
-            
-            item.appendChild(indicator);
-            item.appendChild(label);
-            
-            item.onclick = () => {
-                updateLessonStatus(cell.dataset.lessonId, status);
-                dropdown.remove();
-            };
-            
-            dropdown.appendChild(item);
-        });
-
-        // تحديد موقع القائمة
-        const rect = cell.getBoundingClientRect();
-        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-        dropdown.style.left = `${rect.left + window.scrollX}px`;
-
-        // إضافة القائمة للصفحة
-        document.body.appendChild(dropdown);
-
-        // إغلاق القائمة عند النقر خارجها
-        document.addEventListener('click', function closeDropdown(e) {
-            if (!dropdown.contains(e.target) && e.target !== cell) {
-                dropdown.remove();
-                document.removeEventListener('click', closeDropdown);
-            }
-        });
-    }
-
-    /**
-     * تحديث حالة الدرس
-     * @param {string} lessonId - معرف الدرس
-     * @param {string} status - الحالة الجديدة
-     */
-    function updateLessonStatus(lessonId, status) {
-        // إظهار مؤشر التحميل
-        const cell = document.querySelector(`.status-cell[data-lesson-id="${lessonId}"]`);
-        const originalContent = cell.innerHTML;
-        cell.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-        $.ajax({
-            url: 'lessons_actions.php',
-            method: 'POST',
-            data: {
-                action: 'update_lesson_status',
-                lesson_id: lessonId,
-                status: status
-            },
-            success: function(response) {
-                if (response.success) {
-                    // تحديث واجهة المستخدم
-                    cell.textContent = statusConfig[status].label;
-                    cell.className = `status-cell status-${status}`;
-                    cell.dataset.status = status;
-                    
-                    // إضافة تأثير بصري للتحديث
-                    cell.classList.add('updated');
-                    setTimeout(() => cell.classList.remove('updated'), 1000);
-                    
-                    toastr.success('تم تحديث الحالة بنجاح');
-                } else {
-                    // استعادة المحتوى الأصلي في حالة الفشل
-                    cell.innerHTML = originalContent;
-                    toastr.error(response.message || 'فشل تحديث الحالة');
-                }
-            },
-            error: function(xhr, status, error) {
-                // استعادة المحتوى الأصلي في حالة الخطأ
-                cell.innerHTML = originalContent;
-                console.error('Error:', error);
-                toastr.error('حدث خطأ في الاتصال بالخادم');
-            }
-        });
-    }
-    </script>
-
-    <script>
-    // تحديث عرض الأقسام في الجدول
-    function updateSectionDisplay() {
-        const sectionCells = document.querySelectorAll('.section-cell');
-        sectionCells.forEach(cell => {
-            const sectionType = cell.dataset.sectionType || 'default';
-            cell.classList.add(`section-${sectionType}`);
-        });
-    }
-
-    // تنفيذ عند تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', function() {
-        updateSectionDisplay();
-    });
-    </script>
-
-    <script>
     /**
      * دالة فتح مشغل الفيديو
      * @param {string} videoUrl - رابط فيديو اليوتيوب
      * @param {string} title - عنوان الدرس
-     * @returns {void}
-     * 
-     * الوصف: تقوم هذه الدالة بفتح نافذة منبثقة لتشغيل فيديو يوتيوب
-     * المدخلات:
-     * - videoUrl: رابط الفيديو من يوتيوب
-     * - title: عنوان الدرس الذي سيظهر في النافذة المنبثقة
-     * 
-     * المخرجات:
-     * - تظهر نافذة منبثقة تحتوي على مشغل الفيديو
-     * - في حالة عدم وجود رابط أو حدوث خطأ، تظهر رسالة خطأ للمستخدم
      */
     function openVideoPlayer(videoUrl, title) {
-        // التحقق من وجود رابط الفيديو
-        if (!videoUrl || videoUrl.trim() === '') {
+        if (!videoUrl) {
             alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
             return;
         }
 
-        // تنظيف وتحديث عنوان الموديول
-        const modalTitle = document.getElementById('videoModalLabel');
-        modalTitle.textContent = title || 'مشاهدة الفيديو';
+        // تحديث عنوان الموديول
+        document.getElementById('videoModalLabel').textContent = title;
 
         // تحويل رابط اليوتيوب إلى رابط التضمين
         let embedUrl = '';
         try {
-            // تنظيف الرابط من المسافات الزائدة
-            videoUrl = videoUrl.trim();
-
             if (videoUrl.includes('youtube.com/watch?v=')) {
-                // معالجة روابط يوتيوب العادية
                 const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
                 embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
             } else if (videoUrl.includes('youtu.be/')) {
-                // معالجة روابط يوتيوب المختصرة
                 const videoId = videoUrl.split('youtu.be/')[1];
                 embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
             } else {
-                // إذا كان الرابط ليس من يوتيوب
-                console.warn('الرابط ليس من يوتيوب:', videoUrl);
-                alert('عذراً، الرابط المتوفر ليس رابط يوتيوب صحيح');
-                return;
+                embedUrl = videoUrl;
             }
 
             // تحديث مصدر الـ iframe
             const iframe = document.getElementById('videoIframe');
-            if (!iframe) {
-                console.error('لم يتم العثور على عنصر iframe');
-                alert('عذراً، حدث خطأ في تحميل مشغل الفيديو');
-                return;
-            }
-
             iframe.src = embedUrl;
 
             // فتح الموديول
@@ -1319,9 +1244,18 @@ td.section-cell {
             });
         } catch (error) {
             console.error('خطأ في معالجة رابط الفيديو:', error);
-            alert('عذراً، حدث خطأ في معالجة رابط الفيديو');
+            alert('عذراً، حدث خطأ في تحميل الفيديو');
         }
     }
+
+    // تهيئة التلميحات
+    document.addEventListener('DOMContentLoaded', function() {
+        // تفعيل التلميحات لجميع الأزرار
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
     </script>
 
     <!-- موديول مشغل الفيديو -->
@@ -1388,59 +1322,59 @@ td.section-cell {
     </style>
 
     <script>
-        /**
-         * دالة فتح مشغل الفيديو
-         * @param {string} videoUrl - رابط فيديو اليوتيوب
-         * @param {string} title - عنوان الدرس
-         */
-        function openVideoPlayer(videoUrl, title) {
-            if (!videoUrl) {
-                alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
-                return;
-            }
-
-            // تحديث عنوان الموديول
-            document.getElementById('videoModalLabel').textContent = title;
-
-            // تحويل رابط اليوتيوب إلى رابط التضمين
-            let embedUrl = '';
-            try {
-                if (videoUrl.includes('youtube.com/watch?v=')) {
-                    const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
-                    embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                } else if (videoUrl.includes('youtu.be/')) {
-                    const videoId = videoUrl.split('youtu.be/')[1];
-                    embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                } else {
-                    embedUrl = videoUrl;
-                }
-
-                // تحديث مصدر الـ iframe
-                const iframe = document.getElementById('videoIframe');
-                iframe.src = embedUrl;
-
-                // فتح الموديول
-                const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
-                videoModal.show();
-
-                // إيقاف الفيديو عند إغلاق الموديول
-                document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
-                    iframe.src = '';
-                });
-            } catch (error) {
-                console.error('خطأ في معالجة رابط الفيديو:', error);
-                alert('عذراً، حدث خطأ في تحميل الفيديو');
-            }
+    /**
+     * دالة فتح مشغل الفيديو
+     * @param {string} videoUrl - رابط فيديو اليوتيوب
+     * @param {string} title - عنوان الدرس
+     */
+    function openVideoPlayer(videoUrl, title) {
+        if (!videoUrl) {
+            alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
+            return;
         }
 
-        // تهيئة التلميحات
-        document.addEventListener('DOMContentLoaded', function() {
-            // تفعيل التلميحات لجميع الأزرار
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
+        // تحديث عنوان الموديول
+        document.getElementById('videoModalLabel').textContent = title;
+
+        // تحويل رابط اليوتيوب إلى رابط التضمين
+        let embedUrl = '';
+        try {
+            if (videoUrl.includes('youtube.com/watch?v=')) {
+                const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else if (videoUrl.includes('youtu.be/')) {
+                const videoId = videoUrl.split('youtu.be/')[1];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else {
+                embedUrl = videoUrl;
+            }
+
+            // تحديث مصدر الـ iframe
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = embedUrl;
+
+            // فتح الموديول
+            const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+            videoModal.show();
+
+            // إيقاف الفيديو عند إغلاق الموديول
+            document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                iframe.src = '';
             });
+        } catch (error) {
+            console.error('خطأ في معالجة رابط الفيديو:', error);
+            alert('عذراً، حدث خطأ في تحميل الفيديو');
+        }
+    }
+
+    // تهيئة التلميحات
+    document.addEventListener('DOMContentLoaded', function() {
+        // تفعيل التلميحات لجميع الأزرار
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    });
     </script>
 
 </body>
