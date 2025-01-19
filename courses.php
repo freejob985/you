@@ -223,8 +223,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <i class="fas fa-book-open me-2"></i> عدد الدروس: <?php echo $course['lessons_count']; ?><br>
                                 <i class="fas fa-clock me-2"></i> المدة الإجمالية: <?php echo formatDuration($course['duration']); ?>
                             </p>
-                            <!-- إضافة شريط التقدم للكورس -->
-                            <div class="progress mb-3">
+                            
+                            <!-- إضافة زر عرض الدروس - يفتح في نافذة جديدة -->
+                            <a href="course_lessons.php?course_id=<?php echo $course['id']; ?>" class="btn btn-primary mb-2" target="_blank">
+                                <i class="fas fa-book-reader"></i> عرض الدروس
+                            </a>
+                            
+                            <div class="progress mb-2">
                                 <div class="progress-bar" role="progressbar" style="width: <?php echo $courseCompletionRate; ?>%;" aria-valuenow="<?php echo $courseCompletionRate; ?>" aria-valuemin="0" aria-valuemax="100">
                                     <?php echo number_format($courseCompletionRate, 2); ?>%
                                 </div>
