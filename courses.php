@@ -224,29 +224,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <i class="fas fa-clock me-2"></i> المدة الإجمالية: <?php echo formatDuration($course['duration']); ?>
                             </p>
                             
-                            <div class="card-footer bg-transparent border-0">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="course_lessons.php?course_id=<?php echo $course['id']; ?>" 
-                                       target="_blank" rel="noopener"
-                                       class="btn btn-primary btn-sm w-100" >
-                                        <i class="fas fa-eye"></i> عرض مفصل
-                                    </a>
-                                    
+                            <!-- إضافة زر عرض الدروس - يفتح في نافذة جديدة -->
+                            <a href="course_lessons.php?course_id=<?php echo $course['id']; ?>" class="btn btn-primary mb-2" target="_blank">
+                                <i class="fas fa-book-reader"></i> عرض الدروس
+                            </a>
+                            
+                            <div class="progress mb-2">
+                                <div class="progress-bar" role="progressbar" style="width: <?php echo $courseCompletionRate; ?>%;" aria-valuenow="<?php echo $courseCompletionRate; ?>" aria-valuemin="0" aria-valuemax="100">
+                                    <?php echo number_format($courseCompletionRate, 2); ?>%
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-
-
-                                <button class="btn btn-danger btn-sm delete-course" data-course-id="<?php echo $course['id']; ?>">
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <button class="btn btn-danger btn-sm delete-course" data-course-id="<?php echo $course['id']; ?>">
                                 <i class="fas fa-trash-alt"></i> حذف الكورس
                             </button>
                             <a href="lessons.php?course_id=<?php echo $course['id']; ?>" class="btn btn-primary btn-sm ms-2">
                                 <i class="fas fa-list-ul"></i> عرض الدروس
                             </a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                          
                         </div>
                     </div>
                 </div>
