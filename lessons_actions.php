@@ -244,6 +244,10 @@ switch ($_POST['action']) {
         }
         break;
         
+    case 'update_video_url':
+        handleUpdateVideoUrl($db);
+        break;
+        
     default:
         echo json_encode(['success' => false, 'message' => 'الإجراء غير معروف']);
         break;
@@ -356,6 +360,50 @@ function handleAddSection($db) {
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'حدث خطأ أثناء إضافة القسم']);
     }
+}
+
+/**
+ * تحديث رابط الفيديو للدرس
+ * @param PDO $db اتصال قاعدة البيانات
+ */
+function handleUpdateVideoUrl($db) {
+    if (!isset($_POST['lesson_id']) || !isset($_POST['video_url'])) {
+        echo json_encode(['success' => false, 'message' => 'البيانات غير مكتملة']);
+        return;
+    }
+
+    $lessonId = (int)$_POST['lesson_id'];
+    $videoUrl = trim($_POST['video_url']);
+
+    // التحقق من صحة رابط يوتيوب
+    if (!isValidYouTubeUrl($videoUrl)) {
+        echo json_encode(['success' => false, 'message' => 'رابط يوتيوب غير صالح']);
+        return;
+    }
+
+    try {
+        $stmt = $db->prepare('UPDATE lessons SET video_url = ? WHERE id = ?');
+        $stmt->execute([$videoUrl, $lessonId]);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'تم تحديث رابط الفيديو بنجاح'
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء تحديث رابط الفيديو: ' . $e->getMessage()
+        ]);
+    }
+}
+
+/**
+ * التحقق من صحة رابط يوتيوب
+ * @param string $url الرابط المراد التحقق منه
+ * @return bool
+ */
+function isValidYouTubeUrl($url) {
+    return preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/', $url);
 }
 
 /**

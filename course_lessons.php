@@ -164,51 +164,6 @@ td.section-cell {
             </div>
         </div>
         
-        <!-- تحديث قسم الأقسام -->
-        <div class="sections-header">
-            <h3>الأقسام</h3>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSectionModal">
-                <i class="fas fa-plus"></i> إضافة قسم
-            </button>
-        </div>
-        <div class="sections-container">
-            <button class="section-button" data-section-id="all">الكل</button>
-            <?php foreach ($sections as $section): ?>
-                <button class="section-button draggable" 
-                        data-section-id="<?php echo $section['id']; ?>"
-                        data-section-name="<?php echo htmlspecialchars($section['name']); ?>"
-                        draggable="true">
-                    <?php echo htmlspecialchars($section['name']); ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
-        
-        <!-- الفلترة والبحث -->
-        <div class="filters-container">
-            <form method="GET" action="" class="mb-3">
-                <input type="hidden" name="course_id" value="<?php echo $courseId; ?>">
-                <div class="filter-group">
-                    <input type="text" name="search" class="search-input" 
-                           placeholder="ابحث عن درس..." 
-                           value="<?php echo htmlspecialchars($search); ?>">
-                    <select name="status" class="form-select" style="width: auto;">
-                        <option value="">كل الحالات</option>
-                        <option value="completed" <?php echo $status === 'completed' ? 'selected' : ''; ?>>مكتمل</option>
-                        <option value="watch" <?php echo $status === 'watch' ? 'selected' : ''; ?>>مشاهدة</option>
-                        <option value="review" <?php echo $status === 'review' ? 'selected' : ''; ?>>مراجعة</option>
-                        <option value="problem" <?php echo $status === 'problem' ? 'selected' : ''; ?>>مشكلة</option>
-                        <option value="retry" <?php echo $status === 'retry' ? 'selected' : ''; ?>>إعادة</option>
-                        <option value="retry_again" <?php echo $status === 'retry_again' ? 'selected' : ''; ?>>إعادة ثانية</option>
-                        <option value="discussion" <?php echo $status === 'discussion' ? 'selected' : ''; ?>>نقاش</option>
-                        <option value="search" <?php echo $status === 'search' ? 'selected' : ''; ?>>بحث</option>
-                        <option value="excluded" <?php echo $status === 'excluded' ? 'selected' : ''; ?>>مستبعد</option>
-                        <option value="project" <?php echo $status === 'project' ? 'selected' : ''; ?>>مشروع تطبيقي</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary">تطبيق</button>
-                </div>
-            </form>
-        </div>
-        
         <!-- جدول الدروس -->
         <div class="table-responsive">
             <table class="lessons-table">
@@ -217,13 +172,14 @@ td.section-cell {
                         <th>عنوان الدرس</th>
                         <th>القسم</th>
                         <th>الحالة</th>
+                        <th>تشغيل الفيديو</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody id="lessonsTableBody">
                     <?php if (empty($lessons)): ?>
                         <tr>
-                            <td colspan="4" class="text-center">لا توجد دروس متاحة</td>
+                            <td colspan="5" class="text-center">لا توجد دروس متاحة</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($lessons as $lesson): ?>
@@ -240,6 +196,12 @@ td.section-cell {
                                     data-status="<?php echo $lesson['status']; ?>"
                                     onclick="showStatusDropdown(this)">
                                     <?php echo getStatusLabel($lesson['status']); ?>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary btn-sm play-video-btn" 
+                                            onclick="openVideoPlayer('<?php echo !empty($lesson['url']) ? htmlspecialchars($lesson['url']) : ''; ?>', '<?php echo !empty($lesson['title']) ? htmlspecialchars($lesson['title']) : ''; ?>')">
+                                        <i class="fas fa-play-circle"></i> تشغيل الفيديو
+                                    </button>
                                 </td>
                                 <td>
                                     <div class="action-buttons">
@@ -362,6 +324,32 @@ td.section-cell {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
                     <button type="button" class="btn btn-primary" id="saveSectionBtn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Video URL -->
+    <div class="modal fade" id="videoUrlModal" tabindex="-1" aria-labelledby="videoUrlModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoUrlModalLabel">إضافة رابط الفيديو</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="videoUrlForm">
+                        <input type="hidden" id="lessonId" name="lessonId">
+                        <div class="mb-3">
+                            <label for="videoUrl" class="form-label">رابط فيديو يوتيوب</label>
+                            <input type="text" class="form-control" id="videoUrl" name="videoUrl" 
+                                   placeholder="https://www.youtube.com/watch?v=..." required>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -558,6 +546,75 @@ td.section-cell {
 
     <script>
     /**
+     * دالة فتح نافذة إضافة رابط الفيديو
+     * @param {number} lessonId - معرف الدرس
+     * @param {string} lessonTitle - عنوان الدرس
+     */
+    function openVideoUrlModal(lessonId, lessonTitle) {
+        // تحديث عنوان النافذة المنبثقة
+        document.getElementById('videoUrlModalLabel').textContent = `إضافة رابط الفيديو - ${lessonTitle}`;
+        
+        // تعيين معرف الدرس في النموذج
+        document.getElementById('lessonId').value = lessonId;
+        
+        // عرض النافذة المنبثقة
+        const modal = new bootstrap.Modal(document.getElementById('videoUrlModal'));
+        modal.show();
+    }
+
+    // معالجة تقديم نموذج رابط الفيديو
+    document.getElementById('videoUrlForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const lessonId = document.getElementById('lessonId').value;
+        const videoUrl = document.getElementById('videoUrl').value;
+        
+        // التحقق من صحة رابط يوتيوب
+        if (!isValidYouTubeUrl(videoUrl)) {
+            alert('الرجاء إدخال رابط يوتيوب صحيح');
+            return;
+        }
+        
+        // إرسال الرابط إلى الخادم
+        $.ajax({
+            url: 'lessons_actions.php',
+            method: 'POST',
+            data: {
+                action: 'update_video_url',
+                lesson_id: lessonId,
+                video_url: videoUrl
+            },
+            success: function(response) {
+                if (response.success) {
+                    // إغلاق النافذة المنبثقة وتحديث الصفحة
+                    bootstrap.Modal.getInstance(document.getElementById('videoUrlModal')).hide();
+                    toastr.success('تم حفظ رابط الفيديو بنجاح');
+                    
+                    // فتح الفيديو في نافذة جديدة
+                    window.open(videoUrl, '_blank');
+                } else {
+                    toastr.error('حدث خطأ أثناء حفظ رابط الفيديو');
+                }
+            },
+            error: function() {
+                toastr.error('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    });
+
+    /**
+     * التحقق من صحة رابط يوتيوب
+     * @param {string} url - الرابط المراد التحقق منه
+     * @returns {boolean} - صحيح إذا كان الرابط صحيح
+     */
+    function isValidYouTubeUrl(url) {
+        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
+        return youtubeRegex.test(url);
+    }
+    </script>
+
+    <script>
+    /**
      * تهيئة وظائف السحب والإفلات
      */
     document.addEventListener('DOMContentLoaded', function() {
@@ -589,7 +646,6 @@ td.section-cell {
             cell.addEventListener('drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                this.classList.remove('drag-over');
                 
                 const sourceSectionId = e.dataTransfer.getData('text/plain');
                 const targetLessonId = this.dataset.lessonId;
@@ -653,6 +709,7 @@ td.section-cell {
             },
             success: function(response) {
                 if (response.success) {
+                    // تحديث حالة الدرس في الجدول
                     const cell = document.querySelector(`.section-cell[data-lesson-id="${lessonId}"]`);
                     cell.textContent = response.section_name;
                     cell.dataset.sectionId = sectionId;
@@ -684,6 +741,8 @@ td.section-cell {
             text: 'هل تريد إزالة هذا القسم من الدرس؟',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'نعم',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
@@ -707,6 +766,8 @@ td.section-cell {
             text: `هل تريد حذف القسم "${sectionName}"؟`,
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'نعم',
             cancelButtonText: 'إلغاء'
         }).then((result) => {
@@ -1152,5 +1213,197 @@ td.section-cell {
     });
     </script>
 
+    <script>
+    /**
+     * دالة فتح مشغل الفيديو
+     * @param {string} videoUrl - رابط فيديو اليوتيوب
+     * @param {string} title - عنوان الدرس
+     * @returns {void}
+     * 
+     * الوصف: تقوم هذه الدالة بفتح نافذة منبثقة لتشغيل فيديو يوتيوب
+     * المدخلات:
+     * - videoUrl: رابط الفيديو من يوتيوب
+     * - title: عنوان الدرس الذي سيظهر في النافذة المنبثقة
+     * 
+     * المخرجات:
+     * - تظهر نافذة منبثقة تحتوي على مشغل الفيديو
+     * - في حالة عدم وجود رابط أو حدوث خطأ، تظهر رسالة خطأ للمستخدم
+     */
+    function openVideoPlayer(videoUrl, title) {
+        // التحقق من وجود رابط الفيديو
+        if (!videoUrl || videoUrl.trim() === '') {
+            alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
+            return;
+        }
+
+        // تنظيف وتحديث عنوان الموديول
+        const modalTitle = document.getElementById('videoModalLabel');
+        modalTitle.textContent = title || 'مشاهدة الفيديو';
+
+        // تحويل رابط اليوتيوب إلى رابط التضمين
+        let embedUrl = '';
+        try {
+            // تنظيف الرابط من المسافات الزائدة
+            videoUrl = videoUrl.trim();
+
+            if (videoUrl.includes('youtube.com/watch?v=')) {
+                // معالجة روابط يوتيوب العادية
+                const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else if (videoUrl.includes('youtu.be/')) {
+                // معالجة روابط يوتيوب المختصرة
+                const videoId = videoUrl.split('youtu.be/')[1];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else {
+                // إذا كان الرابط ليس من يوتيوب
+                console.warn('الرابط ليس من يوتيوب:', videoUrl);
+                alert('عذراً، الرابط المتوفر ليس رابط يوتيوب صحيح');
+                return;
+            }
+
+            // تحديث مصدر الـ iframe
+            const iframe = document.getElementById('videoIframe');
+            if (!iframe) {
+                console.error('لم يتم العثور على عنصر iframe');
+                alert('عذراً، حدث خطأ في تحميل مشغل الفيديو');
+                return;
+            }
+
+            iframe.src = embedUrl;
+
+            // فتح الموديول
+            const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+            videoModal.show();
+
+            // إيقاف الفيديو عند إغلاق الموديول
+            document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                iframe.src = '';
+            });
+        } catch (error) {
+            console.error('خطأ في معالجة رابط الفيديو:', error);
+            alert('عذراً، حدث خطأ في معالجة رابط الفيديو');
+        }
+    }
+    </script>
+
+    <!-- موديول مشغل الفيديو -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe id="videoIframe" 
+                                src="" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- تضمين المكتبات المطلوبة -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <!-- الأنماط المخصصة -->
+    <style>
+        .play-video-btn {
+            padding: 5px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .play-video-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .play-video-btn i {
+            margin-right: 5px;
+        }
+        #videoModal .modal-content {
+            background-color: #000;
+            border-radius: 10px;
+        }
+        #videoModal .modal-header {
+            border-bottom: none;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.1);
+        }
+        #videoModal .modal-title {
+            color: #fff;
+            font-weight: bold;
+        }
+        #videoModal .btn-close {
+            background-color: #fff;
+        }
+        #videoModal .modal-body {
+            padding: 0;
+        }
+    </style>
+
+    <script>
+        /**
+         * دالة فتح مشغل الفيديو
+         * @param {string} videoUrl - رابط فيديو اليوتيوب
+         * @param {string} title - عنوان الدرس
+         */
+        function openVideoPlayer(videoUrl, title) {
+            if (!videoUrl) {
+                alert('عذراً، لا يوجد رابط فيديو لهذا الدرس');
+                return;
+            }
+
+            // تحديث عنوان الموديول
+            document.getElementById('videoModalLabel').textContent = title;
+
+            // تحويل رابط اليوتيوب إلى رابط التضمين
+            let embedUrl = '';
+            try {
+                if (videoUrl.includes('youtube.com/watch?v=')) {
+                    const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+                    embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                } else if (videoUrl.includes('youtu.be/')) {
+                    const videoId = videoUrl.split('youtu.be/')[1];
+                    embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                } else {
+                    embedUrl = videoUrl;
+                }
+
+                // تحديث مصدر الـ iframe
+                const iframe = document.getElementById('videoIframe');
+                iframe.src = embedUrl;
+
+                // فتح الموديول
+                const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+                videoModal.show();
+
+                // إيقاف الفيديو عند إغلاق الموديول
+                document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+                    iframe.src = '';
+                });
+            } catch (error) {
+                console.error('خطأ في معالجة رابط الفيديو:', error);
+                alert('عذراً، حدث خطأ في تحميل الفيديو');
+            }
+        }
+
+        // تهيئة التلميحات
+        document.addEventListener('DOMContentLoaded', function() {
+            // تفعيل التلميحات لجميع الأزرار
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
 </body>
-</html> 
+</html>

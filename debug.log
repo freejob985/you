@@ -22,3 +22,79 @@ Stack trace:
 [16-Jan-2025 19:56:17 Europe/Berlin] Course ID: 27
 [16-Jan-2025 19:56:17 Europe/Berlin] Total Lessons: 53
 [16-Jan-2025 19:56:17 Europe/Berlin] Lessons count: 20
+[18-Jan-2025 20:37:14 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:37:14 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:37:14 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:39:22 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:39:22 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:39:22 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:41:55 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:41:55 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:41:55 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:44:51 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:44:51 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:44:51 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:46:47 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:46:47 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:46:47 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:49:15 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:49:15 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:49:15 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Warning:  Undefined array key "video_url" in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:49:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\server\htdocs\you\course_lessons.php on line 202
+[18-Jan-2025 20:51:52 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:51:52 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:51:52 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:54:14 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:54:14 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:54:14 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:55:43 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:55:43 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:55:43 Europe/Berlin] Lessons count: 17
+[18-Jan-2025 20:56:50 Europe/Berlin] Course ID: 31
+[18-Jan-2025 20:56:50 Europe/Berlin] Total Lessons: 17
+[18-Jan-2025 20:56:50 Europe/Berlin] Lessons count: 17
+[19-Jan-2025 00:50:32 Europe/Berlin] Course ID: 31
+[19-Jan-2025 00:50:32 Europe/Berlin] Total Lessons: 17
+[19-Jan-2025 00:50:32 Europe/Berlin] Lessons count: 17
+[19-Jan-2025 00:51:08 Europe/Berlin] Course ID: 31
+[19-Jan-2025 00:51:08 Europe/Berlin] Total Lessons: 17
+[19-Jan-2025 00:51:08 Europe/Berlin] Lessons count: 17
+[19-Jan-2025 00:51:13 Europe/Berlin] Course ID: 31
+[19-Jan-2025 00:51:13 Europe/Berlin] Total Lessons: 17
+[19-Jan-2025 00:51:13 Europe/Berlin] Lessons count: 17
+[19-Jan-2025 13:56:31 Europe/Berlin] Course ID: 31
+[19-Jan-2025 13:56:31 Europe/Berlin] Total Lessons: 17
+[19-Jan-2025 13:56:31 Europe/Berlin] Lessons count: 17
