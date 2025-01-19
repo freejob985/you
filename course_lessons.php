@@ -133,6 +133,44 @@ td.section-cell {
     font-weight: 700;
 }
 
+.related-courses .card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .related-courses .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .related-courses .card-img-top {
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .related-courses .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .related-courses .btn {
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-weight: 500;
+        }
+        
+        .related-courses h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .related-courses .alert {
+            border-radius: 10px;
+            padding: 15px 20px;
+        }
     </style>
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
